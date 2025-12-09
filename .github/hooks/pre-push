@@ -1,0 +1,48 @@
+#!/bin/sh
+# ===== Pre-Push Hook =====
+# Runs Flutter checks before allowing push
+
+echo "🚀 Running pre-push checks..."
+
+# 1. Get packages
+echo "📦 Running flutter pub get..."
+flutter pub get
+if [ $? -ne 0 ]; then
+  echo "❌ flutter pub get failed."
+  exit 1
+fi
+
+# 2. Run code generation
+echo "⚙️ Running code generation..."
+flutter pub run build_runner build --delete-conflicting-outputs
+if [ $? -ne 0 ]; then
+  echo "❌ Code generation failed."
+  exit 1
+fi
+
+# 3. Run intl generation
+echo "🌍 Running intl generation..."
+flutter pub run intl_utils:generate
+if [ $? -ne 0 ]; then
+  echo "❌ Intl generation failed."
+  exit 1
+fi
+
+# 4. Run analyzer
+echo "🔍 Running flutter analyze..."
+flutter analyze
+if [ $? -ne 0 ]; then
+  echo "❌ Lint issues found. Fix them before pushing."
+  exit 1
+fi
+
+# 5. Run unit tests
+echo "🧪 Running flutter tests..."
+flutter test --coverage
+if [ $? -ne 0 ]; then
+  echo "❌ Tests failed. Fix them before pushing."
+  exit 1
+fi
+
+echo "✅ All checks passed. Proceeding with push..."
+exit 0

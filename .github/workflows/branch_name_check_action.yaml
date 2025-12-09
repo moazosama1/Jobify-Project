@@ -1,0 +1,27 @@
+## name of your github action
+name: Branch Name Action
+
+## when will the action trigger
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+## the action script
+jobs:
+  Validate_Branch:
+    name: Validator Branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Branch
+        uses: KinsonDigital/BranchValidator@v1.0.0-preview.4
+        with:
+          branch-name: "${{ github.head_ref }}"
+          validation-logic: "equalTo('feature/ECOM-*/**') || equalTo('bugfix/ECOM-*/**') || equalTo('hotfix/ECOM-*/**') || equalTo('release/ECOM-*/**')"
+          trim-from-start: ""
+          fail-when-not-valid: true

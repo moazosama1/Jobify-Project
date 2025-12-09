@@ -1,0 +1,27 @@
+{
+  "LABEL": {
+    "name": "title needs formatting",
+    "color": "EEEEEE"
+  },
+  "CHECKS": {
+    "prefixes": [
+      "fix: ",
+      "feat: ",
+      "hotfix: ",
+      "release: ",
+      "test: ",
+      "build: "
+    ],
+    "regexp": "^(fix|feat|hotfix|release|test|build)\\((ECOM|JIRA)-[0-9]+\\):\\s.+$",
+    "regexpFlags": "i",
+    "ignoreLabels": [
+      "dont-check-PRs-with-this-label",
+      "meta"
+    ]
+  },
+  "MESSAGES": {
+    "success": "PR title is correctly formatted.",
+    "failure": "PR title format is invalid. Required: <type>(<scope>): Task name — e.g. feat(ECOM-123): Add login screen",
+    "notice": "Valid types: fix, feat, hotfix, release, test, build. Valid scopes: ECOM-<num>, JIRA-<num>"
+  }
+}

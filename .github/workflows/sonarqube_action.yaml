@@ -1,0 +1,55 @@
+name: SonarQube Analysis
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # Required for SonarQube analysi
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.35.2
+      - run: flutter --version
+      - name: Install packages
+        run: flutter pub get
+
+      - name: Generate intl files
+        run: flutter pub run intl_utils:generate
+
+
+      - name: Generate JSON serialization and mocks
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+      # Add Flutter to PATH
+      - name: Add Flutter to PATH
+        run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+      # Run Flutter analyze
+      - name: Analyze code
+        run: flutter analyze
+      # Run tests and generate coverage
+      - name: Run tests
+        run: flutter test --coverage
+      # Run SonarQube scan
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.projectKey=Bablu521_Elevate-Tracking-App
+            -Dsonar.sources=lib,pubspec.yaml
+            -Dsonar.tests=test
+
