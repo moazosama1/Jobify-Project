@@ -28,5 +28,8 @@
   "ok": "Ok",
   "no": "No",
   "yes": "Yes",
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "success": "Success",
+  "error": "Error",
+  "done": "Done"
 }

@@ -1,6 +1,6 @@
 
 
-import 'package:initialize_project/generated/l10n.dart';
+import 'package:jobify_project/generated/l10n.dart';
 
 class Validations {
   Validations._();

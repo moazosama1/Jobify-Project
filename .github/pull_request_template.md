@@ -1,77 +1,39 @@
-<!--
-     Thanks for contributing to our Flutter project! 🎉
+# Jobify PR: [Type] - [Brief, specific title of the change]
 
-     Before submitting a Pull Request, please ensure you've done the following:
-     - 📖 Read the CONTRIBUTING.md guide.
-     - 👷‍♀️ Keep PRs small and focused if possible.
-     - ✅ Provide tests for your changes (unit/widget/integration).
-     - 📝 Use descriptive commit messages.
-     - 📗 Update any related documentation (README, comments, etc.).
--->
+## Type of Change (Check all that apply)
 
-## What type of PR is this? (check all applicable)
-
-- [ ] ✨ Feature
-- [ ] 🐛 Bug Fix
-- [ ] ♻️ Refactor
-- [ ] 🚀 Optimization/Performance
-- [ ] 📖 Documentation Update
-- [ ] 🧪 Tests
+| Category | Icon | Description | Checked |
+| :--- | :--- | :--- | :--- |
+| **Feature** | ✨ | New functionality (e.g., implementing chat feature, new API endpoint) | [ ] |
+| **Bug Fix** | 🐛 | Corrects an existing issue (e.g., authentication error, UI glitch) | [ ] |
+| **Refactor** | ♻️ | Restructuring code without external behavior change (e.g., moving Flutter widgets, cleaning Node.js services) | [ ] |
+| **Optimization** | 🚀 | Performance improvement (e.g., faster queries, optimized Flutter build) | [ ] |
+| **Documentation** | 📖 | Updates to README, comments, or technical guides | [ ] |
+| **Tests** | 🧪 | Adding or updating test files only | [ ] |
 
 ---
 
-## Description
-<!-- Describe your changes in detail -->
+## 📝 Description of Changes
+### Motivation and Context
+Why is this change necessary? (e.g., Fixes a reported bug, implements a core feature from the requirements, improves security).
+
+### Key Implementation Details
+* **Frontend (Flutter)**: [List key changes in Dart/Flutter, e.g., created `JobFilterWidget`, updated State Management.]
+* **Backend (Node.js/MongoDB)**: [List key changes in Node.js/Express, e.g., added `/api/jobs/save` endpoint, updated MongoDB schema.]
 
 ---
 
-## Related Issues / Tickets
-- Closes #  
-- Related to #
+## 🔗 Related Resources
+* **Issue(s) Addressed**: Closes #[Issue Number] / Relates to #[Issue Number]
+* **Figma Design**: [Link to the specific UI design or prototype if applicable]
 
 ---
 
-## How to test this PR
+## 🧪 Testing Instructions
 
-_Please provide instructions for testing locally (e.g., commands, devices, simulators, or scenarios to test)._
+### **1. Automated Tests**
+- [ ] New unit/widget/integration tests added and passing.
+- [ ] Existing tests still pass.
 
-- Run `flutter pub get`
-- Run `flutter test`
-- Manual test steps:
-  1. ...
-  2. ...
-  3. ...
-
----
-
-## Screenshots / Recordings (if applicable)
-<!-- Add UI screenshots, screen recordings, or GIFs if the PR introduces UI changes -->
-
----
-
-## UI accessibility checklist
-_If your PR includes UI changes, please check the following:_
-- [ ] Semantic widgets used where possible? (e.g., `Semantics`, `Text`, `IconButton`)
-- [ ] Tested with screen readers (TalkBack/VoiceOver)?
-- [ ] Proper color contrast?
-- [ ] Supports different screen sizes/orientations?
-
----
-
-## Added/Updated Tests?
-- [ ] ✅ Unit Tests (e.g., business logic, Cubit/Bloc, repositories)
-- [ ] ✅ Widget Tests (e.g., rendering, UI state, widget interactions)
-- [ ] ✅ Integration Tests (e.g., full app flow, navigation, API calls)
-- [ ] ❌ No, and this is why: _please explain_
-- [ ] ❓ Need help with writing tests
-
----
-
-## [Optional] Post-deployment steps
-<!-- Any cleanup tasks or follow-up steps after merge -->
-
----
-
-## [Optional] What gif best describes this PR?
-
-![alt_text](gif_link)
+```bash
+flutter test

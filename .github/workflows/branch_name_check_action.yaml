@@ -22,6 +22,6 @@ jobs:
         uses: KinsonDigital/BranchValidator@v1.0.0-preview.4
         with:
           branch-name: "${{ github.head_ref }}"
-          validation-logic: "equalTo('feature/ECOM-*/**') || equalTo('bugfix/ECOM-*/**') || equalTo('hotfix/ECOM-*/**') || equalTo('release/ECOM-*/**')"
+          validation-logic: "equalTo('feature/JOB-*/**') || equalTo('bugfix/JOB-*/**') || equalTo('hotfix/JOB-*/**') || equalTo('release/JOB-*/**')"
           trim-from-start: ""
           fail-when-not-valid: true

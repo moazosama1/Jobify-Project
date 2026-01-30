@@ -2,12 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../local/models/local_db_model.dart';
-import '../../objectbox.g.dart';
 import '../constants/const_keys.dart';
 import '../constants/end_points.dart';
 import '../utils/secure_storage_manager.dart';
@@ -40,18 +36,6 @@ abstract class AppModules {
     aOptions: AndroidOptions(encryptedSharedPreferences: true),
   );
 
-  @preResolve
-  @lazySingleton
-  Future<Store> provideBoxStore() async {
-    final dir = await getApplicationDocumentsDirectory();
-    final store = await openStore(directory: '${dir.path}/${ConstKeys.appDB}');
-    return store;
-  }
-
-  @lazySingleton
-  Box<LocalDBModel> provideBoxOfLocalDbModel(Store store) {
-    return store.box<LocalDBModel>();
-  }
 
   @preResolve
   @lazySingleton

@@ -1,4 +1,4 @@
-import 'package:initialize_project/core/api_result/api_result.dart';
+import 'package:jobify_project/core/api_result/api_result.dart';
 
 Future<ApiResult<TOut>> safeApiCall<TIn, TOut>(
   Future<TIn> Function() apiCall,
