@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:initialize_project/core/api_result/dio_error_handler.dart';
+
+import 'dio_error_handler.dart' show handleDioError;
 
 sealed class ApiResult<T> {}
 

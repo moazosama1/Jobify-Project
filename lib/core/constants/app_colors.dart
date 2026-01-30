@@ -14,17 +14,17 @@ abstract class AppColors {
     100: Color(0xFF323232),
   });
 
-  static MaterialColor mainColor = const MaterialColor(0xFFD21E6A, <int, Color>{
-    10: Color(0xFFf6d2e1),
-    20: Color(0xFFf0b4cd),
-    30: Color(0xFFe98fb5),
-    40: Color(0xFFe1699c),
-    50: Color(0xFFda4483),
-    60: Color(0xFFaf1958),
-    70: Color(0xFF8c1447),
-    80: Color(0xFF690f35),
-    90: Color(0xFF460a23),
-    100: Color(0xFF2a0615),
+  static MaterialColor mainColor = const MaterialColor(0xFF286AFF, <int, Color>{
+    10: Color(0xFFE0E9FF),
+    20: Color(0xFFB3C6FF),
+    30: Color(0xFF809EFF),
+    40: Color(0xFF4D75FF),
+    50: Color(0xFF286AFF), // base color
+    60: Color(0xFF1F55CC),
+    70: Color(0xFF174099),
+    80: Color(0xFF0F2B66),
+    90: Color(0xFF081633),
+    100: Color(0xFF040B1A),
   });
 
   static MaterialColor black = const MaterialColor(0xFF0C1015, <int, Color>{
@@ -45,4 +45,5 @@ abstract class AppColors {
   static const Color green = Color(0xFF0CB359);
   static const Color lightPink = Color(0xFFF9ECF0);
   static const Color yellow = Color(0xFFC8D444);
+  static const Color splashBackground = Color(0xFF7D66FF);
 }

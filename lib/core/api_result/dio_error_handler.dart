@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:initialize_project/generated/l10n.dart';
+import 'package:jobify_project/generated/l10n.dart';
 
 String handleDioError(DioException error) {
   switch (error.type) {

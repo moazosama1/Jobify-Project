@@ -1,13 +1,16 @@
-import 'package:initialize_project/core/router/route_names.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:jobify_project/core/router/route_names.dart';
 
 abstract class AppRouter {
-  static Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case RouteNames.home:
-        return MaterialPageRoute(builder: (_) => const SizedBox());
-      default:
-        return MaterialPageRoute(builder: (_) => const SizedBox());
-    }
-  }
+  static final router = GoRouter(
+    initialLocation: RouteNames.home,
+    routes: [
+      GoRoute(
+        path: RouteNames.home,
+        builder: (context, state) =>
+            const Scaffold(body: Center(child: Text("Home"))),
+      ),
+    ],
+  );
 }

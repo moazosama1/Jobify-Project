@@ -1,13 +1,12 @@
-import 'package:initialize_project/core/constants/app_theme.dart';
-import 'package:initialize_project/core/di/di.dart';
-import 'package:initialize_project/core/router/app_router.dart';
-import 'package:initialize_project/core/router/route_names.dart';
-import 'package:initialize_project/generated/l10n.dart';
-import 'package:initialize_project/my_bloc_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:jobify_project/core/constants/app_theme.dart';
+import 'package:jobify_project/core/di/di.dart';
+import 'package:jobify_project/core/router/app_router.dart';
+import 'package:jobify_project/generated/l10n.dart';
+import 'package:jobify_project/my_bloc_observer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,12 +25,11 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return MaterialApp(
+        return MaterialApp.router(
           title: AppLocalizations().appName,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
-          onGenerateRoute: AppRouter.onGenerateRoute,
-          initialRoute: RouteNames.home,
+          routerConfig: AppRouter.router,
           localizationsDelegates: [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -45,4 +43,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
