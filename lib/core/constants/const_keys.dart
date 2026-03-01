@@ -5,6 +5,13 @@ abstract final class ConstKeys {
   static const String kUserToken = "user_token";
   static const String kNoToken = "no_token";
   static const String kUserStatus = "user_status";
+
+  // Settings
+  static const String kAppThemeDark = "app_theme_dark";
+  static const String kAppLocale = "app_locale";
+  static const String kEnglish = "en";
+
+  // Fonts
   static const String interFont = "Inter";
   static const String robotoFont = "Roboto";
 }

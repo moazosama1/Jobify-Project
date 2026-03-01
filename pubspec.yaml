@@ -51,7 +51,7 @@ dependencies:
   toastification: ^3.0.3
   
   cached_network_image: ^3.4.1
-  shared_preferences: ^2.5.3
+  shared_preferences: ^2.5.4
   image_picker: ^1.2.0
   objectbox: ^5.0.0
   objectbox_flutter_libs: ^5.0.0
