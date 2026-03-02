@@ -12,13 +12,3 @@ class SaveOnboardingStatusUseCase {
   }
 }
 
-@injectable
-class GetOnboardingStatusUseCase {
-  final OnboardingRepo _repo;
-
-  GetOnboardingStatusUseCase(this._repo);
-
-  Future<bool> call() async {
-    return await _repo.getOnboardingStatus();
-  }
-}

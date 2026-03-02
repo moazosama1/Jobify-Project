@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:jobify_project/domain/use_cases/save_onboarding_status_use_case.dart';
+import 'package:jobify_project/domain/use_cases/get_onboarding_status_use_case.dart';
 
 import 'splash_state.dart';
 
