@@ -8,9 +8,9 @@ import 'package:jobify_project/core/widgets/custom_divider.dart';
 import 'package:jobify_project/core/widgets/custom_elevated_button_loading.dart';
 import 'package:jobify_project/core/widgets/custom_social_button.dart';
 import 'package:jobify_project/core/widgets/custom_text_field.dart';
-import 'package:jobify_project/features/auth/presentation/view_model/login_cubit.dart';
-import 'package:jobify_project/features/auth/presentation/view_model/login_event.dart';
-import 'package:jobify_project/features/auth/presentation/view_model/login_state.dart';
+import 'package:jobify_project/presentation/auth/login/view_model/login_cubit.dart';
+import 'package:jobify_project/presentation/auth/login/view_model/login_event.dart';
+import 'package:jobify_project/presentation/auth/login/view_model/login_state.dart';
 import 'package:jobify_project/generated/l10n.dart';
 
 class LoginBody extends StatefulWidget {

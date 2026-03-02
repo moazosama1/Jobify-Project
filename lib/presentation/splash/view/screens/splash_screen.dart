@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:jobify_project/core/constants/const_keys.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/router/route_names.dart';
-import 'package:jobify_project/features/splash/presentation/view_model/splash_cubit.dart';
-import 'package:jobify_project/features/splash/presentation/view_model/splash_state.dart';
+import 'package:jobify_project/presentation/splash/view_model/splash_cubit.dart';
+import 'package:jobify_project/presentation/splash/view_model/splash_state.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

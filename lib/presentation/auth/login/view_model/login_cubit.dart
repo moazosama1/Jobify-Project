@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:jobify_project/features/auth/presentation/view_model/login_event.dart';
-import 'package:jobify_project/features/auth/presentation/view_model/login_state.dart';
+import 'package:jobify_project/presentation/auth/login/view_model/login_event.dart';
+import 'package:jobify_project/presentation/auth/login/view_model/login_state.dart';
 
 @injectable
 class LoginCubit extends Cubit<LoginState> {

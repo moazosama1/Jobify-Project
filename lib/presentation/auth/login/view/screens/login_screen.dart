@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:jobify_project/core/widgets/custom_app_bar.dart';
 import 'package:jobify_project/core/widgets/custom_screen_wrapper.dart';
-import 'package:jobify_project/features/auth/presentation/view/widgets/login_body.dart';
+import 'package:jobify_project/presentation/auth/login/view/widgets/login_body.dart';
 import 'package:jobify_project/generated/l10n.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toastification/toastification.dart';
 import 'package:jobify_project/core/widgets/custom_toastification.dart';
-import 'package:jobify_project/features/auth/presentation/view_model/login_cubit.dart';
-import 'package:jobify_project/features/auth/presentation/view_model/login_state.dart';
+import 'package:jobify_project/presentation/auth/login/view_model/login_cubit.dart';
+import 'package:jobify_project/presentation/auth/login/view_model/login_state.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});

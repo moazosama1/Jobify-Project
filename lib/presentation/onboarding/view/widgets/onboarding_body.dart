@@ -4,12 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:jobify_project/core/constants/app_images.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/router/route_names.dart';
-import 'package:jobify_project/features/onboarding/presentation/view/widgets/onboarding_buttons.dart';
-import 'package:jobify_project/features/onboarding/presentation/view/widgets/onboarding_indicators.dart';
-import 'package:jobify_project/features/onboarding/presentation/view/widgets/onboarding_page_widget.dart';
-import 'package:jobify_project/features/onboarding/presentation/view_model/onboarding_cubit.dart';
-import 'package:jobify_project/features/onboarding/presentation/view_model/onboarding_event.dart';
-import 'package:jobify_project/features/onboarding/presentation/view_model/onboarding_state.dart';
+import 'package:jobify_project/presentation/onboarding/view/widgets/onboarding_buttons.dart';
+import 'package:jobify_project/presentation/onboarding/view/widgets/onboarding_indicators.dart';
+import 'package:jobify_project/presentation/onboarding/view/widgets/onboarding_page_widget.dart';
+import 'package:jobify_project/presentation/onboarding/view_model/onboarding_cubit.dart';
+import 'package:jobify_project/presentation/onboarding/view_model/onboarding_event.dart';
+import 'package:jobify_project/presentation/onboarding/view_model/onboarding_state.dart';
 import 'package:jobify_project/generated/l10n.dart';
 
 class OnboardingBody extends StatefulWidget {

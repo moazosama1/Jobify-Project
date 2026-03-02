@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jobify_project/core/di/di.dart';
 import 'package:jobify_project/core/router/route_names.dart';
-import 'package:jobify_project/features/onboarding/presentation/view_model/onboarding_cubit.dart';
-import 'package:jobify_project/features/onboarding/presentation/view/screens/onboarding_screen.dart';
-import 'package:jobify_project/features/splash/presentation/view_model/splash_cubit.dart';
-import 'package:jobify_project/features/splash/presentation/view/screens/splash_screen.dart';
-import 'package:jobify_project/features/auth/presentation/view/screens/login_screen.dart';
-import 'package:jobify_project/features/auth/presentation/view_model/login_cubit.dart';
+import 'package:jobify_project/presentation/onboarding/view_model/onboarding_cubit.dart';
+import 'package:jobify_project/presentation/onboarding/view/screens/onboarding_screen.dart';
+import 'package:jobify_project/presentation/splash/view_model/splash_cubit.dart';
+import 'package:jobify_project/presentation/splash/view/screens/splash_screen.dart';
+import 'package:jobify_project/presentation/auth/login/view/screens/login_screen.dart';
+import 'package:jobify_project/presentation/auth/login/view_model/login_cubit.dart';
 
 abstract class AppRouter {
   static final router = GoRouter(
