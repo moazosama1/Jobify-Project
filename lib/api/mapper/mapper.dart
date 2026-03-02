@@ -1,3 +1,1 @@
-class Mapper {
-
-}
+class Mapper {}

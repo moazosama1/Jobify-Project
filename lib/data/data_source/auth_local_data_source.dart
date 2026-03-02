@@ -1,3 +1,1 @@
-abstract interface class AuthLocalDataSource {
-  
-}
+abstract interface class AuthLocalDataSource {}
