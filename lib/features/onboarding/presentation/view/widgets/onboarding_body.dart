@@ -37,7 +37,6 @@ class _OnboardingBodyState extends State<OnboardingBody> {
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
-
     final pages = [
       OnboardingPageWidget(
         title: local.searchJobEasier,

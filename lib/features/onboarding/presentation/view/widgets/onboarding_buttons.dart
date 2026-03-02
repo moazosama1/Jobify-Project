@@ -19,6 +19,7 @@ class OnboardingButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final local = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppMeasurements.paddingLarge,
@@ -30,8 +31,8 @@ class OnboardingButtons extends StatelessWidget {
             widthButton: double.infinity,
             textButton: isLastPage ? local.getStarted : local.next,
             borderButton: AppMeasurements.paddingMedium,
-            textStyleButton: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
+            textStyleButton: theme.textTheme.labelLarge?.copyWith(
+              color: theme.colorScheme.onPrimary,
             ),
             onPressed: () {
               context.read<OnboardingCubit>().onNextClicked(
@@ -47,8 +48,8 @@ class OnboardingButtons extends StatelessWidget {
               widthButton: double.infinity,
               textButton: local.skip,
               borderButton: AppMeasurements.paddingMedium,
-              textStyleButton: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: Theme.of(context).colorScheme.primary,
+              textStyleButton: theme.textTheme.labelLarge?.copyWith(
+                color: theme.colorScheme.primary,
               ),
               colorButton: Theme.of(
                 context,
@@ -61,9 +62,7 @@ class OnboardingButtons extends StatelessWidget {
               },
             )
           else
-            const SizedBox(
-              height: AppMeasurements.buttonHeight,
-            ), // Match height of skip button
+            const SizedBox(height: AppMeasurements.buttonHeight),
         ],
       ),
     );

@@ -13,6 +13,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BlocListener<SplashCubit, SplashState>(
       listener: (context, state) {
         if (state is SplashNavigateToOnboarding) {
@@ -22,7 +23,7 @@ class SplashScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.tertiary,
+        backgroundColor: theme.colorScheme.tertiary,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -30,14 +31,12 @@ class SplashScreen extends StatelessWidget {
               const Spacer(),
               Text(
                 ConstKeys.appName,
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onTertiary,
+                style: theme.textTheme.headlineLarge?.copyWith(
+                  color: theme.colorScheme.onTertiary,
                 ),
               ),
               const Spacer(),
-              CustomLoadingIndicator(
-                color: Theme.of(context).colorScheme.onTertiary,
-              ),
+              CustomLoadingIndicator(color: theme.colorScheme.onTertiary),
               const SizedBox(height: AppMeasurements.buttonHeight),
             ],
           ),

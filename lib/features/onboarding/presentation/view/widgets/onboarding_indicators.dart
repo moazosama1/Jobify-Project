@@ -13,6 +13,7 @@ class OnboardingIndicators extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
@@ -28,10 +29,8 @@ class OnboardingIndicators extends StatelessWidget {
               : AppMeasurements.paddingMedium,
           decoration: BoxDecoration(
             color: currentIndex == index
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(
-                    context,
-                  ).colorScheme.onSurface.withValues(alpha: 0.2),
+                ? theme.colorScheme.primary
+                : theme.colorScheme.onSurface.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(
               AppMeasurements.paddingExtraSmall,
             ),
