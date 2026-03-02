@@ -8,38 +8,41 @@ import 'package:jobify_project/core/widgets/custom_divider.dart';
 import 'package:jobify_project/core/widgets/custom_elevated_button_loading.dart';
 import 'package:jobify_project/core/widgets/custom_social_button.dart';
 import 'package:jobify_project/core/widgets/custom_text_field.dart';
-import 'package:jobify_project/presentation/auth/login/view_model/login_cubit.dart';
-import 'package:jobify_project/presentation/auth/login/view_model/login_event.dart';
-import 'package:jobify_project/presentation/auth/login/view_model/login_state.dart';
+import 'package:jobify_project/presentation/auth/register/view_model/register_cubit.dart';
+import 'package:jobify_project/presentation/auth/register/view_model/register_event.dart';
+import 'package:jobify_project/presentation/auth/register/view_model/register_state.dart';
 import 'package:jobify_project/generated/l10n.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jobify_project/core/router/route_names.dart';
 
-class LoginBody extends StatefulWidget {
-  const LoginBody({super.key});
+class RegisterBody extends StatefulWidget {
+  const RegisterBody({super.key});
 
   @override
-  State<LoginBody> createState() => _LoginBodyState();
+  State<RegisterBody> createState() => _RegisterBodyState();
 }
 
-class _LoginBodyState extends State<LoginBody> {
+class _RegisterBodyState extends State<RegisterBody> {
+  late TextEditingController _fullNameController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  late TextEditingController _confirmPasswordController;
   final _formKey = GlobalKey<FormState>();
-  late ValueNotifier<bool> _rememberMeNotifier;
+
   @override
   void initState() {
     super.initState();
+    _fullNameController = TextEditingController();
     _emailController = TextEditingController();
-
     _passwordController = TextEditingController();
-    _rememberMeNotifier = ValueNotifier<bool>(false);
+    _confirmPasswordController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _fullNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -82,7 +85,7 @@ class _LoginBodyState extends State<LoginBody> {
             ),
             const SizedBox(height: AppMeasurements.paddingMedium),
             Text(
-              local.giveCredentialToSignIn,
+              local.giveCredentialsToSignUpYourAccount,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
@@ -91,9 +94,23 @@ class _LoginBodyState extends State<LoginBody> {
 
             // Inputs
             CustomTextField(
+              controller: _fullNameController,
+              label: local.fullName,
+              hintText: local.typeYourName,
+              textInputAction: .next,
+              prefixIcon: Icon(
+                Icons.person_outline_rounded,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+              ),
+              validator: Validations.validateFullName,
+            ),
+            const SizedBox(height: AppMeasurements.paddingLarge),
+
+            CustomTextField(
               controller: _emailController,
               label: local.email,
               hintText: local.typeYourEmail,
+              textInputAction: .next,
               prefixIcon: Icon(
                 Icons.email_outlined,
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
@@ -101,10 +118,12 @@ class _LoginBodyState extends State<LoginBody> {
               validator: Validations.validateEmail,
             ),
             const SizedBox(height: AppMeasurements.paddingLarge),
+
             CustomTextField(
               controller: _passwordController,
               label: local.password,
               hintText: local.typeYourPassword,
+              textInputAction: .next,
               isPassword: true,
               prefixIcon: Icon(
                 Icons.lock_outline_rounded,
@@ -112,82 +131,42 @@ class _LoginBodyState extends State<LoginBody> {
               ),
               validator: Validations.validatePassword,
             ),
-            const SizedBox(height: AppMeasurements.paddingMedium),
-
-            // Options
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: ValueListenableBuilder<bool>(
-                        valueListenable: _rememberMeNotifier,
-                        builder: (context, isRememberMe, child) {
-                          return Checkbox(
-                            value: isRememberMe,
-                            onChanged: (val) {
-                              if (val != null) {
-                                _rememberMeNotifier.value = val;
-                                context.read<LoginCubit>().onEvent(
-                                  ToggleRememberMeEvent(val),
-                                );
-                              }
-                            },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            activeColor: theme.colorScheme.primary,
-                            side: BorderSide(
-                              color: theme.colorScheme.onSurface.withValues(
-                                alpha: 0.5,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: AppMeasurements.paddingSmall),
-                    Text(
-                      local.rememberMe,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(
-                          alpha: 0.5,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    local.forgotPassword,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
             const SizedBox(height: AppMeasurements.paddingLarge),
+            CustomTextField(
+              controller: _confirmPasswordController,
+              label: local.confirmPassword,
+              hintText: local.typeYourPassword,
+              textInputAction: .done,
+              isPassword: true,
+              prefixIcon: Icon(
+                Icons.lock_outline_rounded,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+              ),
+              validator: (val) {
+                return Validations.validateConfirmPassword(
+                  val,
+                  _passwordController.text,
+                );
+              },
+            ),
+            const SizedBox(height: AppMeasurements.paddingExtraLarge),
 
-            // Login Button
-            BlocBuilder<LoginCubit, LoginState>(
+            // Register Button
+            BlocBuilder<RegisterCubit, RegisterState>(
               builder: (context, state) {
                 return CustomElevatedButtonLoading(
                   widthButton: double.infinity,
                   heightButton: 56,
-                  textButton: local.signIn,
+                  textButton: local.signUp,
                   isLoading: state.isLoading,
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      context.read<LoginCubit>().onEvent(
-                        LoginSubmittedEvent(
+                      context.read<RegisterCubit>().onEvent(
+                        RegisterSubmittedEvent(
+                          fullName: _fullNameController.text,
                           email: _emailController.text,
                           password: _passwordController.text,
+                          confirmPassword: _confirmPasswordController.text,
                         ),
                       );
                     }
@@ -213,8 +192,8 @@ class _LoginBodyState extends State<LoginBody> {
                 CustomSocialButton(
                   iconPath: AppImages.iconGoogle,
                   onTap: () {
-                    context.read<LoginCubit>().onEvent(
-                      GoogleLoginClickedEvent(),
+                    context.read<RegisterCubit>().onEvent(
+                      RegisterGoogleLoginClickedEvent(),
                     );
                   },
                 ),
@@ -224,22 +203,22 @@ class _LoginBodyState extends State<LoginBody> {
             ),
             const SizedBox(height: AppMeasurements.paddingExtraLarge),
 
-            // Sign Up
+            // Sign In
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  local.dontHaveAccount,
+                  local.alreadyHaveAccount,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                 ),
                 TextButton(
                   onPressed: () {
-                    context.push(RouteNames.register);
+                    context.pop();
                   },
                   child: Text(
-                    local.signUp,
+                    local.signIn,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.colorScheme.primary,
                       fontWeight: FontWeight.bold,

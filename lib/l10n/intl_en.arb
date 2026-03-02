@@ -63,6 +63,10 @@
   "passwordMustNotContainSpaces": "Password must not contain spaces.",
   "confirmPasswordIsRequired": "Confirm password is required.",
   "passwordMismatch": "Passwords do not match.",
-  "fullNameTooLongMustBeLessThan20Characters": "Full name must be less than 20 characters."
-
+  "fullNameTooLongMustBeLessThan20Characters": "Full name must be less than 20 characters.",
+  "fullName": "Full Name",
+  "typeYourName": "Type your name",
+  "confirmPassword": "Confirm Password",
+  "alreadyHaveAccount": "Already have an account?",
+  "giveCredentialsToSignUpYourAccount" :"Give credentials to sign up your account"
 }

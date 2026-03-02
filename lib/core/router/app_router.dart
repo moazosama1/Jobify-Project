@@ -9,6 +9,8 @@ import 'package:jobify_project/presentation/splash/view_model/splash_cubit.dart'
 import 'package:jobify_project/presentation/splash/view/screens/splash_screen.dart';
 import 'package:jobify_project/presentation/auth/login/view/screens/login_screen.dart';
 import 'package:jobify_project/presentation/auth/login/view_model/login_cubit.dart';
+import 'package:jobify_project/presentation/auth/register/view/screens/register_screen.dart';
+import 'package:jobify_project/presentation/auth/register/view_model/register_cubit.dart';
 
 abstract class AppRouter {
   static final router = GoRouter(
@@ -38,6 +40,13 @@ abstract class AppRouter {
         builder: (context, state) => BlocProvider(
           create: (_) => getIt<LoginCubit>(),
           child: const LoginScreen(),
+        ),
+      ),
+      GoRoute(
+        path: RouteNames.register,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<RegisterCubit>(),
+          child: const RegisterScreen(),
         ),
       ),
     ],

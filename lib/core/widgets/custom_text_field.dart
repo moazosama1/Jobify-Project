@@ -8,7 +8,7 @@ class CustomTextField extends StatelessWidget {
   final bool isPassword;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
-
+  final TextInputAction? textInputAction;
   const CustomTextField({
     super.key,
     required this.label,
@@ -17,6 +17,7 @@ class CustomTextField extends StatelessWidget {
     this.isPassword = false,
     this.controller,
     this.validator,
+    this.textInputAction,
   });
 
   @override
@@ -39,8 +40,10 @@ class CustomTextField extends StatelessWidget {
           valueListenable: obscureTextNotifier,
           builder: (context, obscureText, child) {
             return TextFormField(
+              validator: validator,
               controller: controller,
               obscureText: obscureText,
+              textInputAction: textInputAction,
               style: Theme.of(context).textTheme.bodyMedium,
               decoration: InputDecoration(
                 hintText: hintText,
