@@ -70,7 +70,7 @@ class _OnboardingBodyState extends State<OnboardingBody> {
     return BlocConsumer<OnboardingCubit, OnboardingState>(
       listener: (context, state) {
         if (state.isCompleted) {
-          context.go(RouteNames.home);
+          context.go(RouteNames.login);
         } else if (_pageController.hasClients &&
             _pageController.page?.round() != state.currentPageIndex) {
           _pageController.animateToPage(

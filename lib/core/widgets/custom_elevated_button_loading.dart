@@ -38,7 +38,7 @@ class CustomElevatedButtonLoading extends StatelessWidget {
           elevation: elevation,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
-              borderButton ?? AppMeasurements.paddingSmall,
+              borderButton ?? AppMeasurements.paddingMedium,
             ),
           ),
         ),
