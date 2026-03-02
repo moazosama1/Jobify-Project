@@ -33,7 +33,7 @@ abstract class AppTheme {
 
     return ThemeData(
       useMaterial3: true,
-      fontFamily: ConstKeys.interFont,
+      fontFamily: ConstKeys.cairoFont,
       scaffoldBackgroundColor: scaffoldBackgroundColor,
       colorScheme: colorScheme,
 

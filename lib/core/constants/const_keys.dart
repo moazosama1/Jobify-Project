@@ -10,8 +10,12 @@ abstract final class ConstKeys {
   static const String kAppThemeDark = "app_theme_dark";
   static const String kAppLocale = "app_locale";
   static const String kEnglish = "en";
-
+  static const String onboardingKey = 'onboarding_completed';
   // Fonts
   static const String interFont = "Inter";
   static const String robotoFont = "Roboto";
+  static const String cairoFont = "Cairo";
+
+  // App Name
+  static const String appName = "Jobify";
 }
