@@ -1,3 +1,1 @@
-abstract interface class AuthRemoteDataSource {
-  
-}
+abstract interface class AuthRemoteDataSource {}

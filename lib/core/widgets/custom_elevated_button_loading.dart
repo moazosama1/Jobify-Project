@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jobify_project/generated/l10n.dart';
+import 'package:jobify_project/core/responsive/app_measurements.dart';
+import 'package:jobify_project/core/widgets/custom_loading_indicator.dart';
 
 class CustomElevatedButtonLoading extends StatelessWidget {
   const CustomElevatedButtonLoading({
@@ -12,11 +14,12 @@ class CustomElevatedButtonLoading extends StatelessWidget {
     this.colorButton,
     this.onPressed,
     this.loadingColor,
+    this.elevation,
     this.isLoading = false,
   });
 
   final bool? isLoading;
-  final double? heightButton, widthButton, borderButton;
+  final double? heightButton, widthButton, borderButton, elevation;
   final String? textButton;
   final TextStyle? textStyleButton;
   final Color? colorButton, loadingColor;
@@ -26,22 +29,23 @@ class CustomElevatedButtonLoading extends StatelessWidget {
     final theme = Theme.of(context);
     final local = AppLocalizations.of(context);
     return SizedBox(
-      height: heightButton ?? 40,
+      height: heightButton ?? AppMeasurements.buttonHeight,
       width: widthButton,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: colorButton ?? theme.colorScheme.primary,
+          elevation: elevation,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderButton ?? 8),
+            borderRadius: BorderRadius.circular(
+              borderButton ?? AppMeasurements.paddingSmall,
+            ),
           ),
         ),
         child: isLoading == true
-            ? CircularProgressIndicator(
+            ? CustomLoadingIndicator(
                 color: loadingColor ?? theme.colorScheme.onSecondary,
-                strokeWidth: 3,
-                padding: const EdgeInsets.symmetric(vertical: 3),
-                trackGap: 4,
+                size: AppMeasurements.buttonHeight * 0.6,
               )
             : Text(textButton ?? local.done, style: textStyleButton),
       ),

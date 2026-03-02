@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class LoginDto extends Equatable{
-
+class LoginDto extends Equatable {
   const LoginDto();
 
   @override

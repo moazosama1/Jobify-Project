@@ -20,6 +20,3 @@ class ApiErrorResult<T> extends ApiResult<T> {
     }
   }
 }
-
-
-

@@ -36,7 +36,6 @@ abstract class AppModules {
     aOptions: AndroidOptions(encryptedSharedPreferences: true),
   );
 
-
   @preResolve
   @lazySingleton
   Future<SharedPreferences> provideSharedPrefs() async {
