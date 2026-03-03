@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 
 class CustomTextField extends StatelessWidget {
-  final String label;
+  final String? label;
   final String hintText;
-  final Widget prefixIcon;
+  final Widget? prefixIcon;
   final bool isPassword;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final TextInputAction? textInputAction;
   const CustomTextField({
     super.key,
-    required this.label,
+    this.label,
     required this.hintText,
-    required this.prefixIcon,
+    this.prefixIcon,
     this.isPassword = false,
     this.controller,
     this.validator,
@@ -29,12 +29,13 @@ class CustomTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: Theme.of(
-            context,
-          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
-        ),
+        if (label != null)
+          Text(
+            label ?? "",
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+          ),
         const SizedBox(height: AppMeasurements.paddingSmall),
         ValueListenableBuilder<bool>(
           valueListenable: obscureTextNotifier,

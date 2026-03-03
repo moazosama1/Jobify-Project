@@ -46,4 +46,6 @@ abstract class AppColors {
   static const Color lightPink = Color(0xFFF9ECF0);
   static const Color yellow = Color(0xFFC8D444);
   static const Color splashBackground = Color(0xFF7D66FF);
+  static const Color brandLight = Color(0xFFE8F5E9);
+  static const Color brandDefault = Color(0xFF4CAF50);
 }

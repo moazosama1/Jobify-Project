@@ -181,7 +181,6 @@ class _LoginBodyState extends State<LoginBody> {
               builder: (context, state) {
                 return CustomElevatedButtonLoading(
                   widthButton: double.infinity,
-                  heightButton: 56,
                   textButton: local.signIn,
                   isLoading: state.isLoading,
                   onPressed: () {
