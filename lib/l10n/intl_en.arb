@@ -68,5 +68,14 @@
   "typeYourName": "Type your name",
   "confirmPassword": "Confirm Password",
   "alreadyHaveAccount": "Already have an account?",
-  "giveCredentialsToSignUpYourAccount" :"Give credentials to sign up your account"
+  "giveCredentialsToSignUpYourAccount": "Give credentials to sign up your account",
+  "resetPassword": "Reset Password",
+  "pleaseEnterEmailForReset": "Please enter your email address to request a password reset",
+  "send": "Send",
+  "verification": "Verification",
+  "weHaveSentCode": "We've send you the verification code on",
+  "resetNow": "Reset Now",
+  "getCodeIn": "Get Code in",
+  "resend": "Resend",
+  "pleaseEnterNewPassword": "Please enter your new password to complete the reset"
 }

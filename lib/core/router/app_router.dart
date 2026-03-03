@@ -11,6 +11,8 @@ import 'package:jobify_project/presentation/auth/login/view/screens/login_screen
 import 'package:jobify_project/presentation/auth/login/view_model/login_cubit.dart';
 import 'package:jobify_project/presentation/auth/register/view/screens/register_screen.dart';
 import 'package:jobify_project/presentation/auth/register/view_model/register_cubit.dart';
+import 'package:jobify_project/presentation/auth/forget_password/view/screens/forget_password_screen.dart';
+import 'package:jobify_project/presentation/auth/forget_password/view_model/forget_password_cubit.dart';
 
 abstract class AppRouter {
   static final router = GoRouter(
@@ -47,6 +49,13 @@ abstract class AppRouter {
         builder: (context, state) => BlocProvider(
           create: (_) => getIt<RegisterCubit>(),
           child: const RegisterScreen(),
+        ),
+      ),
+      GoRoute(
+        path: RouteNames.forgetPassword,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<ForgetPasswordCubit>(),
+          child: const ForgetPasswordScreen(),
         ),
       ),
     ],

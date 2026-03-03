@@ -161,7 +161,7 @@ class _RegisterBodyState extends State<RegisterBody> {
                   isLoading: state.isLoading,
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      context.read<RegisterCubit>().onEvent(
+                      context.read<RegisterCubit>().doIntent(
                         RegisterSubmittedEvent(
                           fullName: _fullNameController.text,
                           email: _emailController.text,
@@ -192,7 +192,7 @@ class _RegisterBodyState extends State<RegisterBody> {
                 CustomSocialButton(
                   iconPath: AppImages.iconGoogle,
                   onTap: () {
-                    context.read<RegisterCubit>().onEvent(
+                    context.read<RegisterCubit>().doIntent(
                       RegisterGoogleLoginClickedEvent(),
                     );
                   },

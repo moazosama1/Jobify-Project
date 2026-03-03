@@ -131,7 +131,7 @@ class _LoginBodyState extends State<LoginBody> {
                             onChanged: (val) {
                               if (val != null) {
                                 _rememberMeNotifier.value = val;
-                                context.read<LoginCubit>().onEvent(
+                                context.read<LoginCubit>().doIntent(
                                   ToggleRememberMeEvent(val),
                                 );
                               }
@@ -161,7 +161,9 @@ class _LoginBodyState extends State<LoginBody> {
                   ],
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.push(RouteNames.forgetPassword);
+                  },
                   child: Text(
                     local.forgotPassword,
                     style: theme.textTheme.bodySmall?.copyWith(
@@ -184,7 +186,7 @@ class _LoginBodyState extends State<LoginBody> {
                   isLoading: state.isLoading,
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      context.read<LoginCubit>().onEvent(
+                      context.read<LoginCubit>().doIntent(
                         LoginSubmittedEvent(
                           email: _emailController.text,
                           password: _passwordController.text,
@@ -213,7 +215,7 @@ class _LoginBodyState extends State<LoginBody> {
                 CustomSocialButton(
                   iconPath: AppImages.iconGoogle,
                   onTap: () {
-                    context.read<LoginCubit>().onEvent(
+                    context.read<LoginCubit>().doIntent(
                       GoogleLoginClickedEvent(),
                     );
                   },

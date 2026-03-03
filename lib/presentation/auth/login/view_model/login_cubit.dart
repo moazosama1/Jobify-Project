@@ -7,7 +7,7 @@ import 'package:jobify_project/presentation/auth/login/view_model/login_state.da
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(const LoginState());
 
-  void onEvent(LoginEvent event) {
+  void doIntent(LoginEvent event) {
     if (event is LoginSubmittedEvent) {
       _onLoginSubmitted(event.email, event.password);
     } else if (event is GoogleLoginClickedEvent) {

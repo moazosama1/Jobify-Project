@@ -7,7 +7,7 @@ import 'package:jobify_project/presentation/auth/register/view_model/register_st
 class RegisterCubit extends Cubit<RegisterState> {
   RegisterCubit() : super(const RegisterState());
 
-  void onEvent(RegisterEvent event) {
+  void doIntent(RegisterEvent event) {
     if (event is RegisterSubmittedEvent) {
       _onRegisterSubmitted(
         event.fullName,
