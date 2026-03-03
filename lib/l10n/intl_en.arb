@@ -77,5 +77,18 @@
   "resetNow": "Reset Now",
   "getCodeIn": "Get Code in",
   "resend": "Resend",
-  "pleaseEnterNewPassword": "Please enter your new password to complete the reset"
+  "pleaseEnterNewPassword": "Please enter your new password to complete the reset",
+  "applyJob": "Apply Job",
+  "websiteBlogPortfolio": "Website, Blog, or Portfolio",
+  "typeYourPortfolioAddress": "Type your portfolio address",
+  "uploadCv": "Upload CV",
+  "formatDocPdfJpg": "Format DOC, PDF, JPG",
+  "browseFiles": "Browse Files",
+  "motivationalLetter": "Motivational Letter",
+  "writeSomething": "Write something...",
+  "applyThisJob": "Apply This Job",
+  "youveApplied": "You've Applied",
+  "youHaveSuccessfullyApplied": "You have successfully applied to\nthis job vacancy.",
+  "backToHome": "Back To Home",
+  "seeAppliedJob": "See Applied Job"
 }

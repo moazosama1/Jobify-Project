@@ -13,9 +13,19 @@ import 'package:jobify_project/presentation/auth/register/view/screens/register_
 import 'package:jobify_project/presentation/auth/register/view_model/register_cubit.dart';
 import 'package:jobify_project/presentation/auth/forget_password/view/screens/forget_password_screen.dart';
 import 'package:jobify_project/presentation/auth/forget_password/view_model/forget_password_cubit.dart';
+import 'package:jobify_project/presentation/home/view/screens/home_screen.dart';
+import 'package:jobify_project/presentation/saved/view/screens/saved_screen.dart';
+import 'package:jobify_project/presentation/messages/view/screens/messages_screen.dart';
+import 'package:jobify_project/presentation/profile/view/screens/profile_screen.dart';
+import 'package:jobify_project/presentation/apply_job/view/screens/apply_job_screen.dart';
+import 'package:jobify_project/presentation/apply_job/view_model/apply_job_cubit.dart';
+import 'package:jobify_project/presentation/main_layout/view/screens/main_layout_screen.dart';
 
 abstract class AppRouter {
+  static final _rootNavigatorKey = GlobalKey<NavigatorState>();
+
   static final router = GoRouter(
+    navigatorKey: _rootNavigatorKey,
     initialLocation: RouteNames.splash,
     routes: [
       GoRoute(
@@ -32,10 +42,52 @@ abstract class AppRouter {
           child: const OnboardingScreen(),
         ),
       ),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return MainLayoutScreen(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RouteNames.home,
+                builder: (context, state) => const HomeScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RouteNames.saved,
+                builder: (context, state) => const SavedScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RouteNames.messages,
+                builder: (context, state) => const MessagesScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RouteNames.profile,
+                builder: (context, state) => const ProfileScreen(),
+              ),
+            ],
+          ),
+        ],
+      ),
       GoRoute(
-        path: RouteNames.home,
-        builder: (context, state) =>
-            const Scaffold(body: Center(child: Text("Home"))),
+        path: RouteNames.applyJob,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<ApplyJobCubit>(),
+          child: const ApplyJobScreen(),
+        ),
       ),
       GoRoute(
         path: RouteNames.login,

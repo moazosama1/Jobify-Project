@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jobify_project/core/constants/app_theme.dart';
@@ -14,6 +15,12 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await configureDependencies();
   Bloc.observer = MyBlocObserver();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+    ),
+  );
   runApp(
     BlocProvider(
       create: (context) => getIt<CoreCubit>(),
@@ -41,6 +48,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           themeMode: currentThemeMode,
           theme: AppTheme.lightTheme,
+
           darkTheme: AppTheme.darkTheme,
           routerConfig: AppRouter.router,
           localizationsDelegates: const [
