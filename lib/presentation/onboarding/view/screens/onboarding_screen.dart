@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jobify_project/features/onboarding/presentation/view/widgets/onboarding_body.dart';
+import 'package:jobify_project/presentation/onboarding/view/widgets/onboarding_body.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});

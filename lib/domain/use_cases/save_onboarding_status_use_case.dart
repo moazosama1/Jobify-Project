@@ -11,4 +11,3 @@ class SaveOnboardingStatusUseCase {
     return await _repo.saveOnboardingStatus(completed);
   }
 }
-
