@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jobify_project/generated/l10n.dart';
-import 'package:jobify_project/presentation/apply_job/view_model/apply_job_cubit.dart';
-import 'package:jobify_project/presentation/apply_job/view_model/apply_job_event.dart';
-import 'package:jobify_project/presentation/apply_job/view_model/apply_job_state.dart';
+import 'package:jobify_project/presentation/job_seeker/apply_job/view_model/apply_job_cubit.dart';
+import 'package:jobify_project/presentation/job_seeker/apply_job/view_model/apply_job_event.dart';
+import 'package:jobify_project/presentation/job_seeker/apply_job/view_model/apply_job_state.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';

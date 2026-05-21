@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jobify_project/core/di/di.dart';
 import 'package:jobify_project/core/router/route_names.dart';
+import 'package:jobify_project/presentation/job_seeker/home/view_model/home_cubit.dart';
+import 'package:jobify_project/presentation/job_seeker/home/view_model/home_event.dart';
 import 'package:jobify_project/presentation/onboarding/view_model/onboarding_cubit.dart';
 import 'package:jobify_project/presentation/onboarding/view/screens/onboarding_screen.dart';
 import 'package:jobify_project/presentation/splash/view_model/splash_cubit.dart';
@@ -13,12 +15,12 @@ import 'package:jobify_project/presentation/auth/register/view/screens/register_
 import 'package:jobify_project/presentation/auth/register/view_model/register_cubit.dart';
 import 'package:jobify_project/presentation/auth/forget_password/view/screens/forget_password_screen.dart';
 import 'package:jobify_project/presentation/auth/forget_password/view_model/forget_password_cubit.dart';
-import 'package:jobify_project/presentation/home/view/screens/home_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/home/view/screens/home_screen.dart';
 import 'package:jobify_project/presentation/saved/view/screens/saved_screen.dart';
 import 'package:jobify_project/presentation/messages/view/screens/messages_screen.dart';
 import 'package:jobify_project/presentation/profile/view/screens/profile_screen.dart';
-import 'package:jobify_project/presentation/apply_job/view/screens/apply_job_screen.dart';
-import 'package:jobify_project/presentation/apply_job/view_model/apply_job_cubit.dart';
+import 'package:jobify_project/presentation/job_seeker/apply_job/view/screens/apply_job_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/apply_job/view_model/apply_job_cubit.dart';
 import 'package:jobify_project/presentation/main_layout/view/screens/main_layout_screen.dart';
 
 abstract class AppRouter {
@@ -51,7 +53,11 @@ abstract class AppRouter {
             routes: [
               GoRoute(
                 path: RouteNames.home,
-                builder: (context, state) => const HomeScreen(),
+                builder: (context, state) => BlocProvider(
+                  create: (_) =>
+                      getIt<HomeCubit>()..doIntent(HomeLoadDataEvent()),
+                  child: const HomeScreen(),
+                ),
               ),
             ],
           ),

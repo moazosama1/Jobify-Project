@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jobify_project/core/widgets/custom_elevated_button_loading.dart';
 import 'package:jobify_project/core/widgets/custom_text_field.dart';
 import 'package:jobify_project/generated/l10n.dart';
-import 'package:jobify_project/presentation/apply_job/view_model/apply_job_cubit.dart';
-import 'package:jobify_project/presentation/apply_job/view_model/apply_job_event.dart';
-import 'package:jobify_project/presentation/apply_job/view_model/apply_job_state.dart';
-import 'package:jobify_project/presentation/apply_job/view/widgets/apply_job_upload_cv_widget.dart';
+import 'package:jobify_project/presentation/job_seeker/apply_job/view_model/apply_job_cubit.dart';
+import 'package:jobify_project/presentation/job_seeker/apply_job/view_model/apply_job_event.dart';
+import 'package:jobify_project/presentation/job_seeker/apply_job/view_model/apply_job_state.dart';
+import 'package:jobify_project/presentation/job_seeker/apply_job/view/widgets/apply_job_upload_cv_widget.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 
 class ApplyJobFormView extends StatefulWidget {

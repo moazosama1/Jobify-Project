@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jobify_project/core/widgets/custom_app_bar.dart';
 import 'package:jobify_project/core/widgets/custom_screen_wrapper.dart';
 import 'package:jobify_project/generated/l10n.dart';
-import 'package:jobify_project/presentation/apply_job/view/widgets/apply_job_body.dart';
+import 'package:jobify_project/presentation/job_seeker/apply_job/view/widgets/apply_job_body.dart';
 
 class ApplyJobScreen extends StatelessWidget {
   const ApplyJobScreen({super.key});

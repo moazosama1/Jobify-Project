@@ -90,5 +90,19 @@
   "youveApplied": "You've Applied",
   "youHaveSuccessfullyApplied": "You have successfully applied to\nthis job vacancy.",
   "backToHome": "Back To Home",
-  "seeAppliedJob": "See Applied Job"
+  "seeAppliedJob": "See Applied Job",
+  "welcomeUser": "Welcome Ahmed",
+  "helloUser": "Hello! Ahmed",
+  "searchPlaceholder": "Search...",
+  "bannerTitle": "Let's find a new job\nsuitable for you",
+  "browseByCategory": "Browse By Category",
+  "suggestedJobs": "Suggested Jobs",
+  "recentJobs": "Recent Jobs",
+  "seeAll": "See All",
+  "categoryCompany": "Company",
+  "categoryFullTime": "Full Time",
+  "categoryPartTime": "Part Time",
+  "categoryFreelance": "Freelance",
+  "year": "Year",
+  "apply": "Apply"
 }
