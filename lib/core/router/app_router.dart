@@ -5,6 +5,7 @@ import 'package:jobify_project/core/di/di.dart';
 import 'package:jobify_project/core/router/route_names.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view_model/home_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view_model/home_event.dart';
+import 'package:jobify_project/presentation/job_seeker/job_details/view/job_details_screen.dart';
 import 'package:jobify_project/presentation/onboarding/view_model/onboarding_cubit.dart';
 import 'package:jobify_project/presentation/onboarding/view/screens/onboarding_screen.dart';
 import 'package:jobify_project/presentation/splash/view_model/splash_cubit.dart';
@@ -115,6 +116,10 @@ abstract class AppRouter {
           create: (_) => getIt<ForgetPasswordCubit>(),
           child: const ForgetPasswordScreen(),
         ),
+      ),
+      GoRoute(
+        path: RouteNames.jobDetails,
+        builder: (context, state) => const JobDetailsScreen(),
       ),
     ],
   );

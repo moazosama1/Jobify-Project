@@ -9,4 +9,5 @@ abstract class RouteNames {
   static const String messages = "/messages";
   static const String profile = "/profile";
   static const String applyJob = "/applyJob";
+  static const String jobDetails = "/jobDetails";
 }

@@ -9,18 +9,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final local = AppLocalizations.of(context);
 
-    return CustomScreenWrapper(
-      applyPadding: false, // Enable edge-to-edge scrolling for horizontal lists
-      // appBar: CustomUserInfoAppBar(
-      //   welcomeText: local.welcomeUser,
-      //   userNameText: local.helloUser,
-      //   onNotificationPressed: () {
-      //     // Notification actions here
-      //   },
-      // ),
-      body: const HomeScreenViewBody(),
+    return const CustomScreenWrapper(
+      applyPadding: false, 
+      body: HomeScreenViewBody(),
     );
   }
 }
