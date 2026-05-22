@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
+import 'package:jobify_project/core/router/route_names.dart';
 import 'package:jobify_project/domain/entities/job_entity.dart';
 import 'package:jobify_project/generated/l10n.dart';
-import 'package:jobify_project/presentation/job_seeker/home/view/screens/widgets/recent_job_card.dart';
+import 'package:jobify_project/core/widgets/job_card.dart';
 
 class RecentJobsSectionWidget extends StatelessWidget {
   final List<JobEntity> recentJobs;
@@ -56,7 +58,8 @@ class RecentJobsSectionWidget extends StatelessWidget {
               const SizedBox(height: AppMeasurements.paddingMedium),
           itemBuilder: (context, index) {
             final job = recentJobs[index];
-            return RecentJobCard(
+            return JobCard(
+              onTap: () => context.push(RouteNames.jobDetails),
               job: job,
               onOptionsTap: () {
                 // Show options modal sheet.

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/domain/entities/job_entity.dart';
 import 'package:jobify_project/generated/l10n.dart';
-import 'package:jobify_project/presentation/job_seeker/home/view/screens/widgets/suggested_job_card.dart';
+import 'package:jobify_project/core/widgets/suggested_job_card.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view_model/home_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view_model/home_event.dart';
 

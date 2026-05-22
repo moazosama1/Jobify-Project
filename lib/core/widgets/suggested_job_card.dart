@@ -5,12 +5,36 @@ import 'package:jobify_project/domain/entities/job_entity.dart';
 
 class SuggestedJobCard extends StatelessWidget {
   final JobEntity job;
+  final double width;
+  final double height;
+  final double borderRadius;
+  final LinearGradient backgroundGradient;
+  final Color applyButtonColor;
+  final Color logoBackgroundColor;
+  final bool showBookmarkButton;
+  final bool showApplyButton;
+  final String applyButtonLabel;
+  final VoidCallback? onTap;
   final VoidCallback? onBookmarkTap;
   final VoidCallback? onApplyTap;
 
   const SuggestedJobCard({
     super.key,
     required this.job,
+    this.width = 280,
+    this.height = 180,
+    this.borderRadius = 24,
+    this.backgroundGradient = const LinearGradient(
+      colors: [Color(0xFF7B61FF), Color(0xFF623ECA)],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    this.applyButtonColor = const Color(0xFF4A1FAD),
+    this.logoBackgroundColor = Colors.white,
+    this.showBookmarkButton = true,
+    this.showApplyButton = true,
+    this.applyButtonLabel = 'Apply',
+    this.onTap,
     this.onBookmarkTap,
     this.onApplyTap,
   });
@@ -19,22 +43,16 @@ class SuggestedJobCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      width: 280,
+    final card = Container(
+      width: width,
+      height: height,
       padding: const EdgeInsets.all(AppMeasurements.paddingMedium),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFF7B61FF), // Vibrant violet-purple
-            Color(0xFF623ECA), // Deep indigo
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(24),
+        gradient: backgroundGradient,
+        borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF7B61FF).withValues(alpha: 0.3),
+            color: const Color(0xFF7B61FF).withOpacity(0.3),
             blurRadius: 15,
             offset: const Offset(0, 6),
           ),
@@ -47,19 +65,17 @@ class SuggestedJobCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Company Logo Box
               Container(
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: AppColors.white,
+                  color: logoBackgroundColor,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 padding: const EdgeInsets.all(AppMeasurements.paddingSmall),
                 child: Image.asset(job.logoAsset, fit: BoxFit.contain),
               ),
               const SizedBox(width: AppMeasurements.paddingMedium),
-              // Company Name & Job Title
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,7 +84,7 @@ class SuggestedJobCard extends StatelessWidget {
                     Text(
                       job.companyName,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppColors.white.withValues(alpha: 0.7),
+                        color: AppColors.white.withOpacity(0.7),
                         fontWeight: FontWeight.w400,
                       ),
                       maxLines: 1,
@@ -87,23 +103,22 @@ class SuggestedJobCard extends StatelessWidget {
                   ],
                 ),
               ),
-              // Bookmark Button
-              IconButton(
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                icon: Icon(
-                  job.isBookmarked
-                      ? Icons.bookmark_rounded
-                      : Icons.bookmark_border_rounded,
-                  color: AppColors.white,
-                  size: 24,
+              if (showBookmarkButton)
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  icon: Icon(
+                    job.isBookmarked
+                        ? Icons.bookmark_rounded
+                        : Icons.bookmark_border_rounded,
+                    color: AppColors.white,
+                    size: 24,
+                  ),
+                  onPressed: onBookmarkTap,
                 ),
-                onPressed: onBookmarkTap,
-              ),
             ],
           ),
           const Spacer(),
-          // Middle Row: Chip Tags
           Wrap(
             spacing: AppMeasurements.paddingSmall,
             runSpacing: AppMeasurements.paddingExtraSmall,
@@ -114,7 +129,7 @@ class SuggestedJobCard extends StatelessWidget {
                   vertical: AppMeasurements.paddingExtraSmall + 2,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.white.withValues(alpha: 0.15),
+                  color: AppColors.white.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -128,11 +143,9 @@ class SuggestedJobCard extends StatelessWidget {
             }).toList(),
           ),
           const Spacer(),
-          // Bottom Row: Salary & Apply Button
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Salary
               RichText(
                 text: TextSpan(
                   children: [
@@ -146,47 +159,61 @@ class SuggestedJobCard extends StatelessWidget {
                     TextSpan(
                       text: ' / Year',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppColors.white.withValues(alpha: 0.6),
+                        color: AppColors.white.withOpacity(0.6),
                       ),
                     ),
                   ],
                 ),
               ),
-              // Apply Button
-              GestureDetector(
-                onTap: onApplyTap,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppMeasurements.paddingMedium,
-                    vertical: AppMeasurements.paddingSmall + 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF4A1FAD), // Darker contrast color
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Apply',
-                        style: theme.textTheme.labelMedium?.copyWith(
-                          color: AppColors.white,
-                          fontWeight: FontWeight.bold,
+              if (showApplyButton)
+                GestureDetector(
+                  onTap: onApplyTap,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppMeasurements.paddingMedium,
+                      vertical: AppMeasurements.paddingSmall + 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: applyButtonColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          applyButtonLabel,
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            color: AppColors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 4),
-                      Icon(
-                        Icons.arrow_forward_rounded,
-                        color: AppColors.white,
-                        size: 14,
-                      ),
-                    ],
+                        const SizedBox(width: 4),
+                        Icon(
+                          Icons.arrow_forward_rounded,
+                          color: AppColors.white,
+                          size: 14,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ],
+      ),
+    );
+
+    if (onTap == null) {
+      return card;
+    }
+
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(borderRadius),
+        onTap: onTap,
+        child: card,
       ),
     );
   }

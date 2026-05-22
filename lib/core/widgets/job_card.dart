@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/constants/app_colors.dart';
-import 'package:jobify_project/core/router/route_names.dart';
 import 'package:jobify_project/domain/entities/job_entity.dart';
 
-class RecentJobCard extends StatelessWidget {
+class JobCard extends StatelessWidget {
   final JobEntity job;
   final VoidCallback? onOptionsTap;
+  final void Function()? onTap;
 
-  const RecentJobCard({super.key, required this.job, this.onOptionsTap});
+  const JobCard({
+    super.key,
+    required this.onTap,
+    required this.job,
+    this.onOptionsTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +21,7 @@ class RecentJobCard extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     return GestureDetector(
-      onTap: () {
-        context.push(RouteNames.jobDetails);
-      },
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: AppMeasurements.paddingMedium,

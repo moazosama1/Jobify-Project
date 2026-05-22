@@ -86,7 +86,7 @@ class ApplyJobSuccessView extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
           onPressed: () {
-            context.go(RouteNames.saved);
+            context.go(RouteNames.applications);
           },
         ),
       ],

@@ -17,12 +17,12 @@ import 'package:jobify_project/presentation/auth/register/view_model/register_cu
 import 'package:jobify_project/presentation/auth/forget_password/view/screens/forget_password_screen.dart';
 import 'package:jobify_project/presentation/auth/forget_password/view_model/forget_password_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view/screens/home_screen.dart';
-import 'package:jobify_project/presentation/saved/view/screens/saved_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/applications/view/screens/applications_screen.dart';
 import 'package:jobify_project/presentation/messages/view/screens/messages_screen.dart';
-import 'package:jobify_project/presentation/profile/view/screens/profile_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/profile/view/screens/profile_screen.dart';
 import 'package:jobify_project/presentation/job_seeker/apply_job/view/screens/apply_job_screen.dart';
 import 'package:jobify_project/presentation/job_seeker/apply_job/view_model/apply_job_cubit.dart';
-import 'package:jobify_project/presentation/main_layout/view/screens/main_layout_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/main_layout/view/screens/main_layout_screen.dart';
 
 abstract class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -65,8 +65,8 @@ abstract class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: RouteNames.saved,
-                builder: (context, state) => const SavedScreen(),
+                path: RouteNames.applications,
+                builder: (context, state) => const ApplicationsScreen(),
               ),
             ],
           ),

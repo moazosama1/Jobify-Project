@@ -4,9 +4,9 @@ import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/router/route_names.dart';
 import 'package:jobify_project/domain/entities/job_entity.dart';
 import 'package:jobify_project/generated/l10n.dart';
+import 'package:jobify_project/core/widgets/suggested_job_card.dart';
 import 'package:jobify_project/presentation/job_seeker/job_details/view/widgets/job_details_header_section.dart';
 import 'package:jobify_project/presentation/job_seeker/job_details/view/widgets/job_details_requirements_section.dart';
-import 'package:jobify_project/presentation/job_seeker/job_details/view/widgets/job_details_role_section.dart';
 
 class JobDetailsScreenViewBody extends StatelessWidget {
   const JobDetailsScreenViewBody({super.key});
@@ -21,7 +21,7 @@ class JobDetailsScreenViewBody extends StatelessWidget {
     'Have a good communication skill',
   ];
 
-  static final _job = JobEntity(
+  static final _job = const JobEntity(
     id: 'd1',
     companyName: 'Google LLC',
     logoAsset: 'assets/icons/google.png',
@@ -49,7 +49,10 @@ class JobDetailsScreenViewBody extends StatelessWidget {
             },
           ),
           const SizedBox(height: AppMeasurements.paddingLarge),
-          JobDetailsRoleSection(job: _job),
+          Center(
+            child: SuggestedJobCard(job: _job, width: double.infinity),
+          ),
+
           const SizedBox(height: AppMeasurements.paddingLarge),
           JobDetailsRequirementsSection(
             description: _description,

@@ -27,7 +27,9 @@ class JobDetailsHeaderSection extends StatelessWidget {
             context,
           ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
-        TextButton(onPressed: onSkipPressed, child: const Text('Skip')),
+        onSkipPressed != null
+            ? TextButton(onPressed: onSkipPressed, child: const Text('Skip'))
+            : SizedBox.shrink(),
       ],
     );
   }

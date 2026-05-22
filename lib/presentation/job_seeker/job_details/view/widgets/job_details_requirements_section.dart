@@ -76,14 +76,11 @@ class JobDetailsRequirementsSection extends StatelessWidget {
           height: AppMeasurements.buttonHeight,
           child: ElevatedButton(
             onPressed: onApplyPressed,
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
+
             child: const Text('Apply This Job'),
           ),
         ),
+        const SizedBox(height: AppMeasurements.paddingLarge),
       ],
     );
   }
