@@ -21,18 +21,18 @@ class MainLayoutScreen extends StatelessWidget {
 
     return Scaffold(
       body: navigationShell,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push(RouteNames.applyJob),
-        backgroundColor: theme.colorScheme.primary,
-        shape: const CircleBorder(),
-        child: Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimary),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () => context.push(RouteNames.applyJob),
+      //   backgroundColor: theme.colorScheme.primary,
+      //   shape: const CircleBorder(),
+      //   child: Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimary),
+      // ),
+      //  floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
         icons: iconList,
         activeIndex: navigationShell.currentIndex,
-        gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.softEdge,
+        gapLocation: GapLocation.none,
+        //  notchSmoothness: NotchSmoothness.softEdge,
         height: 62,
         leftCornerRadius: 32,
         rightCornerRadius: 32,

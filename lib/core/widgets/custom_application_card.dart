@@ -53,7 +53,7 @@ class CustomJobApplicationCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.lightGray.withValues(alpha: 0.1),
+        color: AppColors.lightGray,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(

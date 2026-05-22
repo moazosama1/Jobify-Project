@@ -7,8 +7,8 @@ class JobDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: const CustomScreenWrapper(body: JobDetailsScreenViewBody()),
+    return const Scaffold(
+      body: CustomScreenWrapper(body: JobDetailsScreenViewBody()),
     );
   }
 }
