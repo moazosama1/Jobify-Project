@@ -6,11 +6,11 @@ import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/generated/l10n.dart';
 import 'package:jobify_project/core/router/route_names.dart';
 
-class ProfileHeaderWidget extends StatelessWidget {
+class HrProfileHeaderWidget extends StatelessWidget {
   final String name;
   final String title;
 
-  const ProfileHeaderWidget({
+  const HrProfileHeaderWidget({
     super.key,
     required this.name,
     required this.title,

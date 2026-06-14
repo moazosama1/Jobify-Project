@@ -12,4 +12,14 @@ abstract class RouteNames {
   static const String jobDetails = "/jobDetails";
   static const String savedJobs = "/savedJobs";
   static const String chatScreen = "/chatScreen";
+
+  // HR Routes
+  static const String hrHome = "/hrHome";
+  static const String hrApplications = "/hrApplications";
+  static const String hrMessages = "/hrMessages";
+  static const String hrProfile = "/hrProfile";
+  static const String hrChatScreen = "/hrChatScreen";
+  static const String hrHiringJob = "/hrHiringJob";
+  static const String hrHiringPost = "/hrHiringPost";
+  static const String editProfile = "/editProfile";
 }

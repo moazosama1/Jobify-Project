@@ -32,12 +32,33 @@ import 'package:jobify_project/presentation/job_seeker/apply_job/view/screens/ap
 import 'package:jobify_project/presentation/job_seeker/apply_job/view_model/apply_job_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/main_layout/view/screens/main_layout_screen.dart';
 
+// HR Presentation Layer Imports
+import 'package:jobify_project/presentation/hr/main_layout/view/screens/hr_main_layout_screen.dart';
+import 'package:jobify_project/presentation/hr/home/view/screens/hr_home_screen.dart';
+import 'package:jobify_project/presentation/hr/home/view_model/hr_home_cubit.dart';
+import 'package:jobify_project/presentation/hr/home/view_model/hr_home_event.dart';
+import 'package:jobify_project/presentation/hr/applications/view/screens/hr_applications_screen.dart';
+import 'package:jobify_project/presentation/hr/messages/view/hr_messages_screen.dart';
+import 'package:jobify_project/presentation/hr/messages/view_model/hr_messages_cubit.dart';
+import 'package:jobify_project/presentation/hr/messages/view_model/hr_messages_event.dart';
+import 'package:jobify_project/presentation/hr/profile/view/hr_profile_screen.dart';
+import 'package:jobify_project/presentation/hr/profile/view_model/hr_profile_cubit.dart';
+import 'package:jobify_project/presentation/hr/profile/view_model/hr_profile_event.dart';
+import 'package:jobify_project/presentation/hr/chat_screen/view/screens/hr_chat_screen.dart';
+import 'package:jobify_project/presentation/hr/chat_screen/view_model/hr_chat_screen_cubit.dart';
+import 'package:jobify_project/presentation/hr/chat_screen/view_model/hr_chat_screen_event.dart';
+import 'package:jobify_project/presentation/hr/hiring_post/view/screens/hr_hiring_post_screen.dart';
+import 'package:jobify_project/presentation/hr/hiring_post/view_model/hr_hiring_post_cubit.dart';
+import 'package:jobify_project/presentation/edit_profile/view/screens/edit_profile_screen.dart';
+import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile_cubit.dart';
+import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile_event.dart';
+
 abstract class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
   static final router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: RouteNames.splash,
+    initialLocation: RouteNames.hrHome,
     routes: [
       GoRoute(
         path: RouteNames.splash,
@@ -104,6 +125,57 @@ abstract class AppRouter {
           ),
         ],
       ),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return HrMainLayoutScreen(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RouteNames.hrHome,
+                builder: (context, state) => BlocProvider(
+                  create: (_) =>
+                      getIt<HrHomeCubit>()..doIntent(HrHomeLoadDataEvent()),
+                  child: const HrHomeScreen(),
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RouteNames.hrApplications,
+                builder: (context, state) => const HrApplicationsScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RouteNames.hrMessages,
+                builder: (context, state) => BlocProvider(
+                  create: (_) =>
+                      getIt<HrMessagesCubit>()..doIntent(HrMessagesLoadEvent()),
+                  child: const HrMessagesScreen(),
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RouteNames.hrProfile,
+                builder: (context, state) => BlocProvider(
+                  create: (_) =>
+                      getIt<HrProfileCubit>()..doIntent(const HrProfileLoadDataEvent()),
+                  child: const HrProfileScreen(),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
       GoRoute(
         path: RouteNames.applyJob,
         parentNavigatorKey: _rootNavigatorKey,
@@ -146,6 +218,27 @@ abstract class AppRouter {
         builder: (context, state) => BlocProvider(
           create: (_) => getIt<ChatScreenCubit>()..doIntent(ChatScreenLoadEvent()),
           child: const ChatScreen(),
+        ),
+      ),
+      GoRoute(
+        path: RouteNames.hrChatScreen,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<HrChatScreenCubit>()..doIntent(HrChatScreenLoadEvent()),
+          child: const HrChatScreen(),
+        ),
+      ),
+      GoRoute(
+        path: RouteNames.hrHiringPost,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<HrHiringPostCubit>(),
+          child: const HrHiringPostScreen(),
+        ),
+      ),
+      GoRoute(
+        path: RouteNames.editProfile,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<EditProfileCubit>()..doIntent(const EditProfileLoadEvent()),
+          child: const EditProfileScreen(),
         ),
       ),
     ],

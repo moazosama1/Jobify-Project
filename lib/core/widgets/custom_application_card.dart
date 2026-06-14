@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jobify_project/core/constants/app_colors.dart';
 
-// 1. تعريف حالات الطلب عشان نتحكم في ألوان الزراير
 enum ApplicationStatus { onTheWay, delivered, canceled }
 
 class CustomJobApplicationCard extends StatelessWidget {
@@ -9,7 +8,7 @@ class CustomJobApplicationCard extends StatelessWidget {
   final String companyName;
   final String salary;
   final String location;
-  final String logoUrl; // ممكن تغيرها لـ Widget لو بتستخدم SVG
+  final String logoUrl; 
   final ApplicationStatus status;
   final VoidCallback onViewApplication;
 

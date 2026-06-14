@@ -14,7 +14,7 @@ class HrMainLayoutScreen extends StatelessWidget {
 
     final iconList = <IconData>[
       Icons.home_outlined,
-      Icons.save  ,
+      Icons.save,
       Icons.chat_bubble_outline,
       Icons.person_outline,
     ];
@@ -22,17 +22,17 @@ class HrMainLayoutScreen extends StatelessWidget {
     return Scaffold(
       body: navigationShell,
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push(RouteNames.applyJob),
+        onPressed: () => context.push(RouteNames.hrHiringPost),
         backgroundColor: theme.colorScheme.primary,
         shape: const CircleBorder(),
         child: Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimary),
       ),
-       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
         icons: iconList,
         activeIndex: navigationShell.currentIndex,
-        gapLocation: GapLocation.none,
-        //  notchSmoothness: NotchSmoothness.softEdge,
+        gapLocation: GapLocation.center,
+        notchSmoothness: NotchSmoothness.smoothEdge,
         height: 62,
         leftCornerRadius: 32,
         rightCornerRadius: 32,
