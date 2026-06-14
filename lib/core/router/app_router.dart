@@ -3,6 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jobify_project/core/di/di.dart';
 import 'package:jobify_project/core/router/route_names.dart';
+import 'package:jobify_project/presentation/job_seeker/messages/view/messages_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/messages/view_model/messages_cubit.dart';
+import 'package:jobify_project/presentation/job_seeker/messages/view_model/messages_event.dart';
+import 'package:jobify_project/presentation/job_seeker/chat_screen/view/screens/chat_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/chat_screen/view_model/chat_screen_cubit.dart';
+import 'package:jobify_project/presentation/job_seeker/chat_screen/view_model/chat_screen_event.dart';
+import 'package:jobify_project/presentation/job_seeker/home/view_model/home_cubit.dart';
+import 'package:jobify_project/presentation/job_seeker/home/view_model/home_event.dart';
+import 'package:jobify_project/presentation/job_seeker/job_details/view/job_details_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/profile/view/profile_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/profile/view_model/profile_cubit.dart';
+import 'package:jobify_project/presentation/job_seeker/profile/view_model/profile_event.dart';
+import 'package:jobify_project/presentation/job_seeker/saved_jobs/view/saved_jobs_screen.dart';
 import 'package:jobify_project/presentation/onboarding/view_model/onboarding_cubit.dart';
 import 'package:jobify_project/presentation/onboarding/view/screens/onboarding_screen.dart';
 import 'package:jobify_project/presentation/splash/view_model/splash_cubit.dart';
@@ -13,20 +26,39 @@ import 'package:jobify_project/presentation/auth/register/view/screens/register_
 import 'package:jobify_project/presentation/auth/register/view_model/register_cubit.dart';
 import 'package:jobify_project/presentation/auth/forget_password/view/screens/forget_password_screen.dart';
 import 'package:jobify_project/presentation/auth/forget_password/view_model/forget_password_cubit.dart';
-import 'package:jobify_project/presentation/home/view/screens/home_screen.dart';
-import 'package:jobify_project/presentation/saved/view/screens/saved_screen.dart';
-import 'package:jobify_project/presentation/messages/view/screens/messages_screen.dart';
-import 'package:jobify_project/presentation/profile/view/screens/profile_screen.dart';
-import 'package:jobify_project/presentation/apply_job/view/screens/apply_job_screen.dart';
-import 'package:jobify_project/presentation/apply_job/view_model/apply_job_cubit.dart';
-import 'package:jobify_project/presentation/main_layout/view/screens/main_layout_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/home/view/screens/home_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/applications/view/screens/applications_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/apply_job/view/screens/apply_job_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/apply_job/view_model/apply_job_cubit.dart';
+import 'package:jobify_project/presentation/job_seeker/main_layout/view/screens/main_layout_screen.dart';
+
+// HR Presentation Layer Imports
+import 'package:jobify_project/presentation/hr/main_layout/view/screens/hr_main_layout_screen.dart';
+import 'package:jobify_project/presentation/hr/home/view/screens/hr_home_screen.dart';
+import 'package:jobify_project/presentation/hr/home/view_model/hr_home_cubit.dart';
+import 'package:jobify_project/presentation/hr/home/view_model/hr_home_event.dart';
+import 'package:jobify_project/presentation/hr/applications/view/screens/hr_applications_screen.dart';
+import 'package:jobify_project/presentation/hr/messages/view/hr_messages_screen.dart';
+import 'package:jobify_project/presentation/hr/messages/view_model/hr_messages_cubit.dart';
+import 'package:jobify_project/presentation/hr/messages/view_model/hr_messages_event.dart';
+import 'package:jobify_project/presentation/hr/profile/view/hr_profile_screen.dart';
+import 'package:jobify_project/presentation/hr/profile/view_model/hr_profile_cubit.dart';
+import 'package:jobify_project/presentation/hr/profile/view_model/hr_profile_event.dart';
+import 'package:jobify_project/presentation/hr/chat_screen/view/screens/hr_chat_screen.dart';
+import 'package:jobify_project/presentation/hr/chat_screen/view_model/hr_chat_screen_cubit.dart';
+import 'package:jobify_project/presentation/hr/chat_screen/view_model/hr_chat_screen_event.dart';
+import 'package:jobify_project/presentation/hr/hiring_post/view/screens/hr_hiring_post_screen.dart';
+import 'package:jobify_project/presentation/hr/hiring_post/view_model/hr_hiring_post_cubit.dart';
+import 'package:jobify_project/presentation/edit_profile/view/screens/edit_profile_screen.dart';
+import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile_cubit.dart';
+import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile_event.dart';
 
 abstract class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
   static final router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: RouteNames.splash,
+    initialLocation: RouteNames.hrHome,
     routes: [
       GoRoute(
         path: RouteNames.splash,
@@ -51,15 +83,19 @@ abstract class AppRouter {
             routes: [
               GoRoute(
                 path: RouteNames.home,
-                builder: (context, state) => const HomeScreen(),
+                builder: (context, state) => BlocProvider(
+                  create: (_) =>
+                      getIt<HomeCubit>()..doIntent(HomeLoadDataEvent()),
+                  child: const HomeScreen(),
+                ),
               ),
             ],
           ),
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: RouteNames.saved,
-                builder: (context, state) => const SavedScreen(),
+                path: RouteNames.applications,
+                builder: (context, state) => const ApplicationsScreen(),
               ),
             ],
           ),
@@ -67,7 +103,11 @@ abstract class AppRouter {
             routes: [
               GoRoute(
                 path: RouteNames.messages,
-                builder: (context, state) => const MessagesScreen(),
+                builder: (context, state) => BlocProvider(
+                  create: (_) =>
+                      getIt<MessagesCubit>()..doIntent(MessagesLoadEvent()),
+                  child: const MessagesScreen(),
+                ),
               ),
             ],
           ),
@@ -75,7 +115,62 @@ abstract class AppRouter {
             routes: [
               GoRoute(
                 path: RouteNames.profile,
-                builder: (context, state) => const ProfileScreen(),
+                builder: (context, state) => BlocProvider(
+                  create: (_) =>
+                      getIt<ProfileCubit>()..doIntent(const ProfileLoadDataEvent()),
+                  child: const ProfileScreen(),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return HrMainLayoutScreen(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RouteNames.hrHome,
+                builder: (context, state) => BlocProvider(
+                  create: (_) =>
+                      getIt<HrHomeCubit>()..doIntent(HrHomeLoadDataEvent()),
+                  child: const HrHomeScreen(),
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RouteNames.hrApplications,
+                builder: (context, state) => const HrApplicationsScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RouteNames.hrMessages,
+                builder: (context, state) => BlocProvider(
+                  create: (_) =>
+                      getIt<HrMessagesCubit>()..doIntent(HrMessagesLoadEvent()),
+                  child: const HrMessagesScreen(),
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: RouteNames.hrProfile,
+                builder: (context, state) => BlocProvider(
+                  create: (_) =>
+                      getIt<HrProfileCubit>()..doIntent(const HrProfileLoadDataEvent()),
+                  child: const HrProfileScreen(),
+                ),
               ),
             ],
           ),
@@ -108,6 +203,42 @@ abstract class AppRouter {
         builder: (context, state) => BlocProvider(
           create: (_) => getIt<ForgetPasswordCubit>(),
           child: const ForgetPasswordScreen(),
+        ),
+      ),
+      GoRoute(
+        path: RouteNames.jobDetails,
+        builder: (context, state) => const JobDetailsScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.savedJobs,
+        builder: (context, state) => const SavedJobsScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.chatScreen,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<ChatScreenCubit>()..doIntent(ChatScreenLoadEvent()),
+          child: const ChatScreen(),
+        ),
+      ),
+      GoRoute(
+        path: RouteNames.hrChatScreen,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<HrChatScreenCubit>()..doIntent(HrChatScreenLoadEvent()),
+          child: const HrChatScreen(),
+        ),
+      ),
+      GoRoute(
+        path: RouteNames.hrHiringPost,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<HrHiringPostCubit>(),
+          child: const HrHiringPostScreen(),
+        ),
+      ),
+      GoRoute(
+        path: RouteNames.editProfile,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<EditProfileCubit>()..doIntent(const EditProfileLoadEvent()),
+          child: const EditProfileScreen(),
         ),
       ),
     ],
