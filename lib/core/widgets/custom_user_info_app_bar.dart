@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/constants/app_colors.dart';
 
-class CustomUserInfoAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomUserInfoAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   final String welcomeText;
   final String userNameText;
   final String? profileImageUrl;
-  final VoidCallback? onNotificationPressed;
+  final VoidCallback? onSavedPressed;
   final VoidCallback? onProfilePressed;
 
   const CustomUserInfoAppBar({
@@ -14,7 +15,7 @@ class CustomUserInfoAppBar extends StatelessWidget implements PreferredSizeWidge
     required this.welcomeText,
     required this.userNameText,
     this.profileImageUrl,
-    this.onNotificationPressed,
+    this.onSavedPressed,
     this.onProfilePressed,
   });
 
@@ -113,9 +114,9 @@ class CustomUserInfoAppBar extends StatelessWidget implements PreferredSizeWidge
               ],
             ),
             child: IconButton(
-              onPressed: onNotificationPressed,
+              onPressed: onSavedPressed,
               icon: Icon(
-                Icons.notifications_none_rounded,
+                Icons.bookmark_outline,
                 color: theme.colorScheme.onSurface,
                 size: 22,
               ),
