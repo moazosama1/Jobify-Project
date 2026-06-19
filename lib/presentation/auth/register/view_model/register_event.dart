@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:jobify_project/core/enums/gender_enum.dart';
+import 'package:jobify_project/core/enums/rule_enum.dart';
 
 abstract class RegisterEvent extends Equatable {
   const RegisterEvent();
@@ -8,20 +10,43 @@ abstract class RegisterEvent extends Equatable {
 }
 
 class RegisterSubmittedEvent extends RegisterEvent {
-  final String fullName;
+  final String firstName;
+  final String lastName;
+  final String age;
+  final String location;
+  final String phoneNumber;
+  final Gender gender;
+  final Rule role;
   final String email;
   final String password;
   final String confirmPassword;
 
   const RegisterSubmittedEvent({
-    required this.fullName,
+    required this.firstName,
+    required this.lastName,
+    required this.age,
+    required this.location,
+    required this.phoneNumber,
+    required this.gender,
+    required this.role,
     required this.email,
     required this.password,
     required this.confirmPassword,
   });
 
   @override
-  List<Object?> get props => [fullName, email, password, confirmPassword];
+  List<Object?> get props => [
+    firstName,
+    lastName,
+    age,
+    location,
+    phoneNumber,
+    gender,
+    role,
+    email,
+    password,
+    confirmPassword,
+  ];
 }
 
 class RegisterGoogleLoginClickedEvent extends RegisterEvent {}

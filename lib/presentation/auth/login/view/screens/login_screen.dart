@@ -18,15 +18,13 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
-        if (state.errorMessage != null) {
-          customToastification(
-            context,
-            ToastificationType.error,
-            state.errorMessage,
-          );
-        }
         if (state.isSuccess) {
-          context.push(RouteNames.home);
+          final role = state.data?.user.role;
+          if (role == 'admin') {
+            context.go(RouteNames.hrHome);
+          } else {
+            context.go(RouteNames.home);
+          }
         }
       },
       child: CustomScreenWrapper(

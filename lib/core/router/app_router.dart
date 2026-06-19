@@ -26,6 +26,8 @@ import 'package:jobify_project/presentation/auth/register/view/screens/register_
 import 'package:jobify_project/presentation/auth/register/view_model/register_cubit.dart';
 import 'package:jobify_project/presentation/auth/forget_password/view/screens/forget_password_screen.dart';
 import 'package:jobify_project/presentation/auth/forget_password/view_model/forget_password_cubit.dart';
+import 'package:jobify_project/presentation/auth/confirm_email/view/screens/confirm_email_screen.dart';
+import 'package:jobify_project/presentation/auth/confirm_email/view_model/confirm_email_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view/screens/home_screen.dart';
 import 'package:jobify_project/presentation/job_seeker/applications/view/screens/applications_screen.dart';
 import 'package:jobify_project/presentation/job_seeker/apply_job/view/screens/apply_job_screen.dart';
@@ -58,7 +60,7 @@ abstract class AppRouter {
 
   static final router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: RouteNames.hrHome,
+    initialLocation: RouteNames.splash,
     routes: [
       GoRoute(
         path: RouteNames.splash,
@@ -240,6 +242,16 @@ abstract class AppRouter {
           create: (_) => getIt<EditProfileCubit>()..doIntent(const EditProfileLoadEvent()),
           child: const EditProfileScreen(),
         ),
+      ),
+      GoRoute(
+        path: RouteNames.confirmEmail,
+        builder: (context, state) {
+          final email = state.extra as String? ?? '';
+          return BlocProvider(
+            create: (_) => getIt<ConfirmEmailCubit>(),
+            child: ConfirmEmailScreen(email: email),
+          );
+        },
       ),
     ],
   );
