@@ -10,6 +10,8 @@ import 'package:jobify_project/presentation/auth/register/view_model/register_cu
 import 'package:jobify_project/presentation/auth/register/view_model/register_state.dart';
 import 'package:jobify_project/generated/l10n.dart';
 
+import 'package:jobify_project/core/router/route_names.dart';
+
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
@@ -17,15 +19,23 @@ class RegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<RegisterCubit, RegisterState>(
       listener: (context, state) {
-        if (state.errorMessage != null) {
+        if (state.registerStatus.errorMessage != null) {
           customToastification(
             context,
             ToastificationType.error,
-            state.errorMessage,
+            state.registerStatus.errorMessage,
           );
         }
-        if (state.isSuccess) {
-          context.pop(); // Navigate back to Login or Home upon success
+        if (state.registerStatus.data != null) {
+          customToastification(
+            context,
+            ToastificationType.success,
+            "User created successfully ,please confirmed your email ",
+          );
+          context.pushReplacement(
+            RouteNames.confirmEmail,
+            extra: state.registerStatus.data?.user?.email ?? "",
+          );
         }
       },
       child: CustomScreenWrapper(

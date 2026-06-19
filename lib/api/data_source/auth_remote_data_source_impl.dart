@@ -1,5 +1,45 @@
 import 'package:injectable/injectable.dart';
+import 'package:jobify_project/api/client/api_client.dart';
+import 'package:jobify_project/api/models/login_response.dart';
+import 'package:jobify_project/api/models/signup_response.dart';
+import 'package:jobify_project/api/models/requests/login_request_dto.dart';
+import 'package:jobify_project/api/models/requests/signup_request.dart';
+import 'package:jobify_project/api/models/requests/confirm_email_request.dart';
+import 'package:jobify_project/api/models/confirm_email_response.dart';
+import 'package:jobify_project/api/models/requests/forget_password_request.dart';
+import 'package:jobify_project/api/models/forget_password_response.dart';
+import 'package:jobify_project/api/models/requests/reset_password_request.dart';
+import 'package:jobify_project/api/models/reset_password_response.dart';
 import 'package:jobify_project/data/data_source/auth_remote_data_source.dart';
 
 @Injectable(as: AuthRemoteDataSource)
-class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {}
+class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+  final ApiClient _apiClient;
+
+  AuthRemoteDataSourceImpl(this._apiClient);
+    
+  @override
+  Future<LoginResponse> login(LoginRequestDto request) {
+    return _apiClient.login(request);
+  }
+
+  @override
+  Future<SignUPResponse> signup(SignUpRequest request) {
+    return _apiClient.signup(request);
+  }
+
+  @override
+  Future<ConfirmEmailResponse> confirmEmail(ConfirmEmailRequest request) {
+    return _apiClient.confirmEmail(request);
+  }
+
+  @override
+  Future<ForgetPasswordResponse> forgetPassword(ForgetPasswordRequest request) {
+    return _apiClient.forgetPassword(request);
+  }
+
+  @override
+  Future<ResetPasswordResponse> resetPassword(ResetPasswordRequest request) {
+    return _apiClient.resetPassword(request);
+  }
+}

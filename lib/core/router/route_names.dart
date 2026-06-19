@@ -22,4 +22,5 @@ abstract class RouteNames {
   static const String hrHiringJob = "/hrHiringJob";
   static const String hrHiringPost = "/hrHiringPost";
   static const String editProfile = "/editProfile";
+  static const String confirmEmail = "/confirmEmail";
 }
