@@ -20,6 +20,8 @@ import 'package:jobify_project/presentation/profile/view/screens/profile_screen.
 import 'package:jobify_project/presentation/apply_job/view/screens/apply_job_screen.dart';
 import 'package:jobify_project/presentation/apply_job/view_model/apply_job_cubit.dart';
 import 'package:jobify_project/presentation/main_layout/view/screens/main_layout_screen.dart';
+import 'package:jobify_project/presentation/search/view/screens/search_screen.dart';
+import 'package:jobify_project/presentation/search/view_model/search_cubit.dart';
 
 abstract class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -108,6 +110,14 @@ abstract class AppRouter {
         builder: (context, state) => BlocProvider(
           create: (_) => getIt<ForgetPasswordCubit>(),
           child: const ForgetPasswordScreen(),
+        ),
+      ),
+      GoRoute(
+        path: RouteNames.search,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<SearchCubit>(),
+          child: const SearchScreen(),
         ),
       ),
     ],

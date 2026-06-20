@@ -21,9 +21,28 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "2:5474846348842606426",
+      "lastPropertyId": "2:1614479860653995373",
+      "name": "RecentSearchModel",
+      "properties": [
+        {
+          "id": "1:7029520281965978123",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1614479860653995373",
+          "name": "query",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "1:8303359055966505332",
+  "lastEntityId": "2:5474846348842606426",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

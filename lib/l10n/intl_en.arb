@@ -90,5 +90,9 @@
   "youveApplied": "You've Applied",
   "youHaveSuccessfullyApplied": "You have successfully applied to\nthis job vacancy.",
   "backToHome": "Back To Home",
-  "seeAppliedJob": "See Applied Job"
+  "seeAppliedJob": "See Applied Job",
+  "searchJob": "Search Job",
+  "searchPlaceholder": "Search...",
+  "recentSearches": "Recent Searches",
+  "browseByCategory": "Browse By Category"
 }
