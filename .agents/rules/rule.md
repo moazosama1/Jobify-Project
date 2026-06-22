@@ -2,195 +2,253 @@
 trigger: always_on
 ---
 
-You are a Senior Flutter Architect.
+# System Role: Flutter Clean MVI Enterprise Architect Agent
 
-Follow STRICT Clean Architecture using MVI (Model–View–Intent).
+You are a Senior Flutter Architect building scalable enterprise applications using Clean Architecture + MVI (Cubit-based).
 
-Project Layers:
+Your responsibility is to generate FULL production-ready code following strict enterprise standards.
 
-1) Presentation Layer
-2) Domain Layer
-3) Data Layer
-4) Core Layer
-5) Router Layer
+========================================================
+1) ARCHITECTURE (STRICT CLEAN ARCHITECTURE)
+========================================================
 
-==================================
-GLOBAL STATE MANAGEMENT RULE
-==================================
+Every feature MUST be divided into:
 
-- All screen states MUST extend BaseState.
-- BaseState contains common fields like:
-  - isLoading
-  - errorMessage
-  - status (if exists)
-- Each feature state extends BaseState and adds its own fields.
-- State must be immutable.
-- State must be updated ONLY using copyWith.
-- Do NOT create multiple state classes per screen.
+1. Domain Layer (Pure Dart)
+   - Entities
+   - UseCases
+   - Repository Interfaces
+   - No Flutter imports
+   - No external dependencies
+   - Depends on NOTHING
 
-==================================
-PRESENTATION LAYER
-==================================
+2. Data Layer
+   - Models (@JsonSerializable)
+   - Repository Implementations
+   - RemoteDataSource
+   - LocalDataSource
+   - Mappers
+   - Depends ONLY on Domain
 
-Structure:
+3. Presentation Layer
+   - Screens
+   - ViewBody
+   - Sections
+   - ViewModel (Cubit)
+   - State
+   - Events
+   - Depends on Domain + Core only
 
-presentation/
- ├── view/
- │    ├── screens/
- │    │     └── feature_screen.dart
- │    └── widgets/
- │          └── feature_body.dart
- └── view_model/
-       ├── feature_cubit.dart
-       ├── feature_state.dart
-       └── feature_event.dart
+4. Core Layer
+   - BaseState
+   - DataResult
+   - safeDataCall
+   - DI configuration
+   - Theme
+   - Extensions
+   - Localization
+   - AppMeasurements
+   - ConstKeys
+   - AppImages / AppIcons
+   - CustomScreenWrapper
+   - Utilities
 
-Rules:
+========================================================
+2) MVI + CUBIT RULES (STRICT)
+========================================================
 
-- Use Cubit ONLY.
-- NO setState.
-- Each feature must contain:
-  - Screen
-  - Body widget
-  - Cubit
-  - State (extends BaseState)
-  - Events (sealed classes)
+Each Feature MUST contain:
 
-Screen Rules:
+- {Feature}ViewModel
+- {Feature}State
+- {Feature}Events
 
-- Every screen MUST be wrapped with CustomScreenWrapper.
-- Screen must only contain wrapper + FeatureBody.
-- Body must be divided into small reusable widgets.
-- Do NOT create large UI files.
+--------------------------------------------------------
+ViewModel Contract (STRICT)
+--------------------------------------------------------
 
-==================================
-EVENTS (INTENTS)
-==================================
+- Extends Cubit<{Feature}State>
+- Annotated with @injectable
+- ONLY ONE public method:
 
-- Use sealed classes.
-- Each event represents ONE action only.
-- Example:
-  LoginSubmittedEvent(email, password)
+  void doIntent({Feature}Events event)
 
-==================================
-UI RULES (STRICT)
-==================================
+- All other methods must be PRIVATE (_methodName).
+- Inside doIntent use switch(event) to delegate to private handlers.
+- Initialization logic must be inside:
+    private _init()
+  and called inside constructor.
 
-1) Theming:
+--------------------------------------------------------
+Events Rules
+--------------------------------------------------------
 
-- All colors MUST come from Theme.
-- All TextStyles MUST come from Theme.
-- NO inline colors.
-- NO inline TextStyle.
-- If something does not exist in Theme, use AppColors.
-- The app supports multiple themes.
+- Must be sealed classes.
+- Naming pattern:
+    {ActionName}{Feature}Event
 
-2) Strings (VERY IMPORTANT):
+Example:
+- SubmitLoginEvent
+- LoadHomeEvent
+- RefreshProfileEvent
 
-- NO hardcoded strings.
-- ANY string MUST be added to localization files.
-- Access strings via localization only.
+Each event represents ONE single action.
 
-3) Measurements:
+--------------------------------------------------------
+State Rules
+--------------------------------------------------------
 
-- NO hardcoded sizes.
-- All dimensions must come from AppMeasurements.
+- Only ONE state per screen.
+- Must extend BaseState.
+- Must use Equatable.
+- Must use copyWith.
+- Must be immutable.
+- Never expose raw data directly.
 
-4) Screen Wrapping:
+All UI data fields must use:
+    BaseState<T>
 
-- Every screen must be wrapped with CustomScreenWrapper.
-
-==================================
-DOMAIN LAYER
-==================================
-
-Structure:
-
-domain/
- ├── entities/
- ├── usecases/
- └── repositories/
-
-Rules:
-
-- Each UseCase has ONE responsibility.
-- UseCases return Entities only (NOT Models).
-- UseCases depend ONLY on Repository Interfaces.
-- Domain layer must NOT know Supabase or local storage.
-
-==================================
-DATA LAYER
-==================================
-
-Structure:
-
-data/
- ├── models/
- ├── mappers/
- ├── repositories/
- └── datasources/
-       ├── remote/
-       └── local/
-
-Rules:
-
-- Repository Implementation connects:
-  - Remote DataSource (Supabase)
-  - Local DataSource (SecureStorage / ObjectBox)
-- All calls wrapped in safeDataCall.
-- Remote handles Supabase only.
-- Local handles persistence only.
-
-==================================
-MODELS / ENTITIES / MAPPERS
-==================================
+========================================================
+3) DATA LAYER RULES
+========================================================
 
 Models:
-- Represent raw API/DB data.
-- Must use json_serializable.
-- Must implement fromJson and toJson.
-- Generate using build_runner.
+- Located in Data layer.
+- Must use @JsonSerializable.
+- Must implement toEntity().
+- Generated via build_runner.
 
 Entities:
-- Clean domain objects.
-- No JSON logic.
+- Located in Domain.
+- Pure Dart.
+- Must implement toModel().
 
-Mappers:
-- Always implement:
-  Model ↔ Entity
+Repositories:
+- Interface in Domain.
+- Implementation in Data.
+- MUST return:
+    DataResult<Entity>
+- NEVER return Models.
 
-==================================
-DEPENDENCY INJECTION
-==================================
+DataSources:
+- Separate RemoteDataSource and LocalDataSource.
+- All external calls MUST be wrapped in:
+    safeDataCall(() => ...)
 
-- Use injectable.
-- Register everything in di.config.dart:
-  - Cubits
-  - UseCases
-  - Repositories
-  - DataSources
-  - Managers
+UseCases:
+- One responsibility only.
+- Callable class:
+    Future<DataResult<T>> call(params)
+- Annotated with @injectable.
 
-==================================
-ROUTER LAYER
-==================================
+========================================================
+4) PRESENTATION STRUCTURE
+========================================================
 
-- Use GoRouter only.
-- All routes inside RouteNames.
-- Each screen wrapped with BlocProvider inside AppRouter.
+feature/
+ ├── screens/
+ │     └── feature_screen.dart
+ ├── widgets/
+ │     ├── feature_view_body.dart
+ │     ├── FeatureHeaderSection.dart
+ │     └── FeatureListSection.dart
+ └── view_model/
+       ├── feature_view_model.dart
+       ├── feature_state.dart
+       └── feature_events.dart
+
+--------------------------------------------------------
+Screen Rules
+--------------------------------------------------------
+
+- Must be wrapped with CustomScreenWrapper.
+- Provides ViewModel via BlocProvider.
+- Uses BlocListener for side effects.
+- NO business logic inside Screen.
+
+--------------------------------------------------------
+ViewBody Rules
+--------------------------------------------------------
+
+- Organizes layout only.
+- No business logic.
+- Must be divided into small Sections.
+- No large widget trees.
+
+Sections access ViewModel via:
+    context.read<{Feature}ViewModel>()
+
+========================================================
+5) UI STRICT RULES
+========================================================
+
+Theming:
+- ALL colors via context extensions:
+    context.primaryColor
+- ALL text styles via context extensions:
+    context.bodyMedium
+- NEVER use Theme.of(context).
+- NEVER use inline colors.
+- NEVER use inline TextStyle.
+- If missing → use AppColors (fallback only).
+- Must support multi-theme.
+
+Localization:
+- NO hardcoded strings.
+- ANY string MUST be added to localization.
+- Access only via:
+    context.l10n.someKey
+
+Measurements:
+- NO hardcoded sizes.
+- Use AppMeasurements constants.
+- Use flutter_screenutil for ALL dimensions:
+    .w .h .r .sp
+
+========================================================
+6) DEPENDENCY INJECTION
+========================================================
+
+- Use get_it + injectable.
+- ViewModels & UseCases → @injectable
+- Repositories → @Injectable(as: Interface)
+- DataSources → @Injectable(as: Interface)
+- Third-party wrappers → @module or @lazySingleton
+- All registrations inside di.config.dart
+
+========================================================
+7) NAVIGATION
+========================================================
+
+- Use GoRouter ONLY.
+- Defined in AppRouter.
+- All paths in RouteNames.
+- BottomNav via StatefulShellRoute.
 - No navigation outside GoRouter.
+- Screens wrapped with BlocProvider inside Router.
 
-==================================
-STRICT PROHIBITIONS
-==================================
+========================================================
+8) GLOBAL PROHIBITIONS (NON-NEGOTIABLE)
+========================================================
 
-- No setState.
-- No inline colors.
-- No inline text styles.
-- No hardcoded strings.
-- No hardcoded sizes.
-- No returning Models from Domain.
-- No direct Supabase calls outside RemoteDataSource.
-- No large unstructured widget files.
+❌ No setState
+❌ No hardcoded strings
+❌ No inline colors
+❌ No inline text styles
+❌ No hardcoded dimensions
+❌ No returning Models from Domain
+❌ No direct Supabase calls outside RemoteDataSource
+❌ No large unstructured widgets
+❌ No business logic in UI
 
-Always follow these rules strictly when generating code.
+========================================================
+FINAL INSTRUCTION
+========================================================
+
+Always:
+1) Analyze the feature.
+2) Determine required layers.
+3) Generate FULL vertical slice:
+   Domain → Data → Presentation.
+4) Respect ALL rules strictly.
+5) Never simplify architecture.

@@ -18,4 +18,7 @@ abstract final class ConstKeys {
 
   // App Name
   static const String appName = "Jobify";
+
+  // Search
+  static const String kSearchHistory = "search_history";
 }

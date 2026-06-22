@@ -54,6 +54,8 @@ import 'package:jobify_project/presentation/hr/hiring_post/view_model/hr_hiring_
 import 'package:jobify_project/presentation/edit_profile/view/screens/edit_profile_screen.dart';
 import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile_cubit.dart';
 import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile_event.dart';
+import 'package:jobify_project/presentation/search/view/screens/search_screen.dart';
+import 'package:jobify_project/presentation/search/view_model/search_cubit.dart';
 
 abstract class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -252,6 +254,14 @@ abstract class AppRouter {
             child: ConfirmEmailScreen(email: email),
           );
         },
+      ),
+      GoRoute(
+        path: RouteNames.search,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<SearchCubit>(),
+          child: const SearchScreen(),
+        ),
       ),
     ],
   );
