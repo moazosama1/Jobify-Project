@@ -1,29 +1,22 @@
 import 'package:equatable/equatable.dart';
+import 'package:jobify_project/core/api_result/base_state.dart';
+import 'package:jobify_project/domain/entities/signup_entity.dart';
 
 class RegisterState extends Equatable {
-  final bool isLoading;
-  final bool isSuccess;
-  final String? errorMessage;
+  final BaseState<SignUpEntity> registerStatus;
 
   const RegisterState({
-    this.isLoading = false,
-    this.isSuccess = false,
-    this.errorMessage,
+    this.registerStatus = const BaseState<SignUpEntity>(),
   });
 
   RegisterState copyWith({
-    bool? isLoading,
-    bool? isSuccess,
-    String? errorMessage,
-    bool clearError = false,
+    BaseState<SignUpEntity>? registerStatus,
   }) {
     return RegisterState(
-      isLoading: isLoading ?? this.isLoading,
-      isSuccess: isSuccess ?? this.isSuccess,
-      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+      registerStatus: registerStatus ?? this.registerStatus,
     );
   }
 
   @override
-  List<Object?> get props => [isLoading, isSuccess, errorMessage];
+  List<Object?> get props => [registerStatus];
 }

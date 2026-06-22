@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jobify_project/core/constants/app_images.dart';
 import 'package:jobify_project/core/constants/const_keys.dart';
+import 'package:jobify_project/core/enums/gender_enum.dart';
+import 'package:jobify_project/core/enums/rule_enum.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/utils/validations.dart';
 import 'package:jobify_project/core/widgets/custom_divider.dart';
@@ -22,16 +24,26 @@ class RegisterBody extends StatefulWidget {
 }
 
 class _RegisterBodyState extends State<RegisterBody> {
-  late TextEditingController _fullNameController;
+  late TextEditingController _firstNameController;
+  late TextEditingController _lastNameController;
+  late TextEditingController _ageController;
+  late TextEditingController _locationController;
+  late TextEditingController _phoneController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   late TextEditingController _confirmPasswordController;
+  Gender _selectedGender = Gender.male;
+  Rule _selectedRole = Rule.job_seeker;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    _fullNameController = TextEditingController();
+    _firstNameController = TextEditingController();
+    _lastNameController = TextEditingController();
+    _ageController = TextEditingController();
+    _locationController = TextEditingController();
+    _phoneController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
@@ -39,7 +51,11 @@ class _RegisterBodyState extends State<RegisterBody> {
 
   @override
   void dispose() {
-    _fullNameController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _ageController.dispose();
+    _locationController.dispose();
+    _phoneController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -92,20 +108,77 @@ class _RegisterBodyState extends State<RegisterBody> {
             ),
             const SizedBox(height: AppMeasurements.paddingExtraLarge),
 
-            // Inputs
+            // Name fields
             CustomTextField(
-              controller: _fullNameController,
-              label: local.fullName,
-              hintText: local.typeYourName,
+              controller: _firstNameController,
+              label: local.firstName,
+              hintText: local.typeYourFirstName,
               textInputAction: .next,
               prefixIcon: Icon(
                 Icons.person_outline_rounded,
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
               ),
-              validator: Validations.validateFullName,
+              validator: Validations.validateName,
+            ),
+            const SizedBox(width: AppMeasurements.paddingMedium),
+            CustomTextField(
+              controller: _lastNameController,
+              label: local.lastName,
+              hintText: local.typeYourLastName,
+              textInputAction: .next,
+              prefixIcon: Icon(
+                Icons.person_outline_rounded,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+              ),
+              validator: Validations.validateName,
             ),
             const SizedBox(height: AppMeasurements.paddingLarge),
 
+            // Age
+            CustomTextField(
+              controller: _ageController,
+              label: local.age,
+              hintText: local.typeYourAge,
+              textInputAction: .next,
+              keyboardType: TextInputType.number,
+              prefixIcon: Icon(
+                Icons.cake_outlined,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+              ),
+              validator: Validations.validateAge,
+            ),
+            const SizedBox(height: AppMeasurements.paddingLarge),
+
+            // Location
+            CustomTextField(
+              controller: _locationController,
+              label: local.location,
+              hintText: local.typeYourLocation,
+              textInputAction: .next,
+              prefixIcon: Icon(
+                Icons.location_on_outlined,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+              ),
+              validator: Validations.validateAddress,
+            ),
+            const SizedBox(height: AppMeasurements.paddingLarge),
+
+            // Phone Number
+            CustomTextField(
+              controller: _phoneController,
+              label: local.phoneNumber,
+              hintText: local.typeYourPhoneNumber,
+              textInputAction: .next,
+              keyboardType: TextInputType.phone,
+              prefixIcon: Icon(
+                Icons.phone_outlined,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+              ),
+              validator: Validations.validatePhoneNumber,
+            ),
+            const SizedBox(height: AppMeasurements.paddingLarge),
+
+            // Email
             CustomTextField(
               controller: _emailController,
               label: local.email,
@@ -119,6 +192,7 @@ class _RegisterBodyState extends State<RegisterBody> {
             ),
             const SizedBox(height: AppMeasurements.paddingLarge),
 
+            // Password
             CustomTextField(
               controller: _passwordController,
               label: local.password,
@@ -149,6 +223,98 @@ class _RegisterBodyState extends State<RegisterBody> {
                 );
               },
             ),
+            const SizedBox(height: AppMeasurements.paddingLarge),
+
+            // Gender
+            Text(
+              local.gender,
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: AppMeasurements.paddingSmall),
+            Row(
+              children: [
+                Expanded(
+                  child: RadioListTile<Gender>(
+                    value: Gender.male,
+                    groupValue: _selectedGender,
+                    activeColor: theme.colorScheme.primary,
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(local.male),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          _selectedGender = value;
+                        });
+                      }
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: RadioListTile<Gender>(
+                    value: Gender.female,
+                    groupValue: _selectedGender,
+                    activeColor: theme.colorScheme.primary,
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(local.female),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          _selectedGender = value;
+                        });
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppMeasurements.paddingLarge),
+
+            // Role
+            Text(
+              local.role,
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: AppMeasurements.paddingSmall),
+            Row(
+              children: [
+                Expanded(
+                  child: RadioListTile<Rule>(
+                    value: Rule.admin,
+                    groupValue: _selectedRole,
+                    activeColor: theme.colorScheme.primary,
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(local.hr),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          _selectedRole = value;
+                        });
+                      }
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: RadioListTile<Rule>(
+                    value: Rule.job_seeker,
+                    groupValue: _selectedRole,
+                    activeColor: theme.colorScheme.primary,
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(local.jobSeeker),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          _selectedRole = value;
+                        });
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: AppMeasurements.paddingExtraLarge),
 
             // Register Button
@@ -158,12 +324,18 @@ class _RegisterBodyState extends State<RegisterBody> {
                   widthButton: double.infinity,
                   heightButton: 56,
                   textButton: local.signUp,
-                  isLoading: state.isLoading,
+                  isLoading: state.registerStatus.isLoading,
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       context.read<RegisterCubit>().doIntent(
                         RegisterSubmittedEvent(
-                          fullName: _fullNameController.text,
+                          firstName: _firstNameController.text,
+                          lastName: _lastNameController.text,
+                          age: _ageController.text,
+                          location: _locationController.text,
+                          phoneNumber: _phoneController.text,
+                          gender: _selectedGender,
+                          role: _selectedRole,
                           email: _emailController.text,
                           password: _passwordController.text,
                           confirmPassword: _confirmPasswordController.text,

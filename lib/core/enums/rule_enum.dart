@@ -1,0 +1,1 @@
+enum Rule  { job_seeker , admin }

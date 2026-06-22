@@ -97,6 +97,35 @@ class Validations {
     }
   }
 
+  static String? validateName(String? val) {
+    if (val == null || val.trim().isEmpty) {
+      return AppLocalizations.current.thisFieldIsRequired;
+    }
+
+    if (val.trim().length > 20) {
+      return AppLocalizations.current.fullNameTooLongMustBeLessThan20Characters;
+    }
+
+    return null;
+  }
+
+  static String? validateAge(String? val) {
+    if (val == null || val.trim().isEmpty) {
+      return AppLocalizations.current.thisFieldIsRequired;
+    }
+
+    final age = int.tryParse(val.trim());
+    if (age == null) {
+      return AppLocalizations.current.enterNumbersOnly;
+    }
+
+    if (age < 18 || age > 100) {
+      return AppLocalizations.current.enterValidAge;
+    }
+
+    return null;
+  }
+
   static String? validatePhoneNumber(String? val) {
     // Egyptian Phone Number: Optional +2, then 01, then digit (0,1,2,5), then 8 digits.
     final regex = RegExp(r'^(?:\+2)?01[0125][0-9]{8}$');

@@ -86,7 +86,7 @@ class _ForgetPasswordOtpViewState extends State<ForgetPasswordOtpView> {
             Center(
               child: Pinput(
                 controller: _otpController,
-                length: 4,
+                length: 6,
                 defaultPinTheme: defaultPinTheme,
                 focusedPinTheme: focusedPinTheme,
                 textInputAction: .done,

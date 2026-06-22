@@ -99,3 +99,5 @@ lib/generated/l10n.dart
 
 # Ignore dependency lock file
 *.lock
+
+*.log

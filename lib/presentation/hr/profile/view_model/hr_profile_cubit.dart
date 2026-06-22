@@ -1,0 +1,52 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
+import 'hr_profile_event.dart';
+import 'hr_profile_state.dart';
+
+@injectable
+class HrProfileCubit extends Cubit<HrProfileState> {
+  HrProfileCubit() : super(const HrProfileState());
+
+  void doIntent(HrProfileEvent event) {
+    if (event is HrProfileLoadDataEvent) {
+      _onLoadData();
+    } else if (event is HrProfileUpdateContactInfoEvent) {
+      _onUpdateContactInfo(event);
+    }
+  }
+
+  Future<void> _onLoadData() async {
+    emit(state.copyWith(isLoading: true, clearError: true));
+    try {
+      // Simulate loading delay
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      emit(
+        state.copyWith(
+          isLoading: false,
+          name: 'Mazen Mohammed',
+          email: 'mazen.mohammed@example.com',
+          phoneNumber: '+1 555-0199',
+          title: 'UX Designer',
+          description:
+              'Creative UX Designer with 6+ years of experience in optimizing user experience through innovative solutions and dynamic interface designs. Successful in enhancing user engagement for well-known brands, providing a compelling user experience to improve brand loyalty and customer retention.',
+          appliedCount: 35,
+          reviewedCount: 19,
+          interviewCount: 10,
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+    }
+  }
+
+  void _onUpdateContactInfo(HrProfileUpdateContactInfoEvent event) {
+    emit(
+      state.copyWith(
+        name: event.name,
+        email: event.email,
+        phoneNumber: event.phoneNumber,
+      ),
+    );
+  }
+}

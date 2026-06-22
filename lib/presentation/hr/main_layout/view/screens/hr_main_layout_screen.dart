@@ -1,0 +1,50 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:jobify_project/core/router/route_names.dart';
+
+class HrMainLayoutScreen extends StatelessWidget {
+  final StatefulNavigationShell navigationShell;
+
+  const HrMainLayoutScreen({super.key, required this.navigationShell});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final iconList = <IconData>[
+      Icons.home_outlined,
+      Icons.save,
+      Icons.chat_bubble_outline,
+      Icons.person_outline,
+    ];
+
+    return Scaffold(
+      body: navigationShell,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push(RouteNames.hrHiringPost),
+        backgroundColor: theme.colorScheme.primary,
+        shape: const CircleBorder(),
+        child: Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimary),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: AnimatedBottomNavigationBar(
+        icons: iconList,
+        activeIndex: navigationShell.currentIndex,
+        gapLocation: GapLocation.center,
+        notchSmoothness: NotchSmoothness.smoothEdge,
+        height: 62,
+        leftCornerRadius: 32,
+        rightCornerRadius: 32,
+        activeColor: theme.colorScheme.primary,
+        inactiveColor: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+        onTap: (index) {
+          navigationShell.goBranch(
+            index,
+            initialLocation: index == navigationShell.currentIndex,
+          );
+        },
+      ),
+    );
+  }
+}
