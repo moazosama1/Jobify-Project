@@ -1,0 +1,32 @@
+import 'package:injectable/injectable.dart';
+import 'package:jobify_project/core/api_result/api_result.dart';
+import 'package:jobify_project/core/api_result/safe_api_call.dart';
+import 'package:jobify_project/data/data_source/job_remote_data_source.dart';
+import 'package:jobify_project/data/mappers/job_mapper.dart';
+import 'package:jobify_project/domain/entities/create_job_request_entity.dart';
+import 'package:jobify_project/domain/entities/create_job_response_entity.dart';
+import 'package:jobify_project/domain/entities/job_entity.dart';
+import 'package:jobify_project/domain/repo/job_repository.dart';
+
+@Injectable(as: JobRepository)
+class JobRepositoryImpl implements JobRepository {
+  final JobRemoteDataSource _remoteDataSource;
+
+  JobRepositoryImpl(this._remoteDataSource);
+
+  @override
+  Future<ApiResult<CreateJobResponseEntity>> createJob(CreateJobRequestEntity request) async {
+    return await safeApiCall(
+      () => _remoteDataSource.createJob(request.toModel()),
+      (response) => response.toEntity(),
+    );
+  }
+
+  @override
+  Future<ApiResult<List<JobEntity>>> getMyJobs() async {
+    return await safeApiCall(
+      () => _remoteDataSource.getMyJobs(),
+      (response) => response.jobs?.map((job) => job.toEntity()).toList() ?? const [],
+    );
+  }
+}

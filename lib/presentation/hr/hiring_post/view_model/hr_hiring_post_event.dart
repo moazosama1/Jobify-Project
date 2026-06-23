@@ -3,19 +3,41 @@ sealed class HrHiringPostEvent {
 }
 
 class HrHiringPostSubmitEvent extends HrHiringPostEvent {
-  final String jobTitle;
-  final String positionLevel;
-  final String yearsOfExperience;
+  final String companyName;
+  final String companyLogo;
+  final String title;
+  final String description;
+  final String responsibilities;
+  final String requirements;
+  final String preferredQualifications;
   final String location;
-  final String education;
-  final String jobRequirements;
+  final String employmentType;
+  final String experienceLevel;
+  final int salaryMin;
+  final int salaryMax;
+  final String applicationDeadline;
+  final String skillsRequired;
+  final String category;
+  final int openings;
+  final bool isRemote;
 
   const HrHiringPostSubmitEvent({
-    required this.jobTitle,
-    required this.positionLevel,
-    required this.yearsOfExperience,
+    required this.companyName,
+    required this.companyLogo,
+    required this.title,
+    required this.description,
+    required this.responsibilities,
+    required this.requirements,
+    required this.preferredQualifications,
     required this.location,
-    required this.education,
-    required this.jobRequirements,
+    required this.employmentType,
+    required this.experienceLevel,
+    required this.salaryMin,
+    required this.salaryMax,
+    required this.applicationDeadline,
+    required this.skillsRequired,
+    required this.category,
+    required this.openings,
+    required this.isRemote,
   });
 }
