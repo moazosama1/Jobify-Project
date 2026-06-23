@@ -12,6 +12,7 @@ abstract class RouteNames {
   static const String jobDetails = "/jobDetails";
   static const String savedJobs = "/savedJobs";
   static const String chatScreen = "/chatScreen";
+  static const String aiChat = "/aiChat";
 
   // HR Routes
   static const String hrHome = "/hrHome";

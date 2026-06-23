@@ -10,9 +10,12 @@ import 'package:jobify_project/core/responsive/app_responsive.dart';
 import 'package:jobify_project/core/router/app_router.dart';
 import 'package:jobify_project/generated/l10n.dart';
 import 'package:jobify_project/my_bloc_observer.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await configureDependencies();
   Bloc.observer = MyBlocObserver();
@@ -49,7 +52,6 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           themeMode: currentThemeMode,
           theme: AppTheme.lightTheme,
-
           darkTheme: AppTheme.darkTheme,
           routerConfig: AppRouter.router,
           localizationsDelegates: const [

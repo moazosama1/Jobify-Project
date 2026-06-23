@@ -252,7 +252,7 @@ abstract class AppTheme {
     return TextStyle(
       color: color ?? AppColors.black,
       fontSize: fontSize ?? 14,
-      fontFamily: fontFamily ?? ConstKeys.interFont,
+      fontFamily: fontFamily ?? ConstKeys.cairoFont,
       fontWeight: fontWeight ?? FontWeight.w400,
       height: height,
     );
