@@ -202,8 +202,6 @@ Localization:
 Measurements:
 - NO hardcoded sizes.
 - Use AppMeasurements constants.
-- Use flutter_screenutil for ALL dimensions:
-    .w .h .r .sp
 
 ========================================================
 6) DEPENDENCY INJECTION

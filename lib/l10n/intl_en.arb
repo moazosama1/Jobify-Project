@@ -180,5 +180,18 @@
   "dateOfBirth": "Date of Birth",
   "selectDateOfBirth": "Select date of birth",
   "aboutYou": "About You",
-  "save": "Save"
-}
+  "save": "Save",
+  "aiChatTitle": "AI Career Assistant",
+  "aiChatSubtitle": "Ask anything about jobs, CV, or interview prep",
+  "aiChatPlaceholder": "Type your message here...",
+  "aiChatWelcomeMessage": "Hello! I am your Jobify AI Career Assistant. How can I help you today with your job search, CV, or interview prep?",
+  "aiChatErrorSending": "Failed to send message to AI. Please try again.",
+  "aiChatClearConfirm": "Are you sure you want to clear the conversation?",
+  "clearChat": "Clear Chat",
+  "aiChatHeroTitle": "Jobify Career Coach",
+  "aiChatHeroSubtitle": "Polishing your CV, preparing for interview questions, or planning career moves is easier than ever. Start typing or upload a PDF CV below!",
+  "aiChatSuggestionResume": "📝 Polish my CV/Resume",
+  "aiChatSuggestionInterview": "💡 Prep for mock interview",
+  "aiChatSuggestionSkills": "🚀 Skills to learn for UX",
+  "aiChatSuggestionCareer": "🎯 Suggest career paths"
+}

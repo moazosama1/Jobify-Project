@@ -56,6 +56,7 @@ import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile
 import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile_event.dart';
 import 'package:jobify_project/presentation/search/view/screens/search_screen.dart';
 import 'package:jobify_project/presentation/search/view_model/search_cubit.dart';
+import 'package:jobify_project/presentation/ai_chat/view/screens/ai_chat_screen.dart';
 
 abstract class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -262,6 +263,10 @@ abstract class AppRouter {
           create: (_) => getIt<SearchCubit>(),
           child: const SearchScreen(),
         ),
+      ),
+      GoRoute(
+        path: RouteNames.aiChat,
+        builder: (context, state) => const AiChatScreen(),
       ),
     ],
   );

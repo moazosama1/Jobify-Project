@@ -21,4 +21,7 @@ abstract final class ConstKeys {
 
   // Search
   static const String kSearchHistory = "search_history";
+
+  // AI Chat
+  static const String kAiChatHistory = "ai_chat_history";
 }
