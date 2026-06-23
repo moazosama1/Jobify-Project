@@ -10,6 +10,9 @@ import 'package:jobify_project/api/models/requests/forget_password_request.dart'
 import 'package:jobify_project/api/models/forget_password_response.dart';
 import 'package:jobify_project/api/models/requests/reset_password_request.dart';
 import 'package:jobify_project/api/models/reset_password_response.dart';
+import 'package:jobify_project/api/models/create_job_response.dart';
+import 'package:jobify_project/api/models/requests/create_job_request_model.dart';
+import 'package:jobify_project/api/models/get_my_jobs_response.dart';
 import 'package:jobify_project/core/constants/end_points.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -35,4 +38,10 @@ abstract class ApiClient {
 
   @PATCH(EndPoints.resetPassward)
   Future<ResetPasswordResponse> resetPassword(@Body() ResetPasswordRequest request);
+
+  @POST(EndPoints.createJob)
+  Future<CreateJobResponse> createJob(@Body() CreateJobRequestModel request);
+
+  @GET(EndPoints.getMyJobs)
+  Future<GetMyJobsResponse> getMyJobs();
 }

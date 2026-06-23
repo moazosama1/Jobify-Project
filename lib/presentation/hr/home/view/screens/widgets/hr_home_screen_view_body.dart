@@ -55,7 +55,7 @@ class HrHomeScreenViewBody extends StatelessWidget {
                   welcomeText: local.welcomeUser,
                   userNameText: local.helloUser,
                   onSavedPressed: () {
-                    context.push(RouteNames.savedJobs);
+                    context.push(RouteNames.aiChat);
                   },
                 ),
                 const SizedBox(height: AppMeasurements.paddingLarge),

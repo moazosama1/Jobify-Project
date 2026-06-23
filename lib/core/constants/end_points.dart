@@ -22,4 +22,8 @@ abstract class EndPoints {
   static const String getSavedJobs = "users/getSavedJobs";
   static const String saveJobs = "users/saveJob";
   static const String removeSaveJobs = "users/removeSavedJob";
+  static const String createJob = "jobs/create";
+  static const String getJobs = "jobs/get-all";
+  static const String getMyJobs = "jobs/my-jobs";
+  
 }
