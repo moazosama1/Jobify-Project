@@ -19,7 +19,7 @@ class SplashScreen extends StatelessWidget {
         if (state is SplashNavigateToOnboarding) {
           context.go(RouteNames.onboarding);
         } else if (state is SplashNavigateToLogin) {
-          context.go(RouteNames.aiChat);
+          context.go(RouteNames.login);
         } else if (state is SplashNavigateToHome) {
           context.go(RouteNames.home);
         } else if (state is SplashNavigateToHrHome) {
