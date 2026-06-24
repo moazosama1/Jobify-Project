@@ -72,11 +72,19 @@ class CustomJobApplicationCard extends StatelessWidget {
                     color: AppColors.gray.withValues(alpha: 0.1),
                   ),
                 ),
-                child: Image.asset(
-                  logoUrl,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.business),
-                ),
+                child: logoUrl.startsWith('http')
+                    ? Image.network(
+                        logoUrl,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.business),
+                      )
+                    : Image.asset(
+                        logoUrl,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.business),
+                      ),
               ),
               const SizedBox(width: 12),
               Expanded(

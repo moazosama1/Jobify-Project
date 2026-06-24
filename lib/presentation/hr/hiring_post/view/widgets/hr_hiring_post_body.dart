@@ -7,12 +7,15 @@ import 'package:jobify_project/core/extensions/theme_context_extension.dart';
 import 'package:jobify_project/core/extensions/l10n_extension.dart';
 import 'package:jobify_project/core/widgets/custom_toastification.dart';
 import 'package:toastification/toastification.dart';
+import 'package:jobify_project/domain/entities/job_entity.dart';
 import '../../view_model/hr_hiring_post_cubit.dart';
 import '../../view_model/hr_hiring_post_state.dart';
 import '../../view_model/hr_hiring_post_event.dart';
 
 class HrHiringPostBody extends StatefulWidget {
-  const HrHiringPostBody({super.key});
+  final JobEntity? job;
+
+  const HrHiringPostBody({super.key, this.job});
 
   @override
   State<HrHiringPostBody> createState() => _HrHiringPostBodyState();
@@ -47,22 +50,63 @@ class _HrHiringPostBodyState extends State<HrHiringPostBody> {
   @override
   void initState() {
     super.initState();
-    _companyNameController = TextEditingController(text: 'Route');
-    _companyLogoController = TextEditingController(
-      text: 'https://logo.com/vodafone.png',
+    final hasJob = widget.job != null;
+    _companyNameController = TextEditingController(
+      text: hasJob ? widget.job!.companyName : 'Route',
     );
-    _titleController = TextEditingController();
-    _descriptionController = TextEditingController();
-    _responsibilitiesController = TextEditingController();
-    _requirementsController = TextEditingController();
-    _preferredQualificationsController = TextEditingController();
-    _locationController = TextEditingController();
-    _salaryMinController = TextEditingController();
-    _salaryMaxController = TextEditingController();
-    _deadlineController = TextEditingController();
-    _skillsRequiredController = TextEditingController();
-    _categoryController = TextEditingController();
-    _openingsController = TextEditingController(text: '1');
+    _companyLogoController = TextEditingController(
+      text: hasJob ? widget.job!.logoAsset : 'https://logo.com/vodafone.png',
+    );
+    _titleController = TextEditingController(
+      text: hasJob ? widget.job!.title : '',
+    );
+    _descriptionController = TextEditingController(
+      text: hasJob ? widget.job!.description : '',
+    );
+    _responsibilitiesController = TextEditingController(
+      text: hasJob ? widget.job!.responsibilities.join(', ') : '',
+    );
+    _requirementsController = TextEditingController(
+      text: hasJob ? widget.job!.requirements.join(', ') : '',
+    );
+    _preferredQualificationsController = TextEditingController(
+      text: hasJob ? widget.job!.preferredQualifications.join(', ') : '',
+    );
+    _locationController = TextEditingController(
+      text: hasJob ? widget.job!.location : '',
+    );
+    _salaryMinController = TextEditingController(
+      text: hasJob ? widget.job!.salaryMin.toString() : '',
+    );
+    _salaryMaxController = TextEditingController(
+      text: hasJob ? widget.job!.salaryMax.toString() : '',
+    );
+    _deadlineController = TextEditingController(
+      text: hasJob
+          ? (widget.job!.applicationDeadline.length >= 10
+                ? widget.job!.applicationDeadline.substring(0, 10)
+                : widget.job!.applicationDeadline)
+          : '',
+    );
+    _skillsRequiredController = TextEditingController(
+      text: hasJob ? widget.job!.skillsRequired.join(', ') : '',
+    );
+    _categoryController = TextEditingController(
+      text: hasJob ? widget.job!.category : '',
+    );
+    _openingsController = TextEditingController(
+      text: hasJob ? widget.job!.openings.toString() : '1',
+    );
+
+    if (hasJob) {
+      _selectedEmploymentType.value = widget.job!.employmentType.isNotEmpty
+          ? widget.job!.employmentType
+          : 'full_time';
+      _selectedExperienceLevel.value = widget.job!.experienceLevel.isNotEmpty
+          ? widget.job!.experienceLevel
+          : 'mid_level';
+      _isRemote.value = widget.job!.isRemote;
+    }
   }
 
   @override
@@ -132,7 +176,7 @@ class _HrHiringPostBodyState extends State<HrHiringPostBody> {
 
           Navigator.of(context).pop();
         } else if (state.createJobStatus.errorMessage != null) {
-           customToastification(
+          customToastification(
             context,
             ToastificationType.error,
             state.createJobStatus.errorMessage,
@@ -399,30 +443,61 @@ class _HrHiringPostBodyState extends State<HrHiringPostBody> {
                   ),
                   onPressed: () {
                     if (_formKey.currentState?.validate() == true) {
-                      context.read<HrHiringPostCubit>().doIntent(
-                        HrHiringPostSubmitEvent(
-                          companyName: _companyNameController.text,
-                          companyLogo: _companyLogoController.text,
-                          title: _titleController.text,
-                          description: _descriptionController.text,
-                          responsibilities: _responsibilitiesController.text,
-                          requirements: _requirementsController.text,
-                          preferredQualifications:
-                              _preferredQualificationsController.text,
-                          location: _locationController.text,
-                          employmentType: _selectedEmploymentType.value,
-                          experienceLevel: _selectedExperienceLevel.value,
-                          salaryMin:
-                              int.tryParse(_salaryMinController.text) ?? 0,
-                          salaryMax:
-                              int.tryParse(_salaryMaxController.text) ?? 0,
-                          applicationDeadline: _deadlineController.text,
-                          skillsRequired: _skillsRequiredController.text,
-                          category: _categoryController.text,
-                          openings: int.tryParse(_openingsController.text) ?? 1,
-                          isRemote: _isRemote.value,
-                        ),
-                      );
+                      if (widget.job != null) {
+                        context.read<HrHiringPostCubit>().doIntent(
+                          HrHiringPostUpdateEvent(
+                            jobId: widget.job!.id,
+                            originalJob: widget.job!,
+                            companyName: _companyNameController.text,
+                            companyLogo: _companyLogoController.text,
+                            title: _titleController.text,
+                            description: _descriptionController.text,
+                            responsibilities: _responsibilitiesController.text,
+                            requirements: _requirementsController.text,
+                            preferredQualifications:
+                                _preferredQualificationsController.text,
+                            location: _locationController.text,
+                            employmentType: _selectedEmploymentType.value,
+                            experienceLevel: _selectedExperienceLevel.value,
+                            salaryMin:
+                                int.tryParse(_salaryMinController.text) ?? 0,
+                            salaryMax:
+                                int.tryParse(_salaryMaxController.text) ?? 0,
+                            applicationDeadline: _deadlineController.text,
+                            skillsRequired: _skillsRequiredController.text,
+                            category: _categoryController.text,
+                            openings:
+                                int.tryParse(_openingsController.text) ?? 1,
+                            isRemote: _isRemote.value,
+                          ),
+                        );
+                      } else {
+                        context.read<HrHiringPostCubit>().doIntent(
+                          HrHiringPostSubmitEvent(
+                            companyName: _companyNameController.text,
+                            companyLogo: _companyLogoController.text,
+                            title: _titleController.text,
+                            description: _descriptionController.text,
+                            responsibilities: _responsibilitiesController.text,
+                            requirements: _requirementsController.text,
+                            preferredQualifications:
+                                _preferredQualificationsController.text,
+                            location: _locationController.text,
+                            employmentType: _selectedEmploymentType.value,
+                            experienceLevel: _selectedExperienceLevel.value,
+                            salaryMin:
+                                int.tryParse(_salaryMinController.text) ?? 0,
+                            salaryMax:
+                                int.tryParse(_salaryMaxController.text) ?? 0,
+                            applicationDeadline: _deadlineController.text,
+                            skillsRequired: _skillsRequiredController.text,
+                            category: _categoryController.text,
+                            openings:
+                                int.tryParse(_openingsController.text) ?? 1,
+                            isRemote: _isRemote.value,
+                          ),
+                        );
+                      }
                     }
                   },
                 ),

@@ -1,12 +1,15 @@
 import 'package:injectable/injectable.dart';
 import 'package:jobify_project/core/api_result/api_result.dart';
 import 'package:jobify_project/core/api_result/safe_api_call.dart';
+import 'package:jobify_project/core/enums/application_status.dart';
 import 'package:jobify_project/data/data_source/job_remote_data_source.dart';
 import 'package:jobify_project/data/mappers/job_mapper.dart';
 import 'package:jobify_project/domain/entities/create_job_request_entity.dart';
 import 'package:jobify_project/domain/entities/create_job_response_entity.dart';
 import 'package:jobify_project/domain/entities/job_entity.dart';
+import 'package:jobify_project/domain/entities/job_application_entity.dart';
 import 'package:jobify_project/domain/repo/job_repository.dart';
+import 'package:jobify_project/data/mappers/job_application_mapper.dart';
 
 @Injectable(as: JobRepository)
 class JobRepositoryImpl implements JobRepository {
@@ -27,6 +30,40 @@ class JobRepositoryImpl implements JobRepository {
     return await safeApiCall(
       () => _remoteDataSource.getMyJobs(),
       (response) => response.jobs?.map((job) => job.toEntity()).toList() ?? const [],
+    );
+  }
+
+  @override
+  Future<ApiResult<CreateJobResponseEntity>> updateJob(String id, Map<String, dynamic> request) async {
+    return await safeApiCall(
+      () => _remoteDataSource.updateJob(id, request),
+      (response) => response.toEntity(),
+    );
+  }
+
+  @override
+  Future<ApiResult<CreateJobResponseEntity>> deleteJob(String id) async {
+    return await safeApiCall(
+      () => _remoteDataSource.deleteJob(id),
+      (response) => response.toEntity(),
+    );
+  }
+
+  @override
+  Future<ApiResult<List<JobApplicationEntity>>> getJobApplications(String jobId) async {
+    return await safeApiCall(
+      () => _remoteDataSource.getJobApplications(jobId),
+      (response) => response.applications?.map((app) => app.toEntity()).toList() ?? const [],
+    );
+  }
+
+  @override
+  Future<ApiResult<List<JobApplicationEntity>>> updateApplicationStatus(String id, ApplicationStatus status) async {
+    return await safeApiCall(
+      () => _remoteDataSource.updateApplicationStatus(id, {
+        "status": status.name,
+      }),
+      (response) => response.applications?.map((app) => app.toEntity()).toList() ?? const [],
     );
   }
 }

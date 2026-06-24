@@ -83,6 +83,19 @@ extension JobDtoMapper on JobDto {
       tags: tagsList,
       location: location ?? "",
       isBookmarked: false,
+      description: description ?? "",
+      responsibilities: responsibilities ?? const [],
+      requirements: requirements ?? const [],
+      preferredQualifications: preferredQualifications ?? const [],
+      employmentType: employmentType ?? "",
+      experienceLevel: experienceLevel ?? "",
+      salaryMin: salaryRange?.min ?? 0,
+      salaryMax: salaryRange?.max ?? 0,
+      applicationDeadline: applicationDeadline ?? "",
+      skillsRequired: skillsRequired ?? const [],
+      category: category ?? "",
+      openings: openings ?? 1,
+      isRemote: isRemote ?? false,
     );
   }
 }

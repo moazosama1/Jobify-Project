@@ -5,14 +5,19 @@ import 'package:jobify_project/core/constants/app_images.dart';
 import 'package:jobify_project/domain/entities/category_entity.dart';
 import 'package:jobify_project/domain/entities/job_entity.dart';
 import 'package:jobify_project/domain/use_cases/get_my_jobs_use_case.dart';
+import 'package:jobify_project/domain/use_cases/delete_job_use_case.dart';
 import 'hr_home_event.dart';
 import 'hr_home_state.dart';
 
 @injectable
 class HrHomeCubit extends Cubit<HrHomeState> {
   final GetMyJobsUseCase _getMyJobsUseCase;
+  final DeleteJobUseCase _deleteJobUseCase;
 
-  HrHomeCubit(this._getMyJobsUseCase) : super(const HrHomeState());
+  HrHomeCubit(
+    this._getMyJobsUseCase,
+    this._deleteJobUseCase,
+  ) : super(const HrHomeState());
 
   void doIntent(HrHomeEvent event) {
     switch (event) {
@@ -21,6 +26,9 @@ class HrHomeCubit extends Cubit<HrHomeState> {
         break;
       case final HrHomeToggleBookmarkEvent toggleEvent:
         _onToggleBookmark(toggleEvent.jobId);
+        break;
+      case final HrHomeDeleteJobEvent deleteEvent:
+        _onDeleteJob(deleteEvent.jobId);
         break;
     }
   }
@@ -115,5 +123,21 @@ class HrHomeCubit extends Cubit<HrHomeState> {
         recentJobs: updatedRecent,
       ),
     );
+  }
+
+  Future<void> _onDeleteJob(String jobId) async {
+    emit(state.copyWith(isLoading: true));
+    final result = await _deleteJobUseCase(jobId);
+    switch (result) {
+      case ApiSuccessResult():
+        _onLoadData();
+        break;
+      case ApiErrorResult(:final error):
+        emit(state.copyWith(
+          isLoading: false,
+          errorMessage: error.toString(),
+        ));
+        break;
+    }
   }
 }

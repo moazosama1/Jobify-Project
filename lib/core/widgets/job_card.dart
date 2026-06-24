@@ -7,12 +7,14 @@ class JobCard extends StatelessWidget {
   final JobEntity job;
   final VoidCallback? onOptionsTap;
   final void Function()? onTap;
+  final Widget? trailing;
 
   const JobCard({
     super.key,
     required this.onTap,
     required this.job,
     this.onOptionsTap,
+    this.trailing,
   });
 
   @override
@@ -55,7 +57,7 @@ class JobCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               padding: const EdgeInsets.all(AppMeasurements.paddingSmall),
-              child: Image.asset(job.logoAsset, fit: BoxFit.contain),
+              child: Image.network(job.logoAsset, fit: BoxFit.contain),
             ),
             const SizedBox(width: AppMeasurements.paddingMedium),
             // Center: Job Details
@@ -128,15 +130,18 @@ class JobCard extends StatelessWidget {
               ),
             ),
             // Right: Action Options (three dots)
-            IconButton(
-              icon: Icon(
-                Icons.more_vert_rounded,
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+            if (trailing != null)
+              trailing!
+            else if (onOptionsTap != null)
+              IconButton(
+                icon: Icon(
+                  Icons.more_vert_rounded,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                ),
+                onPressed: onOptionsTap,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
               ),
-              onPressed: onOptionsTap,
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-            ),
           ],
         ),
       ),
