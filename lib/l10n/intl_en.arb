@@ -212,10 +212,47 @@
   "responsibilities": "Responsibilities (comma-separated)",
   "requirements": "Requirements (comma-separated)",
   "preferredQualifications": "Preferred Qualifications (comma-separated)",
+  "details": "Details",
+  "jobNotFound": "Job not found",
+  "remote": "Remote",
+  "internship": "Internship",
+  "contract": "Contract",
+  "junior": "Junior",
+  "midLevel": "Mid Level",
+  "senior": "Senior",
+  "lead": "Lead",
+  "expert": "Expert",
   "companySnapshot": "Company Details",
   "jobDetails": "Job Details",
   "requirementsAndDetails": "Requirements & Qualifications",
   "titleTooShort": "Job title must be more than 3 characters",
+  "descriptionTooShort": "Job description must be at least 50 characters",
+  "savedJobsTitle": "Saved Jobs",
+  "savedJobsCountTitle": "{count} Saved jobs",
+  "@savedJobsCountTitle": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "noSavedJobsFound": "No saved jobs found",
+  "deleteAction": "Delete",
+  "aboutTheRole": "About The Role",
+  "requirementSkillForTheRole": "Requirement Skill For The Role",
+  "skillsRequiredLabel": "Skills Required",
+  "responsibilitiesLabel": "Responsibilities",
+  "typeLabel": "Type",
+  "deadlineLabel": "Deadline",
+  "notAvailable": "N/A",
+  "salary": "Salary",
+  "filters": "Filters",
+  "applyFilters": "Apply Filters",
+  "clearFilters": "Clear",
+  "filterBy": "Filter By",
+  "jobType": "Job Type",
+  "minSalary": "Min Salary",
+  "maxSalary": "Max Salary",
   "descriptionTooShort": "Job description must be at least 50 characters",
   "rejected": "Rejected",
   "pending": "Pending",
@@ -223,4 +260,4 @@
   "reject": "Reject",
   "statusUpdatedSuccess": "Application status updated successfully.",
   "contact": "Contact"
-}
+}

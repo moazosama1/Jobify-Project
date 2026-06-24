@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jobify_project/core/constants/app_colors.dart';
 import 'package:jobify_project/core/constants/app_images.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/generated/l10n.dart';

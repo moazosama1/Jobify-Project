@@ -23,44 +23,45 @@ class HrJobApplicationsViewBody extends StatelessWidget {
   const HrJobApplicationsViewBody({super.key, required this.jobTitle});
 
   Future<void> _openPdf(BuildContext context, String resumePath) async {
-  // رابط الـ S3 Bucket الخاص بك بناءً على البيانات التي أرسلتها
-  const String awsBucketUrl = "https://mahy-s3-bucket-2025.s3.us-east-1.amazonaws.com/";
+    // رابط الـ S3 Bucket الخاص بك بناءً على البيانات التي أرسلتها
+    const String awsBucketUrl =
+        "https://mahy-s3-bucket-2025.s3.us-east-1.amazonaws.com/";
 
-  // لو الـ Backend مراجع الـ URL كامل، هنستخدمه، لو مراجع الـ path بس هنمجده مع رابط الـ Bucket
-  final String urlString = resumePath.startsWith('http')
-      ? resumePath
-      : (awsBucketUrl + resumePath);
+    // لو الـ Backend مراجع الـ URL كامل، هنستخدمه، لو مراجع الـ path بس هنمجده مع رابط الـ Bucket
+    final String urlString = resumePath.startsWith('http')
+        ? resumePath
+        : (awsBucketUrl + resumePath);
 
-  // عمل encode للمسافات والحروف الخاصة بشكل صحيح لضمان عمل الرابط
-  final String encodedUrl = Uri.encodeFull(urlString).replaceAll(' ', '%20');
-  
-  debugPrint("🔗 AWS S3 Link: $encodedUrl");
+    // عمل encode للمسافات والحروف الخاصة بشكل صحيح لضمان عمل الرابط
+    final String encodedUrl = Uri.encodeFull(urlString).replaceAll(' ', '%20');
 
-  try {
-    final Uri url = Uri.parse(encodedUrl);
-    
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
+    debugPrint("🔗 AWS S3 Link: $encodedUrl");
+
+    try {
+      final Uri url = Uri.parse(encodedUrl);
+
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url, mode: LaunchMode.externalApplication);
+      } else {
+        if (context.mounted) {
+          customToastification(
+            context,
+            ToastificationType.error,
+            'Could not launch CV. Please check your browser.',
+          );
+        }
+      }
+    } catch (e) {
       if (context.mounted) {
         customToastification(
           context,
           ToastificationType.error,
-          'Could not launch CV. Please check your browser.',
+          'Error launching CV: $e',
         );
       }
+      debugPrint("❌ Error: $e");
     }
-  } catch (e) {
-    if (context.mounted) {
-      customToastification(
-        context,
-        ToastificationType.error,
-        'Error launching CV: $e',
-      );
-    }
-    debugPrint("❌ Error: $e");
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -256,11 +257,11 @@ class HrJobApplicationsViewBody extends StatelessWidget {
                   _openPdf(context, application.resume);
                   if (application.status == 'pending') {
                     context.read<HrJobApplicationsCubit>().doIntent(
-                          UpdateStatusJobApplicationsEvent(
-                            id: application.id,
-                            status: ApplicationStatus.reviewed,
-                          ),
-                        );
+                      UpdateStatusJobApplicationsEvent(
+                        id: application.id,
+                        status: ApplicationStatus.reviewed,
+                      ),
+                    );
                   }
                 },
                 icon: const Icon(Icons.picture_as_pdf_rounded, size: 18),
@@ -279,7 +280,8 @@ class HrJobApplicationsViewBody extends StatelessWidget {
               ),
             ],
           ),
-          if (application.status == 'pending' || application.status == 'reviewed') ...[
+          if (application.status == 'pending' ||
+              application.status == 'reviewed') ...[
             const SizedBox(height: AppMeasurements.paddingSmall),
             const Divider(height: 1, thickness: 0.5),
             const SizedBox(height: AppMeasurements.paddingSmall),
@@ -289,11 +291,11 @@ class HrJobApplicationsViewBody extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: () {
                       context.read<HrJobApplicationsCubit>().doIntent(
-                            UpdateStatusJobApplicationsEvent(
-                              id: application.id,
-                              status: ApplicationStatus.rejected,
-                            ),
-                          );
+                        UpdateStatusJobApplicationsEvent(
+                          id: application.id,
+                          status: ApplicationStatus.rejected,
+                        ),
+                      );
                     },
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.red,
@@ -313,11 +315,11 @@ class HrJobApplicationsViewBody extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       context.read<HrJobApplicationsCubit>().doIntent(
-                            UpdateStatusJobApplicationsEvent(
-                              id: application.id,
-                              status: ApplicationStatus.accepted,
-                            ),
-                          );
+                        UpdateStatusJobApplicationsEvent(
+                          id: application.id,
+                          status: ApplicationStatus.accepted,
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.green,
@@ -334,7 +336,8 @@ class HrJobApplicationsViewBody extends StatelessWidget {
                 ),
               ],
             ),
-          ] else if (application.status == 'accepted' || application.status == 'approved') ...[
+          ] else if (application.status == 'accepted' ||
+              application.status == 'approved') ...[
             const SizedBox(height: AppMeasurements.paddingSmall),
             const Divider(height: 1, thickness: 0.5),
             const SizedBox(height: AppMeasurements.paddingSmall),

@@ -9,7 +9,7 @@ part 'job_dto.g.dart';
 class JobDto {
   final String? title;
   final CompanySnapshotModel? companySnapshot;
-  final String? postedBy;
+  final dynamic postedBy;
   final String? description;
   final List<String>? responsibilities;
   final List<String>? requirements;

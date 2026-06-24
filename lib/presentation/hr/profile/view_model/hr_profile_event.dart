@@ -17,3 +17,7 @@ class HrProfileUpdateContactInfoEvent extends HrProfileEvent {
     required this.phoneNumber,
   });
 }
+
+class HrProfileLogoutEvent extends HrProfileEvent {
+  const HrProfileLogoutEvent();
+}

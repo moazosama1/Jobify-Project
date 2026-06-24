@@ -59,7 +59,7 @@ class RecentJobsSectionWidget extends StatelessWidget {
           itemBuilder: (context, index) {
             final job = recentJobs[index];
             return JobCard(
-              onTap: () => context.push(RouteNames.jobDetails),
+              onTap: () => context.push(RouteNames.jobDetails, extra: job),
               job: job,
               onOptionsTap: () {
                 // Show options modal sheet.

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jobify_project/core/constants/app_images.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/router/route_names.dart';
 import 'package:jobify_project/core/widgets/custom_loading_indicator.dart';
@@ -13,6 +12,7 @@ import 'package:jobify_project/presentation/job_seeker/home/view/screens/widgets
 import 'package:jobify_project/presentation/job_seeker/home/view_model/home_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view_model/home_event.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view_model/home_state.dart';
+import 'package:jobify_project/domain/entities/requests/get_all_jobs_request_entity.dart';
 import 'package:jobify_project/generated/l10n.dart';
 
 class HomeScreenViewBody extends StatelessWidget {
@@ -43,7 +43,6 @@ class HomeScreenViewBody extends StatelessWidget {
             ),
           );
         }
-
         return RefreshIndicator(
           onRefresh: () async {
             context.read<HomeCubit>().doIntent(HomeLoadDataEvent());
@@ -62,17 +61,33 @@ class HomeScreenViewBody extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: AppMeasurements.paddingLarge),
-
                 SearchSectionWidget(
                   hintText: local.searchPlaceholder,
+                  hasActiveFilters: false,
                   onFilterPressed: () {
-                    // Handle filter button press.
+                    context.push(RouteNames.search);
                   },
                 ),
                 const SizedBox(height: AppMeasurements.paddingLarge),
                 CategorySectionWidget(
                   categories: state.categories,
                   local: local,
+                  onCategoryTap: (category) {
+                    var categoryFilter = '';
+                    var employmentTypeFilter = '';
+
+                    if (category.nameKey == 'categoryCompany') categoryFilter = 'Company';
+                    else if (category.nameKey == 'categoryFullTime') employmentTypeFilter = 'full_time';
+                    else if (category.nameKey == 'categoryPartTime') employmentTypeFilter = 'part_time';
+                    else if (category.nameKey == 'categoryFreelance') categoryFilter = 'Freelance';
+                    else categoryFilter = category.nameKey;
+
+                    final filters = GetAllJobsRequestEntity(
+                      category: categoryFilter.isNotEmpty ? categoryFilter : null,
+                      employmentType: employmentTypeFilter.isNotEmpty ? employmentTypeFilter : null,
+                    );
+                    context.push(RouteNames.search, extra: filters);
+                  },
                 ),
                 const SizedBox(height: AppMeasurements.paddingLarge),
                 SuggestedJobsSectionWidget(

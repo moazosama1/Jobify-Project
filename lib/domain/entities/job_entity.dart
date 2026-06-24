@@ -8,20 +8,22 @@ class JobEntity extends Equatable {
   final String salary;
   final List<String> tags;
   final String location;
-  final bool isBookmarked;
-  
-  // Enriched fields for full detail / editing
   final String description;
   final List<String> responsibilities;
   final List<String> requirements;
-  final List<String> preferredQualifications;
-  final String employmentType;
-  final String experienceLevel;
-  final int salaryMin;
-  final int salaryMax;
-  final String applicationDeadline;
   final List<String> skillsRequired;
   final String category;
+  final String employmentType;
+  final String experienceLevel;
+  final String applicationDeadline;
+  final bool isBookmarked;
+  
+ 
+  final List<String> preferredQualifications;
+
+  final int salaryMin;
+  final int salaryMax;
+
   final int openings;
   final bool isRemote;
 
@@ -33,18 +35,18 @@ class JobEntity extends Equatable {
     required this.salary,
     required this.tags,
     required this.location,
-    this.isBookmarked = false,
     this.description = '',
     this.responsibilities = const [],
     this.requirements = const [],
-    this.preferredQualifications = const [],
-    this.employmentType = '',
-    this.experienceLevel = '',
-    this.salaryMin = 0,
-    this.salaryMax = 0,
-    this.applicationDeadline = '',
     this.skillsRequired = const [],
     this.category = '',
+    this.employmentType = '',
+    this.experienceLevel = '',
+    this.applicationDeadline = '',
+    this.isBookmarked = false,
+    this.preferredQualifications = const [],
+    this.salaryMin = 0,
+    this.salaryMax = 0,
     this.openings = 1,
     this.isRemote = false,
   });
@@ -57,18 +59,22 @@ class JobEntity extends Equatable {
     String? salary,
     List<String>? tags,
     String? location,
-    bool? isBookmarked,
     String? description,
     List<String>? responsibilities,
     List<String>? requirements,
-    List<String>? preferredQualifications,
-    String? employmentType,
-    String? experienceLevel,
-    int? salaryMin,
-    int? salaryMax,
-    String? applicationDeadline,
     List<String>? skillsRequired,
     String? category,
+    String? employmentType,
+    String? experienceLevel,
+    String? applicationDeadline,
+    bool? isBookmarked,
+    
+    List<String>? preferredQualifications,
+   
+    int? salaryMin,
+    int? salaryMax,
+  
+   
     int? openings,
     bool? isRemote,
   }) {
@@ -80,18 +86,21 @@ class JobEntity extends Equatable {
       salary: salary ?? this.salary,
       tags: tags ?? this.tags,
       location: location ?? this.location,
-      isBookmarked: isBookmarked ?? this.isBookmarked,
       description: description ?? this.description,
       responsibilities: responsibilities ?? this.responsibilities,
       requirements: requirements ?? this.requirements,
-      preferredQualifications: preferredQualifications ?? this.preferredQualifications,
-      employmentType: employmentType ?? this.employmentType,
-      experienceLevel: experienceLevel ?? this.experienceLevel,
-      salaryMin: salaryMin ?? this.salaryMin,
-      salaryMax: salaryMax ?? this.salaryMax,
-      applicationDeadline: applicationDeadline ?? this.applicationDeadline,
       skillsRequired: skillsRequired ?? this.skillsRequired,
       category: category ?? this.category,
+      employmentType: employmentType ?? this.employmentType,
+      experienceLevel: experienceLevel ?? this.experienceLevel,
+      applicationDeadline: applicationDeadline ?? this.applicationDeadline,
+      isBookmarked: isBookmarked ?? this.isBookmarked,
+    
+      preferredQualifications: preferredQualifications ?? this.preferredQualifications,
+     
+      salaryMin: salaryMin ?? this.salaryMin,
+      salaryMax: salaryMax ?? this.salaryMax,
+      
       openings: openings ?? this.openings,
       isRemote: isRemote ?? this.isRemote,
     );
@@ -106,6 +115,14 @@ class JobEntity extends Equatable {
         salary,
         tags,
         location,
+        description,
+        responsibilities,
+        requirements,
+        skillsRequired,
+        category,
+        employmentType,
+        experienceLevel,
+        applicationDeadline,
         isBookmarked,
         description,
         responsibilities,

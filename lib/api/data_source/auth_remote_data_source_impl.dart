@@ -42,4 +42,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<ResetPasswordResponse> resetPassword(ResetPasswordRequest request) {
     return _apiClient.resetPassword(request);
   }
+
+  @override
+  Future<dynamic> logout() {
+    return _apiClient.logout({"flag": "all"});
+  }
 }

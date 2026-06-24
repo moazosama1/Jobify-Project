@@ -29,10 +29,10 @@ class RecentSearchesSection extends StatelessWidget {
               ),
               BlocBuilder<SearchCubit, SearchState>(
                 builder: (context, state) {
-                  if (state.recentSearches.isEmpty) {
+                  if (state.recentSearches.data == null ||
+                      state.recentSearches.data!.isEmpty) {
                     return const SizedBox.shrink();
                   }
-
                   return InkWell(
                     onTap: () {
                       context.read<SearchCubit>().doIntent(
@@ -60,23 +60,49 @@ class RecentSearchesSection extends StatelessWidget {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
         return ListView.builder(
-          itemCount: state.recentSearches.length,
+          itemCount: state.recentSearches.data?.length,
           itemBuilder: (context, index) {
+            final query = state.recentSearches.data?[index] ?? "";
+            if (query.isEmpty) return const SizedBox.shrink();
+
             return Padding(
               padding: const EdgeInsets.only(
                 bottom: AppMeasurements.paddingSmall,
               ),
-              child: Row(
-                children: [
-                  const Icon(Icons.access_time, color: Colors.grey, size: 20),
-                  const SizedBox(width: AppMeasurements.paddingMedium),
-                  Text(
-                    state.recentSearches[index],
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey.shade600,
-                    ),
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  final cubit = context.read<SearchCubit>();
+                  cubit.searchController.text = query;
+                  cubit.doIntent(SearchSubmittedEvent(query));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.access_time,
+                        color: Colors.grey,
+                        size: 20,
+                      ),
+                      const SizedBox(width: AppMeasurements.paddingMedium),
+                      Expanded(
+                        child: Text(
+                          query,
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: Colors.grey.shade600),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const Icon(
+                        Icons.arrow_outward_rounded,
+                        color: Colors.grey,
+                        size: 16,
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             );
           },

@@ -17,3 +17,7 @@ class ProfileUpdateContactInfoEvent extends ProfileEvent {
     required this.phoneNumber,
   });
 }
+
+class ProfileLogoutEvent extends ProfileEvent {
+  const ProfileLogoutEvent();
+}

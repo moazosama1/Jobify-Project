@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jobify_project/generated/l10n.dart';
 
 class JobDetailsHeaderSection extends StatelessWidget {
   final String title;
@@ -28,8 +29,8 @@ class JobDetailsHeaderSection extends StatelessWidget {
           ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
         onSkipPressed != null
-            ? TextButton(onPressed: onSkipPressed, child: const Text('Skip'))
-            : SizedBox.shrink(),
+            ? TextButton(onPressed: onSkipPressed, child: Text(AppLocalizations.of(context).skip))
+            : const SizedBox.shrink(),
       ],
     );
   }
