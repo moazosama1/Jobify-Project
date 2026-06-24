@@ -1,13 +1,16 @@
 abstract class EndPoints {
-  static const String baseUrl = "http://192.168.1.14:3000/";
+  // for moo
+  static const String baseUrl = "http://192.168.1.4:3000/";
+  // for anas
+  // static const String baseUrl = "http://192.168.1.14:3000/";
 
   ///User
   ///
   static const String signup = "users/signUp";
   static const String signIn = "users/signIn";
   static const String confirmEmail = "users/confirmEmail";
-  static const String forgetPassward = "users/forgetPassword";
-  static const String resetPassward = "users/resetPassword";
+  static const String forgetPassword = "users/forgetPassword";
+  static const String resetPassword = "users/resetPassword";
   static const String logOut = "users/logOut";
   static const String getProfile = "users/getProfile";
   static const String updateProfile = "users/updateBasicInfo";
@@ -24,6 +27,6 @@ abstract class EndPoints {
   static const String removeSaveJobs = "users/removeSavedJob";
   static const String createJob = "jobs/create";
   static const String getJobs = "jobs/get-all";
+  static const String getJobById = "jobs/{id}";
   static const String getMyJobs = "jobs/my-jobs";
-  
 }

@@ -1,17 +1,23 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:jobify_project/core/api_result/api_result.dart';
+import 'package:jobify_project/domain/use_cases/logout_use_case.dart';
 import 'hr_profile_event.dart';
 import 'hr_profile_state.dart';
 
 @injectable
 class HrProfileCubit extends Cubit<HrProfileState> {
-  HrProfileCubit() : super(const HrProfileState());
+  final LogoutUseCase _logoutUseCase;
+
+  HrProfileCubit(this._logoutUseCase) : super(const HrProfileState());
 
   void doIntent(HrProfileEvent event) {
     if (event is HrProfileLoadDataEvent) {
       _onLoadData();
     } else if (event is HrProfileUpdateContactInfoEvent) {
       _onUpdateContactInfo(event);
+    } else if (event is HrProfileLogoutEvent) {
+      _onLogout();
     }
   }
 
@@ -48,5 +54,20 @@ class HrProfileCubit extends Cubit<HrProfileState> {
         phoneNumber: event.phoneNumber,
       ),
     );
+  }
+
+  Future<void> _onLogout() async {
+    emit(state.copyWith(isLogoutLoading: true, clearError: true));
+    final result = await _logoutUseCase();
+    if (result is ApiSuccessResult) {
+      emit(state.copyWith(isLogoutLoading: false, logoutSuccess: true));
+    } else if (result is ApiErrorResult) {
+      emit(
+        state.copyWith(
+          isLogoutLoading: false,
+          errorMessage: (result).errorMessage,
+        ),
+      );
+    }
   }
 }

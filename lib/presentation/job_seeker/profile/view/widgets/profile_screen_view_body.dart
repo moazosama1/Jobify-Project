@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
+import 'package:jobify_project/core/widgets/custom_elevated_button_loading.dart';
+import 'package:jobify_project/core/widgets/custom_toastification.dart';
+import 'package:jobify_project/generated/l10n.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view/widgets/profile_contact_info_widget.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view/widgets/profile_header_widget.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view/widgets/profile_resume_widget.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view/widgets/profile_stats_widget.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view_model/profile_cubit.dart';
+import 'package:jobify_project/presentation/job_seeker/profile/view_model/profile_event.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view_model/profile_state.dart';
+import 'package:toastification/toastification.dart';
+import 'package:go_router/go_router.dart';
+import 'package:jobify_project/core/router/route_names.dart';
 
 class ProfileScreenViewBody extends StatelessWidget {
   const ProfileScreenViewBody({super.key});
@@ -14,8 +21,28 @@ class ProfileScreenViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final local = AppLocalizations.of(context);
 
-    return BlocBuilder<ProfileCubit, ProfileState>(
+    return BlocConsumer<ProfileCubit, ProfileState>(
+      listenWhen: (previous, current) =>
+          previous.logoutSuccess != current.logoutSuccess ||
+          previous.errorMessage != current.errorMessage,
+      listener: (context, state) {
+        if (state.logoutSuccess) {
+          customToastification(
+            context,
+            ToastificationType.success,
+            local.success,
+          );
+          context.go(RouteNames.login);
+        } else if (state.errorMessage != null && !state.isLoading) {
+          customToastification(
+            context,
+            ToastificationType.error,
+            state.errorMessage,
+          );
+        }
+      },
       builder: (context, state) {
         if (state.isLoading) {
           return const Center(
@@ -23,7 +50,7 @@ class ProfileScreenViewBody extends StatelessWidget {
           );
         }
 
-        if (state.errorMessage != null) {
+        if (state.errorMessage != null && state.name.isEmpty) {
           return Center(
             child: Text(
               state.errorMessage!,
@@ -35,7 +62,6 @@ class ProfileScreenViewBody extends StatelessWidget {
         }
 
         return SingleChildScrollView(
-        //  physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -67,6 +93,17 @@ class ProfileScreenViewBody extends StatelessWidget {
                 name: state.name,
                 email: state.email,
                 phoneNumber: state.phoneNumber,
+              ),
+              const SizedBox(height: AppMeasurements.paddingLarge),
+
+              // Logout Button
+              CustomElevatedButtonLoading(
+                isLoading: state.isLogoutLoading,
+                textButton: 'Logout', // Hardcoded string as fallback
+                colorButton: theme.colorScheme.error,
+                onPressed: () {
+                  context.read<ProfileCubit>().doIntent(const ProfileLogoutEvent());
+                },
               ),
               const SizedBox(height: AppMeasurements.paddingLarge),
             ],

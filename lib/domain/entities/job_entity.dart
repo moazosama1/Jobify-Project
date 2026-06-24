@@ -8,6 +8,14 @@ class JobEntity extends Equatable {
   final String salary;
   final List<String> tags;
   final String location;
+  final String description;
+  final List<String> responsibilities;
+  final List<String> requirements;
+  final List<String> skillsRequired;
+  final String category;
+  final String employmentType;
+  final String experienceLevel;
+  final String applicationDeadline;
   final bool isBookmarked;
 
   const JobEntity({
@@ -18,6 +26,14 @@ class JobEntity extends Equatable {
     required this.salary,
     required this.tags,
     required this.location,
+    this.description = '',
+    this.responsibilities = const [],
+    this.requirements = const [],
+    this.skillsRequired = const [],
+    this.category = '',
+    this.employmentType = '',
+    this.experienceLevel = '',
+    this.applicationDeadline = '',
     this.isBookmarked = false,
   });
 
@@ -29,6 +45,14 @@ class JobEntity extends Equatable {
     String? salary,
     List<String>? tags,
     String? location,
+    String? description,
+    List<String>? responsibilities,
+    List<String>? requirements,
+    List<String>? skillsRequired,
+    String? category,
+    String? employmentType,
+    String? experienceLevel,
+    String? applicationDeadline,
     bool? isBookmarked,
   }) {
     return JobEntity(
@@ -39,6 +63,14 @@ class JobEntity extends Equatable {
       salary: salary ?? this.salary,
       tags: tags ?? this.tags,
       location: location ?? this.location,
+      description: description ?? this.description,
+      responsibilities: responsibilities ?? this.responsibilities,
+      requirements: requirements ?? this.requirements,
+      skillsRequired: skillsRequired ?? this.skillsRequired,
+      category: category ?? this.category,
+      employmentType: employmentType ?? this.employmentType,
+      experienceLevel: experienceLevel ?? this.experienceLevel,
+      applicationDeadline: applicationDeadline ?? this.applicationDeadline,
       isBookmarked: isBookmarked ?? this.isBookmarked,
     );
   }
@@ -52,6 +84,14 @@ class JobEntity extends Equatable {
         salary,
         tags,
         location,
+        description,
+        responsibilities,
+        requirements,
+        skillsRequired,
+        category,
+        employmentType,
+        experienceLevel,
+        applicationDeadline,
         isBookmarked,
       ];
 }

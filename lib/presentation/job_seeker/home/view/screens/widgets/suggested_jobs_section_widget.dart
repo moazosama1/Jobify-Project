@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
+import 'package:jobify_project/core/router/route_names.dart';
 import 'package:jobify_project/domain/entities/job_entity.dart';
 import 'package:jobify_project/generated/l10n.dart';
 import 'package:jobify_project/core/widgets/suggested_job_card.dart';
@@ -55,6 +57,7 @@ class SuggestedJobsSectionWidget extends StatelessWidget {
               horizontal: AppMeasurements.paddingLarge,
             ),
             scrollDirection: Axis.horizontal,
+            reverse: true,
             itemCount: suggestedJobs.length,
             separatorBuilder: (context, index) =>
                 const SizedBox(width: AppMeasurements.paddingMedium),
@@ -62,6 +65,8 @@ class SuggestedJobsSectionWidget extends StatelessWidget {
               final job = suggestedJobs[index];
               return SuggestedJobCard(
                 job: job,
+                cardIndex: index,
+                onTap: () => context.push(RouteNames.jobDetails, extra: job),
                 onBookmarkTap: () {
                   context.read<HomeCubit>().doIntent(
                     HomeToggleBookmarkEvent(job.id),

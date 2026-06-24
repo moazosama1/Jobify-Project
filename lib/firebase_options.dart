@@ -33,10 +33,7 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -56,7 +53,6 @@ class DefaultFirebaseOptions {
     projectId: 'jobify-77ac6',
     storageBucket: 'jobify-77ac6.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCEncAL5Cf8U3GJVL0uLosIRpDHo0soNxc',
     appId: '1:361137124221:ios:0e6c0cf7859785794c5214',
@@ -64,5 +60,15 @@ class DefaultFirebaseOptions {
     projectId: 'jobify-77ac6',
     storageBucket: 'jobify-77ac6.firebasestorage.app',
     iosBundleId: 'com.example.initializeProject',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyA74BO9YqclqbO-772RL269P5C2r0hkgsg',
+    appId: '1:361137124221:web:13d517c0e5f3520d4c5214',
+    messagingSenderId: '361137124221',
+    projectId: 'jobify-77ac6',
+    authDomain: 'jobify-77ac6.firebaseapp.com',
+    storageBucket: 'jobify-77ac6.firebasestorage.app',
+    measurementId: 'G-2JS2TJT7XF',
   );
 }

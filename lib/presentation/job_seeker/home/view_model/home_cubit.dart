@@ -1,30 +1,53 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:jobify_project/core/api_result/api_result.dart';
 import 'package:jobify_project/core/constants/app_images.dart';
 import 'package:jobify_project/domain/entities/category_entity.dart';
 import 'package:jobify_project/domain/entities/job_entity.dart';
+import 'package:jobify_project/domain/entities/get_all_jobs_response_entity.dart';
+import 'package:jobify_project/domain/use_cases/get_all_jobs_use_case.dart';
+import 'package:jobify_project/domain/use_cases/remove_saved_job_use_case.dart';
+import 'package:jobify_project/domain/use_cases/save_job_use_case.dart';
+import 'package:jobify_project/domain/entities/requests/get_all_jobs_request_entity.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view_model/home_event.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view_model/home_state.dart';
 
 @injectable
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit() : super(const HomeState());
+  final GetAllJobsUseCase _getAllJobsUseCase;
+  final SaveJobUseCase _saveJobUseCase;
+  final RemoveSavedJobUseCase _removeSavedJobUseCase;
+
+  HomeCubit(
+    this._getAllJobsUseCase,
+    this._saveJobUseCase,
+    this._removeSavedJobUseCase,
+  ) : super(const HomeState()) {
+    _init();
+  }
+
+  void _init() {
+    doIntent(HomeLoadDataEvent());
+  }
 
   void doIntent(HomeEvent event) {
     if (event is HomeLoadDataEvent) {
       _onLoadData();
     } else if (event is HomeToggleBookmarkEvent) {
       _onToggleBookmark(event.jobId);
+    } else if (event is HomeUpdateFiltersEvent) {
+      _onUpdateFilters(event.filters);
     }
+  }
+
+  void _onUpdateFilters(GetAllJobsRequestEntity filters) {
+    emit(state.copyWith(activeFilters: filters));
+    doIntent(HomeLoadDataEvent());
   }
 
   Future<void> _onLoadData() async {
     emit(state.copyWith(isLoading: true, clearError: true));
     try {
-      // Simulate API call
-      await Future.delayed(const Duration(milliseconds: 800));
-
       final mockCategories = [
         const CategoryEntity(
           id: '1',
@@ -44,70 +67,51 @@ class HomeCubit extends Cubit<HomeState> {
         const CategoryEntity(
           id: '4',
           nameKey: 'categoryFreelance',
-          icon: AppImages.iconFreeLance,
+          icon: AppImages.iconFreelance,
         ),
       ];
 
-      final mockSuggestedJobs = [
-        const JobEntity(
-          id: 's1',
-          companyName: 'Google LLC',
-          logoAsset: 'assets/icons/google.png',
-          title: 'Sr. UX Designer',
-          salary: '\$195,000',
-          tags: ['Design', 'Full Time', 'In House'],
-          location: 'In House',
-          isBookmarked: false,
-        ),
-        const JobEntity(
-          id: 's2',
-          companyName: 'Facebook Inc.',
-          logoAsset: 'assets/icons/facebook.png',
-          title: 'Lead Engineer',
-          salary: '\$190,000',
-          tags: ['Design', 'Full Time', 'Remote'],
-          location: 'Remote',
-          isBookmarked: true,
-        ),
-      ];
+      final request = state.activeFilters ?? const GetAllJobsRequestEntity();
+      final result = await _getAllJobsUseCase.call(request);
 
-      final mockRecentJobs = [
-        const JobEntity(
-          id: 'r1',
-          companyName: 'Apple Inc.',
-          logoAsset: 'assets/icons/apple.png',
-          title: 'Sr. Product Designer',
-          salary: '\$150,000',
-          tags: ['Design', 'Full Time'],
-          location: 'United States',
-          isBookmarked: false,
-        ),
-        const JobEntity(
-          id: 'r2',
-          companyName: 'Google LLC',
-          logoAsset: 'assets/icons/google.png',
-          title: 'Sr. UI/UX Designer',
-          salary: '\$165,000',
-          tags: ['Design', 'Full Time'],
-          location: 'Singapore',
-          isBookmarked: false,
-        ),
-      ];
+      if (result is ApiSuccessResult<GetAllJobsResponseEntity>) {
+        final jobs = result.data.jobs;
+        // Show all jobs in recent jobs, and up to 5 jobs in suggested jobs
+        final suggestedJobs = jobs.take(5).toList();
+        final recentJobs = List<JobEntity>.from(jobs);
 
-      emit(
-        state.copyWith(
-          isLoading: false,
-          categories: mockCategories,
-          suggestedJobs: mockSuggestedJobs,
-          recentJobs: mockRecentJobs,
-        ),
-      );
+        emit(
+          state.copyWith(
+            isLoading: false,
+            categories: mockCategories,
+            suggestedJobs: suggestedJobs,
+            recentJobs: recentJobs,
+          ),
+        );
+      } else if (result is ApiErrorResult<GetAllJobsResponseEntity>) {
+        emit(
+          state.copyWith(isLoading: false, errorMessage: result.errorMessage),
+        );
+      }
     } catch (e) {
       emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
     }
   }
 
-  void _onToggleBookmark(String jobId) {
+  Future<void> _onToggleBookmark(String jobId) async {
+    // Determine the current bookmark status
+    bool wasBookmarked = false;
+    final suggestedJob = state.suggestedJobs
+        .where((j) => j.id == jobId)
+        .firstOrNull;
+    final recentJob = state.recentJobs.where((j) => j.id == jobId).firstOrNull;
+
+    if (suggestedJob != null) {
+      wasBookmarked = suggestedJob.isBookmarked;
+    } else if (recentJob != null) {
+      wasBookmarked = recentJob.isBookmarked;
+    }
+
     // Map suggested jobs list
     final updatedSuggested = state.suggestedJobs.map((job) {
       if (job.id == jobId) {
@@ -124,11 +128,49 @@ class HomeCubit extends Cubit<HomeState> {
       return job;
     }).toList();
 
+    // Optimistically emit state
     emit(
       state.copyWith(
         suggestedJobs: updatedSuggested,
         recentJobs: updatedRecent,
+        clearActionMessage: true,
       ),
     );
+
+    // Call API
+    ApiResult<String> result;
+    if (wasBookmarked) {
+      result = await _removeSavedJobUseCase(jobId);
+    } else {
+      result = await _saveJobUseCase(jobId);
+    }
+
+    if (result is ApiSuccessResult<String>) {
+      emit(state.copyWith(actionMessage: result.data, isActionSuccess: true));
+    } else if (result is ApiErrorResult<String>) {
+      // Revert optimistic update
+      final revertedSuggested = state.suggestedJobs.map((job) {
+        if (job.id == jobId) {
+          return job.copyWith(isBookmarked: wasBookmarked);
+        }
+        return job;
+      }).toList();
+
+      final revertedRecent = state.recentJobs.map((job) {
+        if (job.id == jobId) {
+          return job.copyWith(isBookmarked: wasBookmarked);
+        }
+        return job;
+      }).toList();
+
+      emit(
+        state.copyWith(
+          suggestedJobs: revertedSuggested,
+          recentJobs: revertedRecent,
+          actionMessage: result.errorMessage,
+          isActionSuccess: false,
+        ),
+      );
+    }
   }
 }

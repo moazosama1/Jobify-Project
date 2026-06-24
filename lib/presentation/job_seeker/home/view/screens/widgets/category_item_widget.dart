@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:jobify_project/core/responsive/app_measurements.dart';
 
 class CategoryItemWidget extends StatelessWidget {
-  final String icon;
+  final String imagePath;
   final String label;
-  final Color iconColor;
-  final Color borderColor;
+  final Color accentColor;
+  final bool isSelected;
   final VoidCallback? onTap;
 
   const CategoryItemWidget({
     super.key,
-    required this.icon,
+    required this.imagePath,
     required this.label,
-    required this.iconColor,
-    required this.borderColor,
+    required this.accentColor,
+    this.isSelected = false,
     this.onTap,
   });
 
@@ -21,42 +20,61 @@ class CategoryItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+      behavior: HitTestBehavior.opaque,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Icon Box
+          // Image box
           Container(
-            width: 68,
-            height: 68,
+            width: 80,
+            height: 80,
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: borderColor, width: 1.5),
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: isSelected
+                    ? accentColor
+                    : theme.colorScheme.outline.withValues(alpha: 0.15),
+                width: isSelected ? 2.0 : 1.5,
+              ),
               boxShadow: [
                 BoxShadow(
-                  color: theme.shadowColor.withValues(alpha: 0.02),
+                  color: Colors.black.withValues(alpha: 0.04),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
+                  spreadRadius: 0,
                 ),
               ],
             ),
-            child: Center(child: Image.asset(icon)),
+            child: Center(
+              child: Image.asset(
+                imagePath,
+                width: 48,
+                height: 48,
+                fit: BoxFit.contain,
+              ),
+            ),
           ),
-          const SizedBox(height: AppMeasurements.paddingSmall),
-          // Label text
+          const SizedBox(height: 8),
+          // Label below the box
           Text(
             label,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-              fontWeight: FontWeight.w500,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: isSelected
+                  ? accentColor
+                  : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
             ),
             textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
     );
   }
 }
+

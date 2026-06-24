@@ -7,25 +7,22 @@ import 'package:jobify_project/presentation/job_seeker/home/view/screens/widgets
 class CategorySectionWidget extends StatelessWidget {
   final List<CategoryEntity> categories;
   final AppLocalizations local;
+  final double contentPadding;
+  final Function(CategoryEntity)? onCategoryTap;
 
   const CategorySectionWidget({
     super.key,
     required this.categories,
     required this.local,
+    this.contentPadding = AppMeasurements.paddingLarge,
+    this.onCategoryTap,
   });
 
-  static const _iconColors = <Color>[
-    Color(0xFF5C6BC0),
-    Color(0xFF26A69A),
-    Color(0xFFAB47BC),
-    Color(0xFF29B6F6),
-  ];
-
-  static final _borderColors = <Color>[
-    const Color(0xFF5C6BC0).withOpacity(0.15),
-    const Color(0xFF26A69A).withOpacity(0.15),
-    const Color(0xFFAB47BC).withOpacity(0.15),
-    const Color(0xFF29B6F6).withOpacity(0.15),
+  static const _accentColors = <Color>[
+    Color(0xFF3B7DFF), // Blue — Company
+    Color(0xFF2ECC8F), // Teal Green — Full-time
+    Color(0xFFF5A623), // Warm Amber — Part-time
+    Color(0xFF8B5CF6), // Soft Violet — Freelance
   ];
 
   @override
@@ -36,8 +33,8 @@ class CategorySectionWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppMeasurements.paddingLarge,
+          padding: EdgeInsets.symmetric(
+            horizontal: contentPadding,
           ),
           child: Text(
             local.browseByCategory,
@@ -50,19 +47,18 @@ class CategorySectionWidget extends StatelessWidget {
         ),
         const SizedBox(height: AppMeasurements.paddingMedium),
         SizedBox(
-          height: 100,
+          height: 115,
           child: ListView.separated(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppMeasurements.paddingLarge,
+            padding: EdgeInsets.symmetric(
+              horizontal: contentPadding,
             ),
             scrollDirection: Axis.horizontal,
             itemCount: categories.length,
             separatorBuilder: (context, index) =>
-                const SizedBox(width: AppMeasurements.paddingLarge),
+                const SizedBox(width: 16),
             itemBuilder: (context, index) {
               final category = categories[index];
-              final iconColor = _iconColors[index % _iconColors.length];
-              final borderColor = _borderColors[index % _borderColors.length];
+              final accentColor = _accentColors[index % _accentColors.length];
 
               var label = category.nameKey;
               if (category.nameKey == 'categoryCompany') {
@@ -76,12 +72,13 @@ class CategorySectionWidget extends StatelessWidget {
               }
 
               return CategoryItemWidget(
-                icon: category.icon,
+                imagePath: category.icon,
                 label: label,
-                iconColor: iconColor,
-                borderColor: borderColor,
+                accentColor: accentColor,
                 onTap: () {
-                  // Filter categories or navigate.
+                  if (onCategoryTap != null) {
+                    onCategoryTap!(category);
+                  }
                 },
               );
             },
@@ -91,3 +88,4 @@ class CategorySectionWidget extends StatelessWidget {
     );
   }
 }
+

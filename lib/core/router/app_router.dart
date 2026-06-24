@@ -10,12 +10,12 @@ import 'package:jobify_project/presentation/job_seeker/chat_screen/view/screens/
 import 'package:jobify_project/presentation/job_seeker/chat_screen/view_model/chat_screen_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/chat_screen/view_model/chat_screen_event.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view_model/home_cubit.dart';
-import 'package:jobify_project/presentation/job_seeker/home/view_model/home_event.dart';
 import 'package:jobify_project/presentation/job_seeker/job_details/view/job_details_screen.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view/profile_screen.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view_model/profile_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view_model/profile_event.dart';
 import 'package:jobify_project/presentation/job_seeker/saved_jobs/view/saved_jobs_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/saved_jobs/view_model/saved_jobs_cubit.dart';
 import 'package:jobify_project/presentation/onboarding/view_model/onboarding_cubit.dart';
 import 'package:jobify_project/presentation/onboarding/view/screens/onboarding_screen.dart';
 import 'package:jobify_project/presentation/splash/view_model/splash_cubit.dart';
@@ -33,6 +33,8 @@ import 'package:jobify_project/presentation/job_seeker/applications/view/screens
 import 'package:jobify_project/presentation/job_seeker/apply_job/view/screens/apply_job_screen.dart';
 import 'package:jobify_project/presentation/job_seeker/apply_job/view_model/apply_job_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/main_layout/view/screens/main_layout_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/job_details/view_model/job_details_cubit.dart';
+import 'package:jobify_project/domain/entities/job_entity.dart';
 
 // HR Presentation Layer Imports
 import 'package:jobify_project/presentation/hr/main_layout/view/screens/hr_main_layout_screen.dart';
@@ -56,6 +58,8 @@ import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile
 import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile_event.dart';
 import 'package:jobify_project/presentation/search/view/screens/search_screen.dart';
 import 'package:jobify_project/presentation/search/view_model/search_cubit.dart';
+import 'package:jobify_project/presentation/search/view_model/search_event.dart';
+import 'package:jobify_project/domain/entities/requests/get_all_jobs_request_entity.dart';
 import 'package:jobify_project/presentation/ai_chat/view/screens/ai_chat_screen.dart';
 
 abstract class AppRouter {
@@ -89,8 +93,7 @@ abstract class AppRouter {
               GoRoute(
                 path: RouteNames.home,
                 builder: (context, state) => BlocProvider(
-                  create: (_) =>
-                      getIt<HomeCubit>()..doIntent(HomeLoadDataEvent()),
+                  create: (_) => getIt<HomeCubit>(),
                   child: const HomeScreen(),
                 ),
               ),
@@ -99,8 +102,11 @@ abstract class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: RouteNames.applications,
-                builder: (context, state) => const ApplicationsScreen(),
+                path: RouteNames.savedJobs,
+                builder: (context, state) => BlocProvider(
+                  create: (_) => getIt<SavedJobsCubit>(),
+                  child: const SavedJobsScreen(),
+                ),
               ),
             ],
           ),
@@ -212,11 +218,17 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: RouteNames.jobDetails,
-        builder: (context, state) => const JobDetailsScreen(),
+        builder: (context, state) {
+          final job = state.extra as JobEntity?;
+          return BlocProvider(
+            create: (_) => getIt<JobDetailsCubit>(param1: job),
+            child: const JobDetailsScreen(),
+          );
+        },
       ),
       GoRoute(
-        path: RouteNames.savedJobs,
-        builder: (context, state) => const SavedJobsScreen(),
+        path: RouteNames.applications,
+        builder: (context, state) => const ApplicationsScreen(),
       ),
       GoRoute(
         path: RouteNames.chatScreen,
@@ -259,10 +271,19 @@ abstract class AppRouter {
       GoRoute(
         path: RouteNames.search,
         parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => BlocProvider(
-          create: (_) => getIt<SearchCubit>(),
-          child: const SearchScreen(),
-        ),
+        builder: (context, state) {
+          final initialFilters = state.extra as GetAllJobsRequestEntity?;
+          return BlocProvider(
+            create: (_) {
+              final cubit = getIt<SearchCubit>();
+              if (initialFilters != null) {
+                cubit.doIntent(UpdateSearchFiltersEvent(initialFilters));
+              }
+              return cubit;
+            },
+            child: const SearchScreen(),
+          );
+        },
       ),
       GoRoute(
         path: RouteNames.aiChat,

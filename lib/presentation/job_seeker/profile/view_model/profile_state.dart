@@ -9,6 +9,8 @@ class ProfileState extends BaseState<dynamic> {
   final int appliedCount;
   final int reviewedCount;
   final int interviewCount;
+  final bool isLogoutLoading;
+  final bool logoutSuccess;
 
   const ProfileState({
     super.isLoading = false,
@@ -21,6 +23,8 @@ class ProfileState extends BaseState<dynamic> {
     this.appliedCount = 0,
     this.reviewedCount = 0,
     this.interviewCount = 0,
+    this.isLogoutLoading = false,
+    this.logoutSuccess = false,
   });
 
   ProfileState copyWith({
@@ -34,6 +38,8 @@ class ProfileState extends BaseState<dynamic> {
     int? appliedCount,
     int? reviewedCount,
     int? interviewCount,
+    bool? isLogoutLoading,
+    bool? logoutSuccess,
     bool clearError = false,
   }) {
     return ProfileState(
@@ -47,6 +53,8 @@ class ProfileState extends BaseState<dynamic> {
       appliedCount: appliedCount ?? this.appliedCount,
       reviewedCount: reviewedCount ?? this.reviewedCount,
       interviewCount: interviewCount ?? this.interviewCount,
+      isLogoutLoading: isLogoutLoading ?? this.isLogoutLoading,
+      logoutSuccess: logoutSuccess ?? this.logoutSuccess,
     );
   }
 
@@ -62,5 +70,7 @@ class ProfileState extends BaseState<dynamic> {
         appliedCount,
         reviewedCount,
         interviewCount,
+        isLogoutLoading,
+        logoutSuccess,
       ];
 }
