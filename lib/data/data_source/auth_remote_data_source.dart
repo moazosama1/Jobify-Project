@@ -15,4 +15,5 @@ abstract interface class AuthRemoteDataSource {
   Future<ConfirmEmailResponse> confirmEmail(ConfirmEmailRequest request);
   Future<ForgetPasswordResponse> forgetPassword(ForgetPasswordRequest request);
   Future<ResetPasswordResponse> resetPassword(ResetPasswordRequest request);
+  Future<dynamic> logout();
 }

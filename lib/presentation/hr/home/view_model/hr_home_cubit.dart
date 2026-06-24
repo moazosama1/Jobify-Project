@@ -47,7 +47,7 @@ class HrHomeCubit extends Cubit<HrHomeState> {
       const CategoryEntity(
         id: '4',
         nameKey: 'categoryFreelance',
-        icon: AppImages.iconFreeLance,
+        icon: AppImages.iconFreelance,
       ),
     ];
 
@@ -78,18 +78,17 @@ class HrHomeCubit extends Cubit<HrHomeState> {
 
     switch (result) {
       case ApiSuccessResult(:final data):
-        emit(state.copyWith(
-          isLoading: false,
-          categories: mockCategories,
-          suggestedJobs: mockSuggestedJobs,
-          recentJobs: data,
-        ));
+        emit(
+          state.copyWith(
+            isLoading: false,
+            categories: mockCategories,
+            suggestedJobs: mockSuggestedJobs,
+            recentJobs: data,
+          ),
+        );
         break;
       case ApiErrorResult(:final error):
-        emit(state.copyWith(
-          isLoading: false,
-          errorMessage: error.toString(),
-        ));
+        emit(state.copyWith(isLoading: false, errorMessage: error.toString()));
         break;
     }
   }

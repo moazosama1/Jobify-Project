@@ -8,22 +8,22 @@ import 'package:jobify_project/domain/entities/create_job_request_entity.dart';
 import 'package:jobify_project/domain/entities/create_job_response_entity.dart';
 import 'package:jobify_project/domain/entities/salary_range_entity.dart';
 import 'package:jobify_project/domain/entities/job_entity.dart';
+import 'package:jobify_project/api/models/get_all_jobs_response.dart';
+import 'package:jobify_project/api/models/pagination_model.dart';
+import 'package:jobify_project/domain/entities/get_all_jobs_response_entity.dart';
+import 'package:jobify_project/domain/entities/pagination_entity.dart';
+import 'package:jobify_project/api/models/get_job_by_id_response.dart';
+import 'package:jobify_project/domain/entities/get_job_by_id_response_entity.dart';
 
 extension CompanySnapshotEntityMapper on CompanySnapshotEntity {
   CompanySnapshotModel toModel() {
-    return CompanySnapshotModel(
-      name: name,
-      logo: logo,
-    );
+    return CompanySnapshotModel(name: name, logo: logo);
   }
 }
 
 extension SalaryRangeEntityMapper on SalaryRangeEntity {
   SalaryRangeModel toModel() {
-    return SalaryRangeModel(
-      min: min,
-      max: max,
-    );
+    return SalaryRangeModel(min: min, max: max);
   }
 }
 
@@ -51,9 +51,7 @@ extension CreateJobRequestEntityMapper on CreateJobRequestEntity {
 
 extension CreateJobResponseMapper on CreateJobResponse {
   CreateJobResponseEntity toEntity() {
-    return CreateJobResponseEntity(
-      message: message ?? '',
-    );
+    return CreateJobResponseEntity(message: message ?? '');
   }
 }
 
@@ -82,7 +80,45 @@ extension JobDtoMapper on JobDto {
       salary: salaryStr,
       tags: tagsList,
       location: location ?? "",
+      description: description ?? "",
+      responsibilities: responsibilities ?? const [],
+      requirements: requirements ?? const [],
+      skillsRequired: skillsRequired ?? const [],
+      category: category ?? "",
+      employmentType: employmentType ?? "",
+      experienceLevel: experienceLevel ?? "",
+      applicationDeadline: applicationDeadline ?? "",
       isBookmarked: false,
+    );
+  }
+}
+
+extension PaginationModelMapper on PaginationModel {
+  PaginationEntity toEntity() {
+    return PaginationEntity(
+      currentPage: currentPage ?? 1,
+      totalPages: totalPages ?? 1,
+      totalCount: totalCount ?? 0,
+      limit: limit ?? 10,
+    );
+  }
+}
+
+extension GetAllJobsResponseMapper on GetAllJobsResponse {
+  GetAllJobsResponseEntity toEntity() {
+    return GetAllJobsResponseEntity(
+      message: message ?? '',
+      pagination: pagination?.toEntity(),
+      jobs: jobs?.map((jobDto) => jobDto.toEntity()).toList() ?? [],
+    );
+  }
+}
+
+extension GetJobByIdResponseMapper on GetJobByIdResponse {
+  GetJobByIdResponseEntity toEntity() {
+    return GetJobByIdResponseEntity(
+      message: message ?? '',
+      job: job?.toEntity(),
     );
   }
 }

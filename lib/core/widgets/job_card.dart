@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/constants/app_colors.dart';
@@ -55,7 +56,16 @@ class JobCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               padding: const EdgeInsets.all(AppMeasurements.paddingSmall),
-              child: Image.asset(job.logoAsset, fit: BoxFit.contain),
+              child: CachedNetworkImage(
+                imageUrl: job.logoAsset,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+                errorWidget: (context, url, error) =>
+                    const Icon(Icons.business, color: Colors.grey),
+              ),
             ),
             const SizedBox(width: AppMeasurements.paddingMedium),
             // Center: Job Details

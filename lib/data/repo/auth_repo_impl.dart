@@ -83,5 +83,14 @@ class AuthRepoImpl implements AuthRepo {
   Future<String?> getRole() => _localDataSource.getRole();
 
   @override
-  Future<void> logout() => _localDataSource.clear();
+  Future<ApiResult<void>> logout() async {
+    final result = await safeApiCall(
+      () => _remoteDataSource.logout(),
+      (response) {},
+    );
+    if (result is ApiSuccessResult) {
+      await _localDataSource.clear();
+    }
+    return result;
+  }
 }
