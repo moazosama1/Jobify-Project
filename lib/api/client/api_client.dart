@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:jobify_project/api/models/get_job_applications_response.dart';
 import 'package:jobify_project/api/models/login_response.dart';
 import 'package:jobify_project/api/models/requests/login_request_dto.dart';
 import 'package:jobify_project/api/models/requests/signup_request.dart';
@@ -38,16 +39,13 @@ abstract class ApiClient {
   Future<ConfirmEmailResponse> confirmEmail(
     @Body() ConfirmEmailRequest request,
   );
+ 
 
   @PATCH(EndPoints.forgetPassword)
-  Future<ForgetPasswordResponse> forgetPassword(
-    @Body() ForgetPasswordRequest request,
-  );
+  Future<ForgetPasswordResponse> forgetPassword(@Body() ForgetPasswordRequest request);
 
   @PATCH(EndPoints.resetPassword)
-  Future<ResetPasswordResponse> resetPassword(
-    @Body() ResetPasswordRequest request,
-  );
+  Future<ResetPasswordResponse> resetPassword(@Body() ResetPasswordRequest request);
 
   @POST(EndPoints.createJob)
   Future<CreateJobResponse> createJob(@Body() CreateJobRequestModel request);
@@ -77,4 +75,19 @@ abstract class ApiClient {
 
   @POST(EndPoints.logOut)
   Future<dynamic> logout(@Body() Map<String, dynamic> body);
+
+  @PUT("${EndPoints.updataJob}{id}")
+  Future<CreateJobResponse> updateJob(
+    @Path("id") String id,
+    @Body() Map<String, dynamic> request,
+  );
+
+  @DELETE("jobs/{id}")
+  Future<CreateJobResponse> deleteJob(@Path("id") String id);
+
+  @GET("${EndPoints.getApplicationForEmployee}{id}")
+  Future<GetJobApplicationsResponse> getJobApplications(@Path("id") String id);
+
+   @PUT("job-applications/{id}/status")
+  Future<GetJobApplicationsResponse> updateApplicationStatus(@Path("id") String id, @Body() Map<String, dynamic> request);
 }

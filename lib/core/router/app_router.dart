@@ -53,6 +53,9 @@ import 'package:jobify_project/presentation/hr/chat_screen/view_model/hr_chat_sc
 import 'package:jobify_project/presentation/hr/chat_screen/view_model/hr_chat_screen_event.dart';
 import 'package:jobify_project/presentation/hr/hiring_post/view/screens/hr_hiring_post_screen.dart';
 import 'package:jobify_project/presentation/hr/hiring_post/view_model/hr_hiring_post_cubit.dart';
+import 'package:jobify_project/presentation/hr/job_applications/view/screens/hr_job_applications_screen.dart';
+import 'package:jobify_project/presentation/hr/job_applications/view_model/hr_job_applications_cubit.dart';
+import 'package:jobify_project/presentation/hr/job_applications/view_model/hr_job_applications_event.dart';
 import 'package:jobify_project/presentation/edit_profile/view/screens/edit_profile_screen.dart';
 import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile_cubit.dart';
 import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile_event.dart';
@@ -61,6 +64,7 @@ import 'package:jobify_project/presentation/search/view_model/search_cubit.dart'
 import 'package:jobify_project/presentation/search/view_model/search_event.dart';
 import 'package:jobify_project/domain/entities/requests/get_all_jobs_request_entity.dart';
 import 'package:jobify_project/presentation/ai_chat/view/screens/ai_chat_screen.dart';
+import 'package:jobify_project/domain/entities/job_entity.dart';
 
 abstract class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -246,10 +250,26 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: RouteNames.hrHiringPost,
-        builder: (context, state) => BlocProvider(
-          create: (_) => getIt<HrHiringPostCubit>(),
-          child: const HrHiringPostScreen(),
-        ),
+        builder: (context, state) {
+          final job = state.extra as JobEntity?;
+          return BlocProvider(
+            create: (_) => getIt<HrHiringPostCubit>(),
+            child: HrHiringPostScreen(job: job),
+          );
+        },
+      ),
+      GoRoute(
+        path: RouteNames.hrJobApplications,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          final jobId = extra['jobId'] as String;
+          final jobTitle = extra['jobTitle'] as String;
+          return BlocProvider(
+            create: (_) => getIt<HrJobApplicationsCubit>()
+              ..doIntent(LoadJobApplicationsEvent(jobId)),
+            child: HrJobApplicationsScreen(jobTitle: jobTitle),
+          );
+        },
       ),
       GoRoute(
         path: RouteNames.editProfile,

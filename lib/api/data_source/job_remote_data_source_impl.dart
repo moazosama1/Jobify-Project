@@ -8,6 +8,7 @@ import 'package:jobify_project/domain/entities/requests/get_all_jobs_request_ent
 import 'package:jobify_project/api/models/get_job_by_id_response.dart';
 import 'package:jobify_project/api/models/get_saved_jobs_response.dart';
 import 'package:jobify_project/api/models/toggle_saved_job_response.dart';
+import 'package:jobify_project/api/models/get_job_applications_response.dart';
 import 'package:jobify_project/data/data_source/job_remote_data_source.dart';
 
 @Injectable(as: JobRemoteDataSource)
@@ -49,5 +50,25 @@ class JobRemoteDataSourceImpl implements JobRemoteDataSource {
   @override
   Future<ToggleSavedJobResponse> removeSavedJob(String id) {
     return _apiClient.removeSavedJob(id);
+  }
+
+  @override
+  Future<CreateJobResponse> updateJob(String id, Map<String, dynamic> request) {
+    return _apiClient.updateJob(id, request);
+  }
+
+  @override
+  Future<CreateJobResponse> deleteJob(String id) {
+    return _apiClient.deleteJob(id);
+  }
+
+  @override
+  Future<GetJobApplicationsResponse> getJobApplications(String jobId) {
+    return _apiClient.getJobApplications(jobId);
+  }
+
+  @override
+  Future<GetJobApplicationsResponse> updateApplicationStatus(String id, Map<String, dynamic> request) {
+    return _apiClient.updateApplicationStatus(id, request);
   }
 }

@@ -145,6 +145,9 @@
   "time901": "09:01 AM",
   "time920": "09:20 AM",
   "edit": "Edit",
+  "delete": "Delete",
+  "deleteConfirmTitle": "Delete Job",
+  "deleteConfirmMessage": "Are you sure you want to delete this job?",
   "applied": "Applied",
   "reviewed": "Reviewed",
   "interview": "Interview",
@@ -249,5 +252,12 @@
   "filterBy": "Filter By",
   "jobType": "Job Type",
   "minSalary": "Min Salary",
-  "maxSalary": "Max Salary"
-}
+  "maxSalary": "Max Salary",
+  "descriptionTooShort": "Job description must be at least 50 characters",
+  "rejected": "Rejected",
+  "pending": "Pending",
+  "accept": "Accept",
+  "reject": "Reject",
+  "statusUpdatedSuccess": "Application status updated successfully.",
+  "contact": "Contact"
+}

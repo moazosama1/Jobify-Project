@@ -89,6 +89,14 @@ extension JobDtoMapper on JobDto {
       experienceLevel: experienceLevel ?? "",
       applicationDeadline: applicationDeadline ?? "",
       isBookmarked: false,
+     
+      preferredQualifications: preferredQualifications ?? const [],
+    
+      salaryMin: salaryRange?.min ?? 0,
+      salaryMax: salaryRange?.max ?? 0,
+     
+      openings: openings ?? 1,
+      isRemote: isRemote ?? false,
     );
   }
 }

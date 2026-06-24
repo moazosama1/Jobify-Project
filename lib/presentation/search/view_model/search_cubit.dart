@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jobify_project/core/api_result/api_result.dart';
+import 'package:jobify_project/domain/entities/get_all_jobs_response_entity.dart';
 import 'package:jobify_project/domain/use_cases/get_recent_searches_usecase.dart';
 import 'package:jobify_project/domain/use_cases/save_recent_search_usecase.dart';
 import 'package:jobify_project/domain/use_cases/clear_recent_searches_usecase.dart';
@@ -99,11 +100,12 @@ class SearchCubit extends Cubit<SearchState> {
     switch (result) {
       case ApiSuccessResult():
         emit(state.copyWith(searchResults: BaseState(data: result.data.jobs)));
-      case ApiErrorResult():
+      
+      case ApiErrorResult<GetAllJobsResponseEntity>():
         emit(
           state.copyWith(
             searchResults: BaseState(
-              errorMessage: (result as ApiErrorResult).errorMessage,
+              errorMessage: (result.errorMessage ),
             ),
           ),
         );

@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/router/route_names.dart';
 import 'package:jobify_project/domain/entities/job_entity.dart';
 import 'package:jobify_project/generated/l10n.dart';
 import 'package:jobify_project/core/widgets/job_card.dart';
+import 'package:jobify_project/presentation/hr/home/view_model/hr_home_cubit.dart';
+import 'package:jobify_project/presentation/hr/home/view_model/hr_home_event.dart';
+
+import 'package:jobify_project/core/extensions/theme_context_extension.dart';
 
 class HrRecentJobsSectionWidget extends StatelessWidget {
   final List<JobEntity> recentJobs;
@@ -36,8 +42,8 @@ class HrRecentJobsSectionWidget extends StatelessWidget {
             children: [
               Text(
                 local.postedJobs,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
+                style: context.titleMedium?.copyWith(
+                  color: context.onSurfaceColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
@@ -58,12 +64,77 @@ class HrRecentJobsSectionWidget extends StatelessWidget {
               const SizedBox(height: AppMeasurements.paddingMedium),
           itemBuilder: (context, index) {
             final job = recentJobs[index];
-            return JobCard(
-              onTap: () => context.push(RouteNames.hrHiringPost),
-              job: job,
-              onOptionsTap: () {
-                // Show options modal sheet.
-              },
+            return Slidable(
+              key: ValueKey(job.id),
+              endActionPane: ActionPane(
+                motion: const ScrollMotion(),
+                children: [
+                  SlidableAction(
+                    onPressed: (actionContext) async {
+                      await context.push(
+                        RouteNames.hrHiringPost,
+                        extra: job,
+                      );
+                      if (context.mounted) {
+                        context.read<HrHomeCubit>().doIntent(HrHomeLoadDataEvent());
+                      }
+                    },
+                    backgroundColor: context.primaryColor,
+                    foregroundColor: Colors.white,
+                    icon: Icons.edit_rounded,
+                    label: local.edit,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  const SizedBox(width: 8),
+                  SlidableAction(
+                    onPressed: (actionContext) {
+                      showDialog(
+                        context: context,
+                        builder: (dialogContext) {
+                          return AlertDialog(
+                            title: Text(local.deleteConfirmTitle),
+                            content: Text(local.deleteConfirmMessage),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(dialogContext),
+                                child: Text(local.no),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(dialogContext);
+                                  context.read<HrHomeCubit>().doIntent(
+                                        HrHomeDeleteJobEvent(job.id),
+                                      );
+                                },
+                                child: Text(
+                                  local.delete,
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    backgroundColor: context.errorColor,
+                    foregroundColor: Colors.white,
+                    icon: Icons.delete_rounded,
+                    label: local.delete,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ],
+              ),
+              child: JobCard(
+                onTap: () async {
+                  await context.push(RouteNames.hrHiringPost, extra: job);
+                  if (context.mounted) {
+                    context.read<HrHomeCubit>().doIntent(HrHomeLoadDataEvent());
+                  }
+                },
+                job: job,
+              ),
             );
           },
         ),
