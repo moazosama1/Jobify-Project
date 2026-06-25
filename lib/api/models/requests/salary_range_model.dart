@@ -1,8 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'salary_range_model.g.dart';
-
-@JsonSerializable()
 class SalaryRangeModel {
   final int min;
   final int max;
@@ -12,8 +7,22 @@ class SalaryRangeModel {
     required this.max,
   });
 
-  factory SalaryRangeModel.fromJson(Map<String, dynamic> json) =>
-      _$SalaryRangeModelFromJson(json);
+  factory SalaryRangeModel.fromJson(Map<String, dynamic> json) {
+    final minVal = json['min'];
+    final maxVal = json['max'];
 
-  Map<String, dynamic> toJson() => _$SalaryRangeModelToJson(this);
+    return SalaryRangeModel(
+      min: minVal is num
+          ? minVal.toInt()
+          : int.tryParse(minVal?.toString() ?? '') ?? 0,
+      max: maxVal is num
+          ? maxVal.toInt()
+          : int.tryParse(maxVal?.toString() ?? '') ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'min': min,
+        'max': max,
+      };
 }

@@ -59,7 +59,7 @@ class _AiChatInputSectionState extends State<AiChatInputSection> {
     if (text.isNotEmpty || hasPdf) {
       final finalMsg = text.isNotEmpty
           ? text
-          : "Please analyze this PDF file and provide career advice.";
+          : context.l10n.aiChatAnalyzePdfPrompt;
       context.read<AiChatViewModel>().doIntent(
         SendAiChatMessageEvent(finalMsg),
       );
@@ -81,21 +81,24 @@ class _AiChatInputSectionState extends State<AiChatInputSection> {
           ),
           child: Container(
             padding: const EdgeInsets.symmetric(
-              horizontal: AppMeasurements.paddingMedium,
+              horizontal: AppMeasurements.paddingSmall,
               vertical: AppMeasurements.paddingSmall,
             ),
             decoration: BoxDecoration(
-              color: context.surfaceColor,
-              borderRadius: BorderRadius.circular(28),
+              color: context.theme.brightness == Brightness.dark 
+                  ? context.surfaceColor 
+                  : Colors.white,
+              borderRadius: BorderRadius.circular(32),
               border: Border.all(
-                color: context.onSurfaceColor.withValues(alpha: 0.1),
-                width: 1,
+                color: context.primaryColor.withValues(alpha: 0.2),
+                width: 1.5,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.03),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
+                  color: context.primaryColor.withValues(alpha: 0.05),
+                  blurRadius: 15,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 5),
                 ),
               ],
             ),
@@ -215,10 +218,24 @@ class _AiChatInputSectionState extends State<AiChatInputSection> {
                     GestureDetector(
                       onTap: _sendMessage,
                       child: Container(
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: context.primaryColor,
+                          gradient: LinearGradient(
+                            colors: [
+                              context.primaryColor,
+                              context.primaryColor.withValues(alpha: 0.8),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                           shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: context.primaryColor.withValues(alpha: 0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
                         ),
                         child: Icon(
                           Icons.send_rounded,

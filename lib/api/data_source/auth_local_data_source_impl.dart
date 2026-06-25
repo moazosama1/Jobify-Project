@@ -35,4 +35,14 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     await _secureStorageManager.remove(key: ConstKeys.kUserStatus);
     await _secureStorageManager.remove(key: ConstKeys.kRememberMe);
   }
+
+  @override
+  Future<void> saveRememberMe(bool value) async {
+    await _secureStorageManager.setBool(key: ConstKeys.kRememberMe, value: value);
+  }
+
+  @override
+  Future<bool> getRememberMe() async {
+    return await _secureStorageManager.getBool(key: ConstKeys.kRememberMe);
+  }
 }

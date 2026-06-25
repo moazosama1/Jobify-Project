@@ -14,55 +14,73 @@ class RecentSearchesSection extends StatelessWidget {
     final theme = Theme.of(context);
     final local = AppLocalizations.of(context);
 
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                local.recentSearches,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              local.recentSearches,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
               ),
-              BlocBuilder<SearchCubit, SearchState>(
-                builder: (context, state) {
-                  if (state.recentSearches.data == null ||
-                      state.recentSearches.data!.isEmpty) {
-                    return const SizedBox.shrink();
-                  }
-                  return InkWell(
-                    onTap: () {
-                      context.read<SearchCubit>().doIntent(
-                        ClearRecentSearchesEvent(),
-                      );
-                    },
-                    child: Icon(
-                      Icons.clear_all,
-                      color: theme.colorScheme.primary,
-                      size: 20,
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: AppMeasurements.paddingMedium),
-          Expanded(child: _buildRecentSearchesList()),
-        ],
-      ),
+            ),
+            BlocBuilder<SearchCubit, SearchState>(
+              builder: (context, state) {
+                if (state.recentSearches.data == null ||
+                    state.recentSearches.data!.isEmpty) {
+                  return const SizedBox.shrink();
+                }
+                return InkWell(
+                  onTap: () {
+                    context.read<SearchCubit>().doIntent(
+                      ClearRecentSearchesEvent(),
+                    );
+                  },
+                  child: Icon(
+                    Icons.clear_all,
+                    color: theme.colorScheme.primary,
+                    size: 20,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        const SizedBox(height: AppMeasurements.paddingMedium),
+        Expanded(child: _buildRecentSearchesList()),
+      ],
     );
   }
 
   Widget _buildRecentSearchesList() {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
+        if (state.recentSearches.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (state.recentSearches.errorMessage != null) {
+          return Center(
+            child: Text(
+              state.recentSearches.errorMessage!,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.red,
+                  ),
+            ),
+          );
+        }
+
+        final searches = state.recentSearches.data ?? const [];
+        if (searches.isEmpty) {
+          return const SizedBox.shrink();
+        }
+
         return ListView.builder(
-          itemCount: state.recentSearches.data?.length,
+          itemCount: searches.length,
           itemBuilder: (context, index) {
-            final query = state.recentSearches.data?[index] ?? "";
+            final query = searches[index];
             if (query.isEmpty) return const SizedBox.shrink();
 
             return Padding(

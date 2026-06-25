@@ -2,14 +2,25 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'pagination_model.g.dart';
 
+int? _toInt(dynamic value) {
+  if (value == null) return null;
+  if (value is num) return value.toInt();
+  if (value is String) {
+    if (value.isEmpty) return null;
+    return int.tryParse(value);
+  }
+  return null;
+}
+
 @JsonSerializable()
 class PaginationModel {
-  @JsonKey(name: 'current_page')
+  @JsonKey(name: 'current_page', fromJson: _toInt)
   final int? currentPage;
-  @JsonKey(name: 'total_pages')
+  @JsonKey(name: 'total_pages', fromJson: _toInt)
   final int? totalPages;
-  @JsonKey(name: 'total_count')
+  @JsonKey(name: 'total_count', fromJson: _toInt)
   final int? totalCount;
+  @JsonKey(fromJson: _toInt)
   final int? limit;
 
   PaginationModel({

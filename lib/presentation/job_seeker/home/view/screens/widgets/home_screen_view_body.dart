@@ -8,6 +8,7 @@ import 'package:jobify_project/core/widgets/custom_user_info_app_bar.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view/screens/widgets/category_section_widget.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view/screens/widgets/recent_jobs_section_widget.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view/screens/widgets/search_section_widget.dart';
+import 'package:jobify_project/presentation/job_seeker/home/view/screens/widgets/home_ai_chat_banner_widget.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view/screens/widgets/suggested_jobs_section_widget.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view_model/home_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/home/view_model/home_event.dart';
@@ -69,6 +70,8 @@ class HomeScreenViewBody extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: AppMeasurements.paddingLarge),
+                const HomeAiChatBannerWidget(),
+                const SizedBox(height: AppMeasurements.paddingLarge),
                 CategorySectionWidget(
                   categories: state.categories,
                   local: local,
@@ -76,11 +79,17 @@ class HomeScreenViewBody extends StatelessWidget {
                     var categoryFilter = '';
                     var employmentTypeFilter = '';
 
-                    if (category.nameKey == 'categoryCompany') categoryFilter = 'Company';
-                    else if (category.nameKey == 'categoryFullTime') employmentTypeFilter = 'full_time';
-                    else if (category.nameKey == 'categoryPartTime') employmentTypeFilter = 'part_time';
-                    else if (category.nameKey == 'categoryFreelance') categoryFilter = 'Freelance';
-                    else categoryFilter = category.nameKey;
+                    if (category.nameKey == 'categoryCompany') {
+                      categoryFilter = 'Company';
+                    } else if (category.nameKey == 'categoryFullTime') {
+                      employmentTypeFilter = 'full_time';
+                    } else if (category.nameKey == 'categoryPartTime') {
+                      employmentTypeFilter = 'part_time';
+                    } else if (category.nameKey == 'categoryFreelance') {
+                      categoryFilter = 'Freelance';
+                    } else {
+                      categoryFilter = category.nameKey;
+                    }
 
                     final filters = GetAllJobsRequestEntity(
                       category: categoryFilter.isNotEmpty ? categoryFilter : null,

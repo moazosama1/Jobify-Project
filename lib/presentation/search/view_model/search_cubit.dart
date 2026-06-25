@@ -32,7 +32,9 @@ class SearchCubit extends Cubit<SearchState> {
     _init();
   }
 
-  void _init() {}
+  void _init() {
+    doIntent(LoadRecentSearchesEvent());
+  }
 
   void doIntent(SearchEvent event) {
     if (event is LoadRecentSearchesEvent) {
@@ -67,7 +69,10 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   Future<void> _submitSearch(String query) async {
-    if (query.trim().isEmpty && !state.hasActiveFilters) return;
+    if (query.trim().isEmpty && !state.hasActiveFilters) {
+      _clearSearchResults();
+      return;
+    }
 
     emit(
       state.copyWith(

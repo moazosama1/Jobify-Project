@@ -57,7 +57,6 @@ class SuggestedJobsSectionWidget extends StatelessWidget {
               horizontal: AppMeasurements.paddingLarge,
             ),
             scrollDirection: Axis.horizontal,
-            reverse: true,
             itemCount: suggestedJobs.length,
             separatorBuilder: (context, index) =>
                 const SizedBox(width: AppMeasurements.paddingMedium),

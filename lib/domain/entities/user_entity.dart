@@ -23,12 +23,14 @@ class UserEntity extends Equatable {
   final bool notificationsEnabled;
   final List<dynamic> experience;
   final List<dynamic> education;
+  final String? resume;
   
   final DateTime createdAt;
   final DateTime updatedAt;
   final int version;
   final String userName;
   final String id;
+  final String? bio;
 
   const UserEntity({
     required this.mongoId,
@@ -52,11 +54,13 @@ class UserEntity extends Equatable {
     required this.notificationsEnabled,
     required this.experience,
     required this.education,
+    this.resume,
     required this.createdAt,
     required this.updatedAt,
     required this.version,
     required this.userName,
     required this.id,
+    this.bio,
   });
 
   @override
@@ -82,10 +86,12 @@ class UserEntity extends Equatable {
         notificationsEnabled,
         experience,
         education,
+        resume,
         createdAt,
         updatedAt,
         version,
         userName,
         id,
+        bio,
       ];
 }

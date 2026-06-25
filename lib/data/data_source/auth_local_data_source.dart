@@ -4,4 +4,6 @@ abstract interface class AuthLocalDataSource {
   Future<void> saveRole(String role);
   Future<String?> getRole();
   Future<void> clear();
+  Future<void> saveRememberMe(bool value);
+  Future<bool> getRememberMe();
 }

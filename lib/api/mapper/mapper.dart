@@ -43,8 +43,8 @@ extension UserDtoMapper on UserDto {
       notificationsEnabled: notificationsEnabled,
       experience: experience,
       education: education,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
+      createdAt: createdAt ?? DateTime.now(),
+      updatedAt: updatedAt ?? DateTime.now(),
       version: version,
       userName: userName,
       id: id,
@@ -109,8 +109,12 @@ extension UserDataMapper on UserData {
       notificationsEnabled: notificationsEnabled ?? false,
       experience: experience ?? const [],
       education: education ?? const [],
-      createdAt: createdAt != null ? DateTime.tryParse(createdAt!) ?? DateTime.now() : DateTime.now(),
-      updatedAt: updatedAt != null ? DateTime.tryParse(updatedAt!) ?? DateTime.now() : DateTime.now(),
+      createdAt: createdAt != null
+          ? DateTime.tryParse(createdAt!) ?? DateTime.now()
+          : DateTime.now(),
+      updatedAt: updatedAt != null
+          ? DateTime.tryParse(updatedAt!) ?? DateTime.now()
+          : DateTime.now(),
       version: v ?? 0,
       userName: userName ?? '',
       id: id ?? '',
@@ -131,10 +135,7 @@ extension LoginResponseMapper on LoginResponse {
 
 extension SignUPResponseMapper on SignUPResponse {
   SignUpEntity toEntity() {
-    return SignUpEntity(
-      message: message ?? '',
-      user: user?.toEntity(),
-    );
+    return SignUpEntity(message: message ?? '', user: user?.toEntity());
   }
 }
 
@@ -157,34 +158,25 @@ extension SignUpRequestEntityMapper on SignUpRequestEntity {
 
 extension ConfirmEmailRequestEntityMapper on ConfirmEmailRequestEntity {
   ConfirmEmailRequest toModel() {
-    return ConfirmEmailRequest(
-      email: email,
-      otp: otp,
-    );
+    return ConfirmEmailRequest(email: email, otp: otp);
   }
 }
 
 extension ConfirmEmailResponseMapper on ConfirmEmailResponse {
   ConfirmEmailEntity toEntity() {
-    return ConfirmEmailEntity(
-      message: message ?? '',
-    );
+    return ConfirmEmailEntity(message: message ?? '');
   }
 }
 
 extension ForgetPasswordRequestEntityMapper on ForgetPasswordRequestEntity {
   ForgetPasswordRequest toModel() {
-    return ForgetPasswordRequest(
-      email: email,
-    );
+    return ForgetPasswordRequest(email: email);
   }
 }
 
 extension ForgetPasswordResponseMapper on ForgetPasswordResponse {
   ForgetPasswordEntity toEntity() {
-    return ForgetPasswordEntity(
-      message: message ?? '',
-    );
+    return ForgetPasswordEntity(message: message ?? '');
   }
 }
 
@@ -201,8 +193,6 @@ extension ResetPasswordRequestEntityMapper on ResetPasswordRequestEntity {
 
 extension ResetPasswordResponseMapper on ResetPasswordResponse {
   ResetPasswordEntity toEntity() {
-    return ResetPasswordEntity(
-      message: message ?? '',
-    );
+    return ResetPasswordEntity(message: message ?? '');
   }
 }

@@ -43,11 +43,13 @@ extension UserDtoMapper on UserDto {
       notificationsEnabled: notificationsEnabled,
       experience: experience,
       education: education,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
+      resume: resume,
+      createdAt: createdAt ?? DateTime.now(),
+      updatedAt: updatedAt ?? DateTime.now(),
       version: version,
       userName: userName,
       id: id,
+      bio: bio,
     );
   }
 }
@@ -76,11 +78,13 @@ extension UserEntityMapper on UserEntity {
       notificationsEnabled: notificationsEnabled,
       experience: experience,
       education: education,
+      resume: resume,
       createdAt: createdAt,
       updatedAt: updatedAt,
       version: version,
       userName: userName,
       id: id,
+      bio: bio,
     );
   }
 }
@@ -109,11 +113,13 @@ extension UserDataMapper on UserData {
       notificationsEnabled: notificationsEnabled ?? false,
       experience: experience ?? const [],
       education: education ?? const [],
+      resume: null,
       createdAt: createdAt != null ? DateTime.tryParse(createdAt!) ?? DateTime.now() : DateTime.now(),
       updatedAt: updatedAt != null ? DateTime.tryParse(updatedAt!) ?? DateTime.now() : DateTime.now(),
       version: v ?? 0,
       userName: userName ?? '',
       id: id ?? '',
+      bio: null,
     );
   }
 }

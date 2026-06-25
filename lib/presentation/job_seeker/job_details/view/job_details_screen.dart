@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jobify_project/core/extensions/l10n_extension.dart';
+import 'package:jobify_project/core/widgets/custom_app_bar.dart';
 import 'package:jobify_project/core/widgets/custom_screen_wrapper.dart';
 import 'package:jobify_project/core/widgets/custom_toastification.dart';
 import 'package:jobify_project/presentation/job_seeker/job_details/view/widgets/job_details_screen_view_body.dart';
@@ -27,7 +29,12 @@ class JobDetailsScreen extends StatelessWidget {
             );
           }
         },
-        child: const CustomScreenWrapper(body: JobDetailsScreenViewBody()),
+        child: CustomScreenWrapper(
+          appBar: CustomAppBar(
+            title: context.l10n.details,
+          ),
+          body: const JobDetailsScreenViewBody(),
+        ),
       ),
     );
   }

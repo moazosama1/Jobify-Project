@@ -10,4 +10,8 @@ abstract class AppMeasurements {
   static const double paddingMedium = 16;
   static const double paddingLarge = 24;
   static const double paddingExtraLarge = 32;
+
+  static const double radiusSmall = 8;
+  static const double radiusMedium = 16;
+  static const double radiusLarge = 24;
 }

@@ -5,6 +5,16 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'job_dto.g.dart';
 
+int? _toInt(dynamic value) {
+  if (value == null) return null;
+  if (value is num) return value.toInt();
+  if (value is String) {
+    if (value.isEmpty) return null;
+    return int.tryParse(value);
+  }
+  return null;
+}
+
 @JsonSerializable(explicitToJson: true)
 class JobDto {
   final String? title;
@@ -21,15 +31,17 @@ class JobDto {
   final String? applicationDeadline;
   final List<String>? skillsRequired;
   final String? category;
+  @JsonKey(fromJson: _toInt)
   final int? openings;
   final String? status;
+  @JsonKey(fromJson: _toInt)
   final int? applicationsCount;
   final bool? isRemote;
   @JsonKey(name: '_id')
   final String? mongoId;
   final String? createdAt;
   final String? updatedAt;
-  @JsonKey(name: '__v')
+  @JsonKey(name: '__v', fromJson: _toInt)
   final int? version;
   final String? id;
 

@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'package:injectable/injectable.dart';
 import 'package:firebase_ai/firebase_ai.dart';
 import 'package:jobify_project/data/data_source/ai_chat_remote_data_source.dart';
-import 'package:jobify_project/data/models/ai_chat_message_model.dart';
+import 'package:jobify_project/api/models/ai_chat_message_model.dart';
 import 'package:jobify_project/domain/entities/ai_chat_message_entity.dart';
 
 @Injectable(as: AiChatRemoteDataSource)

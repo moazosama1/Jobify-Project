@@ -5,7 +5,7 @@ import 'package:jobify_project/core/api_result/safe_api_call.dart';
 import 'package:jobify_project/data/data_source/ai_chat_local_data_source.dart';
 import 'package:jobify_project/data/data_source/ai_chat_remote_data_source.dart';
 import 'package:jobify_project/data/mappers/ai_chat_mapper.dart';
-import 'package:jobify_project/data/models/ai_chat_message_model.dart';
+import 'package:jobify_project/api/models/ai_chat_message_model.dart';
 import 'package:jobify_project/domain/entities/ai_chat_message_entity.dart';
 import 'package:jobify_project/domain/repo/ai_chat_repository.dart';
 

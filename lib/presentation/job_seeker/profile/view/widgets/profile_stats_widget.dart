@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jobify_project/core/constants/app_colors.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
-import 'package:jobify_project/generated/l10n.dart';
+import 'package:jobify_project/core/extensions/theme_context_extension.dart';
+import 'package:jobify_project/core/extensions/l10n_extension.dart';
 
 class ProfileStatsWidget extends StatelessWidget {
   final int appliedCount;
@@ -16,36 +18,57 @@ class ProfileStatsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final local = AppLocalizations.of(context);
+    final local = context.l10n;
+    final isDark = context.theme.brightness == Brightness.dark;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _buildStatItem(theme, appliedCount.toString(), local.applied),
-        _buildDivider(theme),
-        _buildStatItem(theme, reviewedCount.toString(), local.reviewed),
-        _buildDivider(theme),
-        _buildStatItem(theme, interviewCount.toString(), local.interview),
-      ],
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        vertical: AppMeasurements.paddingMedium,
+        horizontal: AppMeasurements.paddingSmall,
+      ),
+      decoration: BoxDecoration(
+        color: isDark ? context.surfaceColor : AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: context.onSurfaceColor.withValues(alpha: 0.05),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: context.theme.shadowColor.withValues(alpha: 0.04),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildStatItem(context, appliedCount.toString(), local.applied),
+          _buildDivider(context),
+          _buildStatItem(context, reviewedCount.toString(), local.reviewed),
+          _buildDivider(context),
+          _buildStatItem(context, interviewCount.toString(), local.interview),
+        ],
+      ),
     );
   }
 
-  Widget _buildStatItem(ThemeData theme, String count, String label) {
+  Widget _buildStatItem(BuildContext context, String count, String label) {
     return Column(
       children: [
         Text(
           count,
-          style: theme.textTheme.headlineSmall?.copyWith(
+          style: context.headlineSmall?.copyWith(
             fontWeight: FontWeight.bold,
-            color: theme.colorScheme.onSurface,
+            color: context.primaryColor,
           ),
         ),
         const SizedBox(height: AppMeasurements.paddingExtraSmall),
         Text(
           label,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+          style: context.bodyMedium?.copyWith(
+            color: context.onSurfaceColor.withValues(alpha: 0.5),
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -53,11 +76,11 @@ class ProfileStatsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDivider(ThemeData theme) {
+  Widget _buildDivider(BuildContext context) {
     return Container(
       width: 1,
       height: 32,
-      color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+      color: context.onSurfaceColor.withValues(alpha: 0.08),
     );
   }
 }

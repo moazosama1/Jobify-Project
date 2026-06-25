@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jobify_project/core/constants/app_colors.dart';
 import 'package:jobify_project/core/constants/const_keys.dart';
 
@@ -99,6 +100,19 @@ abstract class AppTheme {
           fontSize: 18,
           fontWeight: FontWeight.w600,
           color: primaryTextColor,
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: colorScheme.brightness == Brightness.light
+              ? Brightness.dark
+              : Brightness.light,
+          statusBarBrightness: colorScheme.brightness == Brightness.light
+              ? Brightness.light
+              : Brightness.dark,
+          systemNavigationBarColor: scaffoldBackgroundColor,
+          systemNavigationBarIconBrightness: colorScheme.brightness == Brightness.light
+              ? Brightness.dark
+              : Brightness.light,
         ),
       ),
 

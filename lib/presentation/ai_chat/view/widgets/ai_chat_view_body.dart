@@ -43,31 +43,6 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
     }
   }
 
-  void _showClearConfirmation(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (dialogCtx) => AlertDialog(
-        title: Text(context.l10n.clearChat),
-        content: Text(context.l10n.aiChatClearConfirm),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogCtx),
-            child: Text(context.l10n.no),
-          ),
-          TextButton(
-            onPressed: () {
-              context.read<AiChatViewModel>().doIntent(
-                const ClearAiChatHistoryEvent(),
-              );
-              Navigator.pop(dialogCtx);
-            },
-            child: Text(context.l10n.yes),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AiChatViewModel, AiChatState>(
@@ -82,7 +57,6 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
         if (isChatMode) {
           return Column(
             children: [
-              _buildHeader(context, showDelete: true),
               Expanded(child: _buildChatContent(context, state, messages)),
               const AiChatInputSection(),
             ],
@@ -91,7 +65,6 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
 
         return Column(
           children: [
-            _buildHeader(context, showDelete: false),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
@@ -116,83 +89,6 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
     );
   }
 
-  Widget _buildHeader(BuildContext context, {required bool showDelete}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppMeasurements.paddingLarge,
-        vertical: AppMeasurements.paddingMedium,
-      ),
-      decoration: BoxDecoration(
-        color: context.surfaceColor,
-        border: Border(
-          bottom: BorderSide(
-            color: context.onSurfaceColor.withValues(alpha: 0.08),
-            width: 1,
-          ),
-        ),
-      ),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () {
-              final nav = Navigator.of(context);
-              if (nav.canPop()) nav.pop();
-            },
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: context.onSurfaceColor.withValues(alpha: 0.12),
-                  width: 1.5,
-                ),
-              ),
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: 16,
-                color: context.onSurfaceColor,
-              ),
-            ),
-          ),
-          const SizedBox(width: AppMeasurements.paddingMedium),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  context.l10n.aiChatTitle,
-                  style: context.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: context.onSurfaceColor,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  context.l10n.aiChatSubtitle,
-                  style: context.labelSmall?.copyWith(
-                    color: context.onSurfaceColor.withValues(alpha: 0.4),
-                    fontSize: 11,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (showDelete)
-            IconButton(
-              icon: Icon(
-                Icons.delete_outline_rounded,
-                color: context.errorColor,
-                size: 24,
-              ),
-              onPressed: () => _showClearConfirmation(context),
-            ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildHeroSection(BuildContext context) {
     return Column(
       children: [
@@ -207,7 +103,7 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
             ),
           ),
           child: Text(
-            "JOBIFY INTELLIGENCE",
+            context.l10n.aiChatIntelligence,
             style: context.labelSmall?.copyWith(
               color: context.primaryColor,
               fontWeight: FontWeight.bold,
@@ -218,15 +114,34 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
         ),
         const SizedBox(height: AppMeasurements.paddingMedium),
         Container(
-          width: 72,
-          height: 72,
+          width: 80,
+          height: 80,
           decoration: BoxDecoration(
-            color: context.primaryColor.withValues(alpha: 0.08),
+            gradient: LinearGradient(
+              colors: [
+                context.primaryColor.withValues(alpha: 0.2),
+                context.primaryColor.withValues(alpha: 0.05),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
             shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: context.primaryColor.withValues(alpha: 0.15),
+                blurRadius: 24,
+                spreadRadius: 4,
+                offset: const Offset(0, 8),
+              ),
+            ],
+            border: Border.all(
+              color: context.primaryColor.withValues(alpha: 0.3),
+              width: 1.5,
+            ),
           ),
           child: Icon(
-            Icons.smart_toy_rounded,
-            size: 36,
+            Icons.auto_awesome,
+            size: 40,
             color: context.primaryColor,
           ),
         ),
@@ -269,7 +184,7 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
         Padding(
           padding: const EdgeInsets.only(left: 4, bottom: AppMeasurements.paddingSmall + 2),
           child: Text(
-            "SUGGESTED TOPICS",
+            context.l10n.aiChatSuggestedTopics,
             style: context.labelSmall?.copyWith(
               color: context.onSurfaceColor.withValues(alpha: 0.4),
               fontWeight: FontWeight.bold,
@@ -330,12 +245,14 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
       return const Center(child: CustomLoadingIndicator());
     }
 
+    final isSending = state.sendMessageStatus.isLoading;
+
     return ListView.builder(
       controller: _scrollController,
       padding: const EdgeInsets.symmetric(
         vertical: AppMeasurements.paddingMedium,
       ),
-      itemCount: messages.length + (state.sendMessageStatus.isLoading ? 1 : 0),
+      itemCount: messages.length + (isSending ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == messages.length) {
           return const _AnimatedTypingIndicator();
@@ -391,7 +308,7 @@ class _AnimatedTypingIndicatorState extends State<_AnimatedTypingIndicator>
               shape: BoxShape.circle,
             ),
             child: Icon(
-              Icons.smart_toy_outlined,
+              Icons.auto_awesome,
               size: 18,
               color: context.primaryColor,
             ),
