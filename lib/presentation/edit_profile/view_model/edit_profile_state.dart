@@ -1,51 +1,31 @@
+import 'package:equatable/equatable.dart';
 import 'package:jobify_project/core/api_result/base_state.dart';
+import 'package:jobify_project/domain/entities/user_entity.dart';
 
-class EditProfileState extends BaseState<dynamic> {
-  final String name;
-  final String contactNumber;
-  final String dateOfBirth;
-  final String aboutYou;
-  final String photoUrl;
+class EditProfileState extends Equatable {
+  final BaseState<UserEntity> profileState;
+  final String? successMessage;
 
   const EditProfileState({
-    super.isLoading = false,
-    super.errorMessage,
-    this.name = '',
-    this.contactNumber = '',
-    this.dateOfBirth = '',
-    this.aboutYou = '',
-    this.photoUrl = '',
+    this.profileState = const BaseState<UserEntity>(),
+    this.successMessage,
   });
 
   EditProfileState copyWith({
-    bool? isLoading,
-    String? errorMessage,
-    String? name,
-    String? contactNumber,
-    String? dateOfBirth,
-    String? aboutYou,
-    String? photoUrl,
+    BaseState<UserEntity>? profileState,
+    String? successMessage,
     bool clearError = false,
+    bool clearSuccess = false,
   }) {
     return EditProfileState(
-      isLoading: isLoading ?? this.isLoading,
-      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
-      name: name ?? this.name,
-      contactNumber: contactNumber ?? this.contactNumber,
-      dateOfBirth: dateOfBirth ?? this.dateOfBirth,
-      aboutYou: aboutYou ?? this.aboutYou,
-      photoUrl: photoUrl ?? this.photoUrl,
+      profileState: profileState ?? this.profileState,
+      successMessage: clearSuccess ? null : (successMessage ?? this.successMessage),
     );
   }
 
   @override
   List<Object?> get props => [
-        isLoading,
-        errorMessage,
-        name,
-        contactNumber,
-        dateOfBirth,
-        aboutYou,
-        photoUrl,
+        profileState,
+        successMessage,
       ];
 }

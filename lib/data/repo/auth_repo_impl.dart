@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:injectable/injectable.dart';
 import 'package:jobify_project/data/mappers/auth_mapper.dart';
 import 'package:jobify_project/api/models/requests/login_request_dto.dart';
@@ -56,7 +57,10 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<ApiResult<SignUpEntity>> signup(SignUpRequestEntity request) async {
     return await safeApiCall(
-      () => _remoteDataSource.signup(request.toModel()),
+      () => _remoteDataSource.signup(
+        request.toModel(),
+        request.profileImage != null ? File(request.profileImage!) : null,
+      ),
       (response) => response.toEntity(),
     );
   }

@@ -98,7 +98,12 @@ class ProfileScreenViewBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // ── Header (Avatar, Name, Role, Bio) ──
-              ProfileHeaderWidget(name: name, title: title, bio: bio),
+              ProfileHeaderWidget(
+                name: name,
+                title: title,
+                bio: bio,
+                profileImage: user?.profileImage,
+              ),
               const SizedBox(height: AppMeasurements.paddingLarge),
 
               // ── Stats (Applied, Pending, Reviewed, Interview, Accepted, Rejected) ──

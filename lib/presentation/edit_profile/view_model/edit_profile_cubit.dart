@@ -1,50 +1,77 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:jobify_project/core/api_result/api_result.dart';
+import 'package:jobify_project/core/api_result/base_state.dart';
+import 'package:jobify_project/domain/entities/user_entity.dart';
+import 'package:jobify_project/domain/use_cases/auth/get_user_profile_use_case.dart';
+import 'package:jobify_project/domain/use_cases/auth/update_basic_info_use_case.dart';
+
 import 'edit_profile_event.dart';
 import 'edit_profile_state.dart';
 
 @injectable
 class EditProfileCubit extends Cubit<EditProfileState> {
-  EditProfileCubit() : super(const EditProfileState());
+  final GetUserProfileUseCase _getUserProfileUseCase;
+  final UpdateBasicInfoUseCase _updateBasicInfoUseCase;
+
+  EditProfileCubit(
+    this._getUserProfileUseCase,
+    this._updateBasicInfoUseCase,
+  ) : super(const EditProfileState()) {
+    _init();
+  }
+
+  void _init() {
+    doIntent(LoadEditProfileEvent());
+  }
 
   void doIntent(EditProfileEvent event) {
-    if (event is EditProfileLoadEvent) {
-      _onLoadData();
-    } else if (event is EditProfileSubmitEvent) {
-      _onSubmit(event);
+    switch (event) {
+      case LoadEditProfileEvent():
+        _onLoadEditProfileEvent();
+        break;
+      case UpdateBasicInfoEvent():
+        _onUpdateBasicInfoEvent(event);
+        break;
     }
   }
 
-  Future<void> _onLoadData() async {
-    emit(state.copyWith(isLoading: true, clearError: true));
-    try {
-      await Future.delayed(const Duration(milliseconds: 600));
-      emit(state.copyWith(
-        isLoading: false,
-        name: 'Ahmed Elsaied',
-        contactNumber: '+00123456789',
-        dateOfBirth: '2000-01-01',
-        aboutYou: 'UX/UI Designer passionate about building functional products.',
-      ));
-    } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+  Future<void> _onLoadEditProfileEvent() async {
+    emit(state.copyWith(profileState:  BaseState.loading(), clearSuccess: true));
+    final result = await _getUserProfileUseCase();
+    switch (result) {
+      case ApiSuccessResult<UserEntity>():
+        emit(
+          state.copyWith(
+            profileState: BaseState.success(result.data),
+          ),
+        );
+      case ApiErrorResult<UserEntity>():
+        emit(
+          state.copyWith(
+            profileState: BaseState.error(result.errorMessage),
+          ),
+        );
     }
   }
 
-  Future<void> _onSubmit(EditProfileSubmitEvent event) async {
-    emit(state.copyWith(isLoading: true, clearError: true));
-    try {
-      await Future.delayed(const Duration(milliseconds: 1000));
-      emit(state.copyWith(
-        isLoading: false,
-        name: event.name,
-        contactNumber: event.contactNumber,
-        dateOfBirth: event.dateOfBirth,
-        aboutYou: event.aboutYou,
-        photoUrl: event.photoUrl,
-      ));
-    } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+  Future<void> _onUpdateBasicInfoEvent(UpdateBasicInfoEvent event) async {
+    emit(state.copyWith(profileState:  BaseState.loading(), clearSuccess: true));
+    final result = await _updateBasicInfoUseCase(event.request);
+    switch (result) {
+      case ApiSuccessResult<UserEntity>():
+        emit(
+          state.copyWith(
+            profileState: BaseState.success(result.data),
+            successMessage: "Basic info updated successfully",
+          ),
+        );
+      case ApiErrorResult<UserEntity>():
+        emit(
+          state.copyWith(
+            profileState: BaseState.error(result.errorMessage),
+          ),
+        );
     }
   }
 }

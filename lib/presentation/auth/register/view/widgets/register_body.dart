@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:jobify_project/core/constants/app_images.dart';
 import 'package:jobify_project/core/constants/const_keys.dart';
 import 'package:jobify_project/core/enums/gender_enum.dart';
@@ -34,6 +36,7 @@ class _RegisterBodyState extends State<RegisterBody> {
   late TextEditingController _confirmPasswordController;
   Gender _selectedGender = Gender.male;
   Rule _selectedRole = Rule.job_seeker;
+  String? _profileImagePath;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -47,6 +50,27 @@ class _RegisterBodyState extends State<RegisterBody> {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
+  }
+
+  Future<void> _pickImage() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: [
+        'jpg',
+        'jpeg',
+        'png',
+        'gif',
+        'webp',
+        'bmp',
+        'heic',
+        'heif',
+      ],
+    );
+    if (result != null && result.files.single.path != null) {
+      setState(() {
+        _profileImagePath = result.files.single.path;
+      });
+    }
   }
 
   @override
@@ -104,6 +128,63 @@ class _RegisterBodyState extends State<RegisterBody> {
               local.giveCredentialsToSignUpYourAccount,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+              ),
+            ),
+            const SizedBox(height: AppMeasurements.paddingLarge),
+
+            // Avatar picker
+            Center(
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Container(
+                    width: 110,
+                    height: 110,
+                    margin: const EdgeInsets.only(bottom: 12),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: _profileImagePath != null
+                          ? DecorationImage(
+                              image: FileImage(File(_profileImagePath!)),
+                              fit: BoxFit.cover,
+                            )
+                          : const DecorationImage(
+                              image: AssetImage(AppImages.imageUserPhoto),
+                              fit: BoxFit.cover,
+                            ),
+                      border: Border.all(
+                        color: theme.colorScheme.primary,
+                        width: 2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.shadowColor.withValues(alpha: 0.08),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    child: GestureDetector(
+                      onTap: _pickImage,
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: const Icon(
+                          Icons.camera_alt,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: AppMeasurements.paddingExtraLarge),
@@ -339,6 +420,7 @@ class _RegisterBodyState extends State<RegisterBody> {
                           email: _emailController.text,
                           password: _passwordController.text,
                           confirmPassword: _confirmPasswordController.text,
+                          profileImage: _profileImagePath,
                         ),
                       );
                     }

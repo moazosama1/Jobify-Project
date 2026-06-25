@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jobify_project/core/di/di.dart';
 import 'package:jobify_project/core/router/route_names.dart';
+import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile_event.dart';
 import 'package:jobify_project/presentation/job_seeker/edit_profile/view/screens/edit_profile_screen.dart';
 import 'package:jobify_project/presentation/job_seeker/edit_profile/view_model/edit_job_seeker_profile_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/messages/view/messages_screen.dart';
@@ -60,7 +61,6 @@ import 'package:jobify_project/presentation/hr/job_applications/view_model/hr_jo
 import 'package:jobify_project/presentation/hr/job_applications/view_model/hr_job_applications_event.dart';
 import 'package:jobify_project/presentation/edit_profile/view/screens/edit_profile_screen.dart';
 import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile_cubit.dart';
-import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile_event.dart';
 import 'package:jobify_project/presentation/search/view/screens/search_screen.dart';
 import 'package:jobify_project/presentation/search/view_model/search_cubit.dart';
 import 'package:jobify_project/presentation/search/view_model/search_event.dart';
@@ -283,7 +283,7 @@ abstract class AppRouter {
         path: RouteNames.editProfile,
         builder: (context, state) => BlocProvider(
           create: (_) =>
-              getIt<EditProfileCubit>()..doIntent(const EditProfileLoadEvent()),
+              getIt<EditProfileCubit>(),
           child: const EditProfileScreen(),
         ),
       ),

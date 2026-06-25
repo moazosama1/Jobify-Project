@@ -41,6 +41,7 @@ class UserDto extends Equatable {
   @JsonKey(defaultValue: [])
   final List<dynamic> education;
   final String? resume;
+  final String? profileImage;
   
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -78,6 +79,7 @@ class UserDto extends Equatable {
     required this.experience,
     required this.education,
     this.resume,
+    this.profileImage,
     this.createdAt,
     this.updatedAt,
     required this.version,
@@ -113,6 +115,7 @@ class UserDto extends Equatable {
         experience,
         education,
         resume,
+        profileImage,
         createdAt,
         updatedAt,
         version,

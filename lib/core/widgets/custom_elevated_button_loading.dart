@@ -36,6 +36,8 @@ class CustomElevatedButtonLoading extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: colorButton ?? theme.colorScheme.primary,
           elevation: elevation,
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+          minimumSize: Size.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
               borderButton ?? AppMeasurements.paddingMedium,
@@ -47,7 +49,11 @@ class CustomElevatedButtonLoading extends StatelessWidget {
                 color: loadingColor ?? theme.colorScheme.onSecondary,
                 size: AppMeasurements.buttonHeight * 0.6,
               )
-            : Text(textButton ?? local.done, style: textStyleButton),
+            : Text(
+                textButton ?? local.done,
+                style: textStyleButton,
+                textAlign: TextAlign.center,
+              ),
       ),
     );
   }

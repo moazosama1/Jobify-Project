@@ -11,6 +11,8 @@ import '../../../view_model/hr_home_cubit.dart';
 import '../../../view_model/hr_home_event.dart';
 import '../../../view_model/hr_home_state.dart';
 import 'package:jobify_project/generated/l10n.dart';
+import 'package:jobify_project/core/cubit/core_cubit.dart';
+import 'package:jobify_project/core/constants/end_points.dart';
 
 class HrHomeScreenViewBody extends StatelessWidget {
   const HrHomeScreenViewBody({super.key});
@@ -19,6 +21,11 @@ class HrHomeScreenViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final local = AppLocalizations.of(context);
+
+    final coreState = context.watch<CoreCubit>().state;
+    final userName = (coreState is CoreStateChanged && coreState.user != null)
+        ? '${coreState.user!.firstName} ${coreState.user!.lastName}'
+        : local.helloUser;
 
     return BlocBuilder<HrHomeCubit, HrHomeState>(
       builder: (context, state) {
@@ -44,6 +51,7 @@ class HrHomeScreenViewBody extends StatelessWidget {
         return RefreshIndicator(
           onRefresh: () async {
             context.read<HrHomeCubit>().doIntent(HrHomeLoadDataEvent());
+            context.read<CoreCubit>().fetchUserInfo();
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -53,7 +61,10 @@ class HrHomeScreenViewBody extends StatelessWidget {
                 const SizedBox(height: AppMeasurements.paddingSmall),
                 CustomUserInfoAppBar(
                   welcomeText: local.welcomeUser,
-                  userNameText: local.helloUser,
+                  userNameText: userName,
+                  profileImageUrl: (coreState is CoreStateChanged && coreState.user != null && coreState.user!.profileImage != null && coreState.user!.profileImage!.isNotEmpty)
+                      ? "${EndPoints.awsBaseUrl}${coreState.user!.profileImage}"
+                      : null,
                   onSavedPressed: () {
                     context.push(RouteNames.aiChat);
                   },

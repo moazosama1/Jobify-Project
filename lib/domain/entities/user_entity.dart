@@ -24,6 +24,7 @@ class UserEntity extends Equatable {
   final List<dynamic> experience;
   final List<dynamic> education;
   final String? resume;
+  final String? profileImage;
   
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -55,6 +56,7 @@ class UserEntity extends Equatable {
     required this.experience,
     required this.education,
     this.resume,
+    this.profileImage,
     required this.createdAt,
     required this.updatedAt,
     required this.version,
@@ -87,6 +89,7 @@ class UserEntity extends Equatable {
         experience,
         education,
         resume,
+        profileImage,
         createdAt,
         updatedAt,
         version,

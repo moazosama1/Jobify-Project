@@ -20,6 +20,7 @@ class RegisterSubmittedEvent extends RegisterEvent {
   final String email;
   final String password;
   final String confirmPassword;
+  final String? profileImage;
 
   const RegisterSubmittedEvent({
     required this.firstName,
@@ -32,6 +33,7 @@ class RegisterSubmittedEvent extends RegisterEvent {
     required this.email,
     required this.password,
     required this.confirmPassword,
+    this.profileImage,
   });
 
   @override
@@ -46,6 +48,7 @@ class RegisterSubmittedEvent extends RegisterEvent {
     email,
     password,
     confirmPassword,
+    profileImage,
   ];
 }
 

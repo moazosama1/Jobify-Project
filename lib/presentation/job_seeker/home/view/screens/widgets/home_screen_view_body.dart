@@ -16,6 +16,7 @@ import 'package:jobify_project/presentation/job_seeker/home/view_model/home_stat
 import 'package:jobify_project/domain/entities/requests/get_all_jobs_request_entity.dart';
 import 'package:jobify_project/generated/l10n.dart';
 import 'package:jobify_project/core/cubit/core_cubit.dart';
+import 'package:jobify_project/core/constants/end_points.dart';
 
 class HomeScreenViewBody extends StatelessWidget {
   const HomeScreenViewBody({super.key});
@@ -64,6 +65,9 @@ class HomeScreenViewBody extends StatelessWidget {
                 CustomUserInfoAppBar(
                   welcomeText: local.welcomeUser,
                   userNameText: userName,
+                  profileImageUrl: (coreState is CoreStateChanged && coreState.user != null && coreState.user!.profileImage != null && coreState.user!.profileImage!.isNotEmpty)
+                      ? "${EndPoints.awsBaseUrl}${coreState.user!.profileImage}"
+                      : null,
                   onSavedPressed: () {
                     context.push(RouteNames.savedJobs);
                   },

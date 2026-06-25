@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jobify_project/api/client/api_client.dart';
 import 'package:jobify_project/api/models/login_response.dart';
@@ -23,15 +25,57 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final ApiClient _apiClient;
 
   AuthRemoteDataSourceImpl(this._apiClient);
-    
+
   @override
   Future<LoginResponse> login(LoginRequestDto request) {
     return _apiClient.login(request);
   }
 
   @override
-  Future<SignUPResponse> signup(SignUpRequest request) {
-    return _apiClient.signup(request);
+  Future<SignUPResponse> signup(
+    SignUpRequest request,
+    File? profileImage,
+  ) async {
+    MultipartFile? multipartFile;
+    if (profileImage != null) {
+      final ext = profileImage.path.split('.').last.toLowerCase();
+      final MediaType mediaType;
+      if (ext == 'png') {
+        mediaType = MediaType('image', 'png');
+      } else if (ext == 'gif') {
+        mediaType = MediaType('image', 'gif');
+      } else if (ext == 'webp') {
+        mediaType = MediaType('image', 'webp');
+      } else if (ext == 'jpg' || ext == 'jpeg') {
+        mediaType = MediaType('image', 'jpeg');
+      } else if (ext == 'bmp') {
+        mediaType = MediaType('image', 'bmp');
+      } else if (ext == 'heic' || ext == 'heif') {
+        mediaType = MediaType('image', 'heic');
+      } else {
+        mediaType = MediaType('image', 'jpeg');
+      }
+
+      multipartFile = await MultipartFile.fromFile(
+        profileImage.path,
+        filename: profileImage.path.split(RegExp(r'[/\\]')).last,
+        contentType: mediaType,
+      );
+    }
+
+    return _apiClient.signup(
+      request.firstName,
+      request.lastName,
+      request.email,
+      request.password,
+      request.cPassword,
+      request.age,
+      request.location,
+      request.phoneNumber,
+      request.gender,
+      request.role,
+      multipartFile,
+    );
   }
 
   @override
@@ -60,18 +104,30 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<GetUserProfileResponse> updateBasicInfo(UpdateBasicInfoRequestModel request) {
-    return _apiClient.updateBasicInfo(request.toJson()..removeWhere((key, value) => value == null));
+  Future<GetUserProfileResponse> updateBasicInfo(
+    UpdateBasicInfoRequestModel request,
+  ) {
+    return _apiClient.updateBasicInfo(
+      request.toJson()..removeWhere((key, value) => value == null),
+    );
   }
 
   @override
   Future<GetUserProfileResponse> addExperience(ExperienceRequestModel request) {
-    return _apiClient.addExperience(request.toJson()..removeWhere((key, value) => value == null));
+    return _apiClient.addExperience(
+      request.toJson()..removeWhere((key, value) => value == null),
+    );
   }
 
   @override
-  Future<GetUserProfileResponse> updateExperience(String id, ExperienceRequestModel request) {
-    return _apiClient.updateExperience(id, request.toJson()..removeWhere((key, value) => value == null));
+  Future<GetUserProfileResponse> updateExperience(
+    String id,
+    ExperienceRequestModel request,
+  ) {
+    return _apiClient.updateExperience(
+      id,
+      request.toJson()..removeWhere((key, value) => value == null),
+    );
   }
 
   @override
@@ -81,12 +137,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<GetUserProfileResponse> addEducation(EducationRequestModel request) {
-    return _apiClient.addEducation(request.toJson()..removeWhere((key, value) => value == null));
+    return _apiClient.addEducation(
+      request.toJson()..removeWhere((key, value) => value == null),
+    );
   }
 
   @override
-  Future<GetUserProfileResponse> updateEducation(String id, EducationRequestModel request) {
-    return _apiClient.updateEducation(id, request.toJson()..removeWhere((key, value) => value == null));
+  Future<GetUserProfileResponse> updateEducation(
+    String id,
+    EducationRequestModel request,
+  ) {
+    return _apiClient.updateEducation(
+      id,
+      request.toJson()..removeWhere((key, value) => value == null),
+    );
   }
 
   @override
@@ -95,8 +159,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<GetUserProfileResponse> updateSkills(UpdateSkillsRequestModel request) {
-    return _apiClient.updateSkills(request.toJson()..removeWhere((key, value) => value == null));
+  Future<GetUserProfileResponse> updateSkills(
+    UpdateSkillsRequestModel request,
+  ) {
+    return _apiClient.updateSkills(
+      request.toJson()..removeWhere((key, value) => value == null),
+    );
   }
 
   @override
