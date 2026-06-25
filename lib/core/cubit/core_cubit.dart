@@ -2,16 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jobify_project/core/api_result/api_result.dart';
 import 'package:jobify_project/core/constants/const_keys.dart';
+import 'package:jobify_project/domain/entities/user_entity.dart';
+import 'package:jobify_project/domain/use_cases/get_user_profile_use_case.dart';
 
 part 'core_state.dart';
 
 @singleton
 class CoreCubit extends Cubit<CoreState> {
   final SharedPreferences _prefs;
+  final GetUserProfileUseCase _getUserProfileUseCase;
 
-  CoreCubit(this._prefs) : super(CoreInitial()) {
+  CoreCubit(this._prefs, this._getUserProfileUseCase) : super(CoreInitial()) {
     _loadSettings();
+    fetchUserInfo();
   }
 
   static CoreCubit get(BuildContext context) => BlocProvider.of(context);
@@ -51,6 +56,25 @@ class CoreCubit extends Cubit<CoreState> {
       _prefs.setString(ConstKeys.kAppLocale, languageCode);
 
       emit(currentState.copyWith(locale: Locale(languageCode)));
+    }
+  }
+
+  Future<void> fetchUserInfo() async {
+    final result = await _getUserProfileUseCase.call();
+    
+    if (result is ApiSuccessResult<UserEntity>) {
+      if (state is CoreStateChanged) {
+        final currentState = state as CoreStateChanged;
+        emit(currentState.copyWith(user: result.data));
+      } else {
+        emit(
+          CoreStateChanged(
+            themeMode: ThemeMode.light, // fallback
+            locale: const Locale(ConstKeys.kEnglish),
+            user: result.data,
+          ),
+        );
+      }
     }
   }
 }

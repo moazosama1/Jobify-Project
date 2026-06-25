@@ -9,7 +9,11 @@ import 'package:jobify_project/api/models/get_job_by_id_response.dart';
 import 'package:jobify_project/api/models/get_saved_jobs_response.dart';
 import 'package:jobify_project/api/models/toggle_saved_job_response.dart';
 import 'package:jobify_project/api/models/get_job_applications_response.dart';
+import 'package:jobify_project/api/models/get_my_applications_response.dart';
+import 'package:jobify_project/api/models/get_application_stats_response.dart';
+import 'package:jobify_project/api/models/apply_job_response.dart';
 import 'package:jobify_project/data/data_source/job_remote_data_source.dart';
+import 'dart:io';
 
 @Injectable(as: JobRemoteDataSource)
 class JobRemoteDataSourceImpl implements JobRemoteDataSource {
@@ -70,5 +74,28 @@ class JobRemoteDataSourceImpl implements JobRemoteDataSource {
   @override
   Future<GetJobApplicationsResponse> updateApplicationStatus(String id, Map<String, dynamic> request) {
     return _apiClient.updateApplicationStatus(id, request);
+  }
+
+  @override
+  Future<ApplyJobResponse> applyJob({
+    required String jobId,
+    required File resumeFile,
+    String? coverLetter,
+  }) {
+    return _apiClient.applyJob(jobId, resumeFile, coverLetter);
+  }
+
+  @override
+  Future<GetMyApplicationsResponse> getMyApplications({
+    int? page,
+    int? limit,
+    String? status,
+  }) {
+    return _apiClient.getMyApplications(page, limit, status);
+  }
+
+  @override
+  Future<GetApplicationStatsResponse> getApplicationStats() {
+    return _apiClient.getApplicationStats();
   }
 }

@@ -83,7 +83,14 @@ class ProfileScreenViewBody extends StatelessWidget {
         final bio = user?.bio ?? '';
         final skillsString = user?.skills.join(', ') ?? '';
 
-        return SingleChildScrollView(
+        return RefreshIndicator(
+          color: context.primaryColor,
+          backgroundColor: context.surfaceColor,
+          onRefresh: () async {
+            context.read<ProfileCubit>().doIntent(const LoadProfileEvent());
+            await Future.delayed(const Duration(milliseconds: 800));
+          },
+          child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(
             parent: BouncingScrollPhysics(),
           ),
@@ -94,11 +101,9 @@ class ProfileScreenViewBody extends StatelessWidget {
               ProfileHeaderWidget(name: name, title: title, bio: bio),
               const SizedBox(height: AppMeasurements.paddingLarge),
 
-              // ── Stats (Applied, Reviewed, Interview) ──
+              // ── Stats (Applied, Pending, Reviewed, Interview, Accepted, Rejected) ──
               ProfileStatsWidget(
-                appliedCount: user?.savedJobs.length ?? 0,
-                reviewedCount: 0,
-                interviewCount: 0,
+                stats: state.stats,
               ),
               const SizedBox(height: AppMeasurements.paddingLarge),
 
@@ -168,7 +173,7 @@ class ProfileScreenViewBody extends StatelessWidget {
               const SizedBox(height: AppMeasurements.paddingLarge),
             ],
           ),
-        );
+        ));
       },
     );
   }

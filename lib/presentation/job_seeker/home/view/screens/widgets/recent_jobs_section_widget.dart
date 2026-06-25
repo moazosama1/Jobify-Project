@@ -70,6 +70,9 @@ class RecentJobsSectionWidget extends StatelessWidget {
                   HomeToggleBookmarkEvent(job.id),
                 );
               },
+              onApplyTap: () {
+                context.push(RouteNames.applyJob, extra: job.id);
+              },
             );
           },
         ),

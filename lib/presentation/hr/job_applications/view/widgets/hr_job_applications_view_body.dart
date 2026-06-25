@@ -9,6 +9,7 @@ import 'package:jobify_project/core/extensions/theme_context_extension.dart';
 import 'package:jobify_project/core/extensions/l10n_extension.dart';
 import 'package:jobify_project/core/enums/application_status.dart';
 import 'package:jobify_project/core/constants/app_colors.dart';
+import 'package:jobify_project/core/constants/end_points.dart';
 import 'package:jobify_project/core/widgets/custom_toastification.dart';
 import 'package:jobify_project/domain/entities/job_application_entity.dart';
 import 'package:jobify_project/presentation/hr/job_applications/view_model/hr_job_applications_cubit.dart';
@@ -23,32 +24,39 @@ class HrJobApplicationsViewBody extends StatelessWidget {
   const HrJobApplicationsViewBody({super.key, required this.jobTitle});
 
   Future<void> _openPdf(BuildContext context, String resumePath) async {
-    // رابط الـ S3 Bucket الخاص بك بناءً على البيانات التي أرسلتها
-    const String awsBucketUrl =
-        "https://mahy-s3-bucket-2025.s3.us-east-1.amazonaws.com/";
-
     // لو الـ Backend مراجع الـ URL كامل، هنستخدمه، لو مراجع الـ path بس هنمجده مع رابط الـ Bucket
     final String urlString = resumePath.startsWith('http')
         ? resumePath
-        : (awsBucketUrl + resumePath);
+        : (EndPoints.awsBaseUrl + resumePath);
 
     // عمل encode للمسافات والحروف الخاصة بشكل صحيح لضمان عمل الرابط
     final String encodedUrl = Uri.encodeFull(urlString).replaceAll(' ', '%20');
 
+    // On Android, raw PDF URLs just download in the background.
+    // Using Google Docs Viewer renders the PDF directly on the screen inside the browser.
+    final String googleDocsUrl = "https://docs.google.com/gview?embedded=true&url=$encodedUrl";
+
     debugPrint("🔗 AWS S3 Link: $encodedUrl");
+    debugPrint("🔗 Google Docs Viewer Link: $googleDocsUrl");
 
     try {
-      final Uri url = Uri.parse(encodedUrl);
+      final Uri url = Uri.parse(googleDocsUrl);
 
       if (await canLaunchUrl(url)) {
         await launchUrl(url, mode: LaunchMode.externalApplication);
       } else {
-        if (context.mounted) {
-          customToastification(
-            context,
-            ToastificationType.error,
-            'Could not launch CV. Please check your browser.',
-          );
+        // Fallback to raw S3 URL if Google Docs Viewer cannot be launched
+        final Uri rawUrl = Uri.parse(encodedUrl);
+        if (await canLaunchUrl(rawUrl)) {
+          await launchUrl(rawUrl, mode: LaunchMode.externalApplication);
+        } else {
+          if (context.mounted) {
+            customToastification(
+              context,
+              ToastificationType.error,
+              "Could not open resume link",
+            );
+          }
         }
       }
     } catch (e) {
@@ -56,10 +64,9 @@ class HrJobApplicationsViewBody extends StatelessWidget {
         customToastification(
           context,
           ToastificationType.error,
-          'Error launching CV: $e',
+          "Error opening resume: $e",
         );
       }
-      debugPrint("❌ Error: $e");
     }
   }
 

@@ -14,6 +14,11 @@ import 'package:jobify_project/domain/entities/get_job_by_id_response_entity.dar
 import 'package:jobify_project/domain/entities/job_application_entity.dart';
 import 'package:jobify_project/domain/repo/job_repository.dart';
 import 'package:jobify_project/data/mappers/job_application_mapper.dart';
+import 'package:jobify_project/data/mappers/my_job_applications_mapper.dart';
+import 'package:jobify_project/domain/entities/apply_job_response_entity.dart';
+import 'package:jobify_project/domain/entities/get_my_applications_response_entity.dart';
+import 'package:jobify_project/domain/entities/application_stats_entity.dart';
+import 'dart:io';
 
 @Injectable(as: JobRepository)
 class JobRepositoryImpl implements JobRepository {
@@ -108,6 +113,46 @@ class JobRepositoryImpl implements JobRepository {
     return await safeApiCall(
       () => _remoteDataSource.removeSavedJob(id),
       (response) => response.message ?? 'Success',
+    );
+  }
+
+  @override
+  Future<ApiResult<ApplyJobResponseEntity>> applyJob({
+    required String jobId,
+    required String resumeFilePath,
+    String? coverLetter,
+  }) async {
+    return await safeApiCall(
+      () => _remoteDataSource.applyJob(
+        jobId: jobId,
+        resumeFile: File(resumeFilePath),
+        coverLetter: coverLetter,
+      ),
+      (response) => response.toEntity(),
+    );
+  }
+
+  @override
+  Future<ApiResult<GetMyApplicationsResponseEntity>> getMyApplications({
+    int? page,
+    int? limit,
+    String? status,
+  }) async {
+    return await safeApiCall(
+      () => _remoteDataSource.getMyApplications(
+        page: page,
+        limit: limit,
+        status: status,
+      ),
+      (response) => response.toEntity(),
+    );
+  }
+
+  @override
+  Future<ApiResult<ApplicationStatsEntity>> getApplicationStats() async {
+    return await safeApiCall(
+      () => _remoteDataSource.getApplicationStats(),
+      (response) => response.toEntity(),
     );
   }
 }

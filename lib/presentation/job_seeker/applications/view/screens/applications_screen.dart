@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jobify_project/core/di/di.dart';
+import 'package:jobify_project/presentation/job_seeker/applications/view_model/applications_cubit.dart';
 import 'package:jobify_project/core/widgets/custom_screen_wrapper.dart';
 import 'package:jobify_project/presentation/job_seeker/applications/view/screens/widgets/applications_view_body.dart';
 
@@ -7,10 +10,10 @@ class ApplicationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: CustomScreenWrapper(
-        // applyPadding: false,
-        body: ApplicationsViewBody(),
+    return CustomScreenWrapper(
+      body: BlocProvider(
+        create: (context) => getIt<JobSeekerApplicationsCubit>(),
+        child: const ApplicationsViewBody(),
       ),
     );
   }

@@ -297,5 +297,11 @@
   "aiChatAnalyzePdfPrompt": "Please analyze this PDF file and provide career advice.",
   "homeAiChatBannerTitle": "Your AI Career Assistant",
   "homeAiChatBannerSubtitle": "Prepare mock interviews, polish your CV, or find ideal career paths instantly!",
-  "homeAiChatBannerCTA": "Chat Now"
+  "homeAiChatBannerCTA": "Chat Now",
+  "savedJobs": "Saved Jobs",
+  "myApplications": "My Applications",
+  "searchApplication": "Search Application...",
+  "all": "All",
+  "noApplicationsFound": "No applications found",
+  "viewApplication": "View Application"
 }

@@ -1,9 +1,11 @@
 import 'package:jobify_project/core/api_result/base_state.dart';
 import 'package:jobify_project/domain/entities/user_entity.dart';
+import 'package:jobify_project/domain/entities/application_stats_entity.dart';
 
 class ProfileState extends BaseState<UserEntity> {
   final bool isLogoutLoading;
   final bool logoutSuccess;
+  final ApplicationStatsEntity? stats;
 
   const ProfileState({
     super.isLoading = false,
@@ -11,6 +13,7 @@ class ProfileState extends BaseState<UserEntity> {
     super.data,
     this.isLogoutLoading = false,
     this.logoutSuccess = false,
+    this.stats,
   });
 
   ProfileState copyWith({
@@ -19,6 +22,7 @@ class ProfileState extends BaseState<UserEntity> {
     UserEntity? data,
     bool? isLogoutLoading,
     bool? logoutSuccess,
+    ApplicationStatsEntity? stats,
     bool clearError = false,
   }) {
     return ProfileState(
@@ -27,6 +31,7 @@ class ProfileState extends BaseState<UserEntity> {
       data: data ?? this.data,
       isLogoutLoading: isLogoutLoading ?? this.isLogoutLoading,
       logoutSuccess: logoutSuccess ?? this.logoutSuccess,
+      stats: stats ?? this.stats,
     );
   }
 
@@ -37,5 +42,6 @@ class ProfileState extends BaseState<UserEntity> {
         data,
         isLogoutLoading,
         logoutSuccess,
+        stats,
       ];
 }

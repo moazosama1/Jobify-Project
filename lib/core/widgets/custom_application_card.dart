@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:jobify_project/core/constants/app_colors.dart';
+import 'package:jobify_project/core/extensions/l10n_extension.dart';
+import 'package:jobify_project/core/extensions/theme_context_extension.dart';
 
 enum ApplicationStatus { onTheWay, delivered, canceled }
 
@@ -8,24 +11,27 @@ class CustomJobApplicationCard extends StatelessWidget {
   final String companyName;
   final String salary;
   final String location;
-  final String logoUrl; 
+  final String logoUrl;
+  final String employmentType;
+  final String createdAt;
   final ApplicationStatus status;
   final VoidCallback onViewApplication;
 
   const CustomJobApplicationCard({
-    Key? key,
+    super.key,
     required this.jobTitle,
     required this.companyName,
     required this.salary,
     required this.location,
     required this.logoUrl,
+    this.employmentType = '',
+    this.createdAt = '',
     required this.status,
     required this.onViewApplication,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    // تحديد ألوان الـ Status Button بناءً على الحالة
     Color statusBgColor;
     Color statusTextColor;
     String statusText;
@@ -34,161 +40,187 @@ class CustomJobApplicationCard extends StatelessWidget {
       case ApplicationStatus.onTheWay:
         statusBgColor = AppColors.brandLight;
         statusTextColor = AppColors.brandDefault;
-        statusText = 'On the way';
+        statusText = context.l10n.accepted;
         break;
       case ApplicationStatus.delivered:
         statusBgColor = AppColors.gray.withValues(alpha: 0.1);
         statusTextColor = AppColors.gray;
-        statusText = 'Delivered';
+        statusText = context.l10n.pending;
         break;
       case ApplicationStatus.canceled:
         statusBgColor = AppColors.lightPink;
         statusTextColor = AppColors.red;
-        statusText = 'Canceled';
+        statusText = context.l10n.rejected;
         break;
     }
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.lightGray,
+        color: context.surfaceColor,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: context.onSurfaceColor.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+        border: Border.all(
+          color: context.onSurfaceColor.withValues(alpha: 0.05),
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              // Company Logo Container
-              Container(
-                width: 48,
-                height: 48,
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: AppColors.gray.withValues(alpha: 0.1),
-                  ),
-                ),
-                child: logoUrl.startsWith('http')
-                    ? Image.network(
-                        logoUrl,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(Icons.business),
-                      )
-                    : Image.asset(
-                        logoUrl,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(Icons.business),
-                      ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onViewApplication,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      jobTitle,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.headlineSmall?.copyWith(fontSize: 16),
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        Text(
-                          companyName,
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(color: AppColors.gray),
+                    Container(
+                      width: 48,
+                      height: 48,
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: context.scaffoldBackgroundColor,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: context.onSurfaceColor.withValues(alpha: 0.1),
                         ),
-                      ],
+                      ),
+                      child: logoUrl.startsWith('http')
+                          ? CachedNetworkImage(
+                              imageUrl: logoUrl,
+                              fit: BoxFit.contain,
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => const Icon(
+                                Icons.business,
+                                color: AppColors.gray,
+                              ),
+                            )
+                          : Image.asset(
+                              logoUrl,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(
+                                    Icons.business,
+                                    color: AppColors.gray,
+                                  ),
+                            ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            jobTitle,
+                            style: context.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            companyName,
+                            style: context.bodySmall?.copyWith(
+                              color: AppColors.gray,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: statusBgColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        statusText,
+                        style: context.labelSmall?.copyWith(
+                          color: statusTextColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 16),
-
-          Row(
-            mainAxisAlignment: .center,
-            children: [
-              _buildInfoChip(context, Icons.payments_outlined, salary),
-              const SizedBox(width: 16),
-              _buildInfoChip(context, Icons.location_on_outlined, location),
-            ],
-          ),
-
-          const SizedBox(height: 16),
-
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: statusBgColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    statusText,
-                    style: TextStyle(
-                      color: statusTextColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  children: [
+                    _buildInfoChip(context, Icons.payments_outlined, salary),
+                    _buildInfoChip(
+                      context,
+                      Icons.location_on_outlined,
+                      location,
                     ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              // زر View Application
-              Expanded(
-                child: InkWell(
-                  onTap: onViewApplication,
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: AppColors.mainColor[10],
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'View Application',
-                      style: TextStyle(
-                        color: AppColors.mainColor,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                    if (employmentType.isNotEmpty)
+                      _buildInfoChip(
+                        context,
+                        Icons.work_outline,
+                        employmentType,
                       ),
-                    ),
-                  ),
+                    if (createdAt.isNotEmpty)
+                      _buildInfoChip(
+                        context,
+                        Icons.calendar_today_outlined,
+                        _formatDate(createdAt),
+                      ),
+                  ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ],
+        ),
       ),
     );
   }
 
   Widget _buildInfoChip(BuildContext context, IconData icon, String text) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 18, color: AppColors.gray),
+        Icon(icon, size: 16, color: AppColors.gray),
         const SizedBox(width: 4),
-        Text(
-          text,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(color: AppColors.gray),
+        Flexible(
+          child: Text(
+            text,
+            style: context.bodySmall?.copyWith(color: AppColors.gray),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );
+  }
+
+  String _formatDate(String isoDate) {
+    try {
+      final date = DateTime.parse(isoDate);
+      return '${date.day}/${date.month}/${date.year}';
+    } catch (e) {
+      return isoDate;
+    }
   }
 }

@@ -15,6 +15,7 @@ import 'package:jobify_project/presentation/job_seeker/home/view_model/home_even
 import 'package:jobify_project/presentation/job_seeker/home/view_model/home_state.dart';
 import 'package:jobify_project/domain/entities/requests/get_all_jobs_request_entity.dart';
 import 'package:jobify_project/generated/l10n.dart';
+import 'package:jobify_project/core/cubit/core_cubit.dart';
 
 class HomeScreenViewBody extends StatelessWidget {
   const HomeScreenViewBody({super.key});
@@ -23,6 +24,11 @@ class HomeScreenViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final local = AppLocalizations.of(context);
+
+    final coreState = context.watch<CoreCubit>().state;
+    final userName = (coreState is CoreStateChanged && coreState.user != null)
+        ? '${coreState.user!.firstName} ${coreState.user!.lastName}'
+        : local.helloUser;
 
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
@@ -47,6 +53,7 @@ class HomeScreenViewBody extends StatelessWidget {
         return RefreshIndicator(
           onRefresh: () async {
             context.read<HomeCubit>().doIntent(HomeLoadDataEvent());
+            context.read<CoreCubit>().fetchUserInfo();
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -56,7 +63,7 @@ class HomeScreenViewBody extends StatelessWidget {
                 const SizedBox(height: AppMeasurements.paddingSmall),
                 CustomUserInfoAppBar(
                   welcomeText: local.welcomeUser,
-                  userNameText: local.helloUser,
+                  userNameText: userName,
                   onSavedPressed: () {
                     context.push(RouteNames.savedJobs);
                   },
@@ -92,8 +99,12 @@ class HomeScreenViewBody extends StatelessWidget {
                     }
 
                     final filters = GetAllJobsRequestEntity(
-                      category: categoryFilter.isNotEmpty ? categoryFilter : null,
-                      employmentType: employmentTypeFilter.isNotEmpty ? employmentTypeFilter : null,
+                      category: categoryFilter.isNotEmpty
+                          ? categoryFilter
+                          : null,
+                      employmentType: employmentTypeFilter.isNotEmpty
+                          ? employmentTypeFilter
+                          : null,
                     );
                     context.push(RouteNames.search, extra: filters);
                   },
