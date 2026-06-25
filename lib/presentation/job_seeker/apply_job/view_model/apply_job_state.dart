@@ -1,44 +1,29 @@
 import 'package:equatable/equatable.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:jobify_project/core/api_result/base_state.dart';
 
 class ApplyJobState extends Equatable {
-  final String fullName;
-  final String portfolioUrl;
-  final String motivationalLetter;
-  final PlatformFile? selectedCv;
-  final BaseState<bool> apiStatus;
+  final BaseState<bool> applyStatus;
+  final String? resumeFilePath;
+  final String? coverLetter;
 
   const ApplyJobState({
-    this.fullName = '',
-    this.portfolioUrl = '',
-    this.motivationalLetter = '',
-    this.selectedCv,
-    this.apiStatus = const BaseState<bool>(),
+    this.applyStatus = const BaseState(),
+    this.resumeFilePath,
+    this.coverLetter,
   });
 
   ApplyJobState copyWith({
-    String? fullName,
-    String? portfolioUrl,
-    String? motivationalLetter,
-    PlatformFile? selectedCv,
-    BaseState<bool>? apiStatus,
+    BaseState<bool>? applyStatus,
+    String? resumeFilePath,
+    String? coverLetter,
   }) {
     return ApplyJobState(
-      fullName: fullName ?? this.fullName,
-      portfolioUrl: portfolioUrl ?? this.portfolioUrl,
-      motivationalLetter: motivationalLetter ?? this.motivationalLetter,
-      selectedCv: selectedCv ?? this.selectedCv,
-      apiStatus: apiStatus ?? this.apiStatus,
+      applyStatus: applyStatus ?? this.applyStatus,
+      resumeFilePath: resumeFilePath ?? this.resumeFilePath,
+      coverLetter: coverLetter ?? this.coverLetter,
     );
   }
 
   @override
-  List<Object?> get props => [
-    fullName,
-    portfolioUrl,
-    motivationalLetter,
-    selectedCv,
-    apiStatus,
-  ];
+  List<Object?> get props => [applyStatus, resumeFilePath, coverLetter];
 }

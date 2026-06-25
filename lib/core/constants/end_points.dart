@@ -4,8 +4,8 @@ abstract class EndPoints {
   // for anas
   // static const String baseUrl = "http://192.168.1.14:3000/";
 
-  // AWS S3 Base URL (Replace with your actual bucket URL if different)
-  static const String awsBaseUrl = "https://your-bucket-name.s3.amazonaws.com/";
+  // AWS S3 Base URL
+  static const String awsBaseUrl = "https://mahy-s3-bucket-2025.s3.us-east-1.amazonaws.com/";
 
 
   ///User
@@ -37,4 +37,7 @@ abstract class EndPoints {
   static const String deleteJob = "jobs/hard-delete";
   static const String saveJob = "jobs/hard-delete";
   static const String getApplicationForEmployee = "job-applications/job/";
+  static const String applyJob = "job-applications/apply";
+  static const String getMyApplications = "job-applications/my-applications";
+  static const String getApplicationStats = "job-applications/stats";
 }

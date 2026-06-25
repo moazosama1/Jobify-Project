@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jobify_project/core/constants/app_images.dart';
 import 'package:jobify_project/core/widgets/custom_loading_indicator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jobify_project/core/constants/const_keys.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/router/route_names.dart';
 import 'package:jobify_project/presentation/splash/view_model/splash_cubit.dart';
@@ -33,11 +33,11 @@ class SplashScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              Text(
-                ConstKeys.appName,
-                style: theme.textTheme.headlineLarge?.copyWith(
-                  color: theme.colorScheme.onTertiary,
-                ),
+              Image.asset(
+                AppImages.iconLogoFullName,
+                width: 180,
+                height: 180,
+                color: theme.colorScheme.onTertiary,
               ),
               const Spacer(),
               CustomLoadingIndicator(color: theme.colorScheme.onTertiary),

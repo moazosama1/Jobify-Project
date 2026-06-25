@@ -193,10 +193,13 @@ abstract class AppRouter {
       GoRoute(
         path: RouteNames.applyJob,
         parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => BlocProvider(
-          create: (_) => getIt<ApplyJobCubit>(),
-          child: const ApplyJobScreen(),
-        ),
+        builder: (context, state) {
+          final jobId = state.extra as String;
+          return BlocProvider(
+            create: (_) => getIt<ApplyJobCubit>(),
+            child: ApplyJobScreen(jobId: jobId),
+          );
+        },
       ),
       GoRoute(
         path: RouteNames.login,

@@ -36,6 +36,9 @@ class JobDetailsScreenViewBody extends StatelessWidget {
                   ToggleSavedJobDetailsEvent(job.id),
                 );
               },
+              onApplyTap: () {
+                context.push(RouteNames.applyJob, extra: job.id);
+              },
             ),
           ),
 
@@ -52,7 +55,7 @@ class JobDetailsScreenViewBody extends StatelessWidget {
             location: job.location,
             salary: job.salary,
             onApplyPressed: () {
-              context.push(RouteNames.applyJob);
+              context.push(RouteNames.applyJob, extra: job.id);
             },
           ),
         ],

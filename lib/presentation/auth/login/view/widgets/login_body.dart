@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jobify_project/core/constants/app_images.dart';
-import 'package:jobify_project/core/constants/const_keys.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/utils/validations.dart';
 import 'package:jobify_project/core/widgets/custom_divider.dart';
@@ -67,32 +66,12 @@ class _LoginBodyState extends State<LoginBody> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header
-              Row(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primary,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.pin_drop_rounded,
-                        color: theme.colorScheme.onPrimary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: AppMeasurements.paddingMedium),
-                  Text(
-                    ConstKeys.appName,
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              Image.asset(
+                AppImages.iconLogoFullName,
+                fit: BoxFit.contain,
+                height: 120,
+                width: 120,
               ),
-              const SizedBox(height: AppMeasurements.paddingMedium),
               Text(
                 local.giveCredentialToSignIn,
                 style: theme.textTheme.bodyMedium?.copyWith(

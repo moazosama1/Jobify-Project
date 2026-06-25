@@ -35,7 +35,9 @@ class SavedJobsViewBody extends StatelessWidget {
             ),
             const SizedBox(height: AppMeasurements.paddingLarge),
             Text(
-              AppLocalizations.of(context).savedJobsCountTitle(state.filteredJobs.length.toString()),
+              AppLocalizations.of(
+                context,
+              ).savedJobsCountTitle(state.filteredJobs.length.toString()),
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: AppMeasurements.paddingSmall),
@@ -46,7 +48,11 @@ class SavedJobsViewBody extends StatelessWidget {
                         state.errorMessage!.isNotEmpty)
                   ? Center(child: Text(state.errorMessage!))
                   : state.filteredJobs.isEmpty
-                  ? Center(child: Text(AppLocalizations.of(context).noSavedJobsFound))
+                  ? Center(
+                      child: Text(
+                        AppLocalizations.of(context).noSavedJobsFound,
+                      ),
+                    )
                   : ListView.builder(
                       itemCount: state.filteredJobs.length,
                       itemBuilder: (context, index) {
@@ -55,36 +61,17 @@ class SavedJobsViewBody extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                             vertical: AppMeasurements.paddingMedium,
                           ),
-                          child: Slidable(
-                            key: ValueKey(job.id),
-                            endActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (context) {
-                                    context.read<SavedJobsCubit>().doIntent(
-                                      SavedJobsRemoveEvent(job.id),
-                                    );
-                                  },
-                                  backgroundColor: Theme.of(context).colorScheme.error,
-                                  foregroundColor: Theme.of(context).colorScheme.onError,
-                                  icon: Icons.delete_outline,
-                                  label: AppLocalizations.of(context).deleteAction,
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                              ],
-                            ),
-                            child: JobCard(
-                              onTap: () {
-                                context.push(RouteNames.jobDetails, extra: job);
-                              },
-                              job: job,
-                              onOptionsTap: () {
-                                context.read<SavedJobsCubit>().doIntent(
-                                  SavedJobsRemoveEvent(job.id),
-                                );
-                              },
-                            ),
+                          child: JobCard(
+                            onTap: () {
+                              context.push(RouteNames.jobDetails, extra: job);
+                            },
+                            // Force isBookmarked to true just in case the backend didn't set it for the saved jobs list
+                            job: job.copyWith(isBookmarked: true),
+                            onOptionsTap: () {
+                              context.read<SavedJobsCubit>().doIntent(
+                                SavedJobsRemoveEvent(job.id),
+                              );
+                            },
                           ),
                         );
                       },

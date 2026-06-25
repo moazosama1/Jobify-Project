@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:jobify_project/core/widgets/custom_app_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jobify_project/core/widgets/custom_screen_wrapper.dart';
-import 'package:jobify_project/generated/l10n.dart';
-import 'package:jobify_project/presentation/job_seeker/apply_job/view/widgets/apply_job_body.dart';
+import 'package:jobify_project/core/di/di.dart';
+import 'package:jobify_project/presentation/job_seeker/apply_job/view_model/apply_job_cubit.dart';
+import 'package:jobify_project/presentation/job_seeker/apply_job/view/widgets/apply_job_view_body.dart';
 
 class ApplyJobScreen extends StatelessWidget {
-  const ApplyJobScreen({super.key});
+  final String jobId;
+
+  const ApplyJobScreen({super.key, required this.jobId});
 
   @override
   Widget build(BuildContext context) {
-    return CustomScreenWrapper(
-      appBar: CustomAppBar(
-        title: AppLocalizations.of(context).applyJob,
-        showBackButton: true,
-      ),
-      body: const ApplyJobBody(),
+    return BlocProvider(
+      create: (context) => getIt<ApplyJobCubit>(),
+      child: CustomScreenWrapper(body: ApplyJobViewBody(jobId: jobId)),
     );
   }
 }

@@ -59,17 +59,25 @@ class ProfileResumeWidget extends StatelessWidget {
                   } else {
                     fullUrl = "${EndPoints.awsBaseUrl}$resumeUrl";
                   }
+
+                  final String encodedUrl = Uri.encodeFull(fullUrl).replaceAll(' ', '%20');
+                  final String googleDocsUrl = "https://docs.google.com/gview?embedded=true&url=$encodedUrl";
                   
-                  final Uri url = Uri.parse(fullUrl);
+                  final Uri url = Uri.parse(googleDocsUrl);
                   if (await canLaunchUrl(url)) {
                     await launchUrl(url, mode: LaunchMode.externalApplication);
                   } else {
-                    if (context.mounted) {
-                      customToastification(
-                        context,
-                        ToastificationType.error,
-                        "Could not open resume link",
-                      );
+                    final Uri rawUrl = Uri.parse(encodedUrl);
+                    if (await canLaunchUrl(rawUrl)) {
+                      await launchUrl(rawUrl, mode: LaunchMode.externalApplication);
+                    } else {
+                      if (context.mounted) {
+                        customToastification(
+                          context,
+                          ToastificationType.error,
+                          "Could not open resume link",
+                        );
+                      }
                     }
                   }
                 },

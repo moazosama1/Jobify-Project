@@ -72,7 +72,7 @@ class SuggestedJobsSectionWidget extends StatelessWidget {
                   );
                 },
                 onApplyTap: () {
-                  // Navigate to apply job details or form.
+                  context.push(RouteNames.applyJob, extra: job.id);
                 },
               );
             },

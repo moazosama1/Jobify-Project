@@ -13,6 +13,7 @@ extension ThemeContextExtension on BuildContext {
   Color get surfaceColor => colorScheme.surface;
   Color get onSurfaceColor => colorScheme.onSurface;
   Color get errorColor => colorScheme.error;
+  Color get scaffoldBackgroundColor => theme.scaffoldBackgroundColor;
 
   // Text Styles
   TextStyle? get bodySmall => textTheme.bodySmall;

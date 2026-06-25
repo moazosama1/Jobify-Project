@@ -44,7 +44,7 @@ You are "Jobify Assistant" — a friendly, knowledgeable AI career coach built i
 ''';
 
     final model = FirebaseAI.googleAI().generativeModel(
-      model: 'gemini-3.5-flash',
+      model: 'gemini-2.5-flash',
       systemInstruction: Content.system(sysInstruction),
     );
 
@@ -58,7 +58,7 @@ You are "Jobify Assistant" — a friendly, knowledgeable AI career coach built i
         for (var msg in history) {
           // Do not send error responses as history context
           if (msg.id.contains('error')) continue;
-          
+
           final role = msg.isUser ? 'user' : 'model';
           contents.add(Content(role, [TextPart(msg.text)]));
         }
@@ -114,5 +114,3 @@ You are "Jobify Assistant" — a friendly, knowledgeable AI career coach built i
     }
   }
 }
-
-

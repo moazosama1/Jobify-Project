@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jobify_project/api/models/get_job_applications_response.dart';
+import 'package:jobify_project/api/models/get_my_applications_response.dart';
+import 'package:jobify_project/api/models/get_application_stats_response.dart';
+import 'package:jobify_project/api/models/apply_job_response.dart';
 import 'package:jobify_project/api/models/login_response.dart';
 import 'package:jobify_project/api/models/requests/login_request_dto.dart';
 import 'package:jobify_project/api/models/requests/signup_request.dart';
@@ -121,6 +124,24 @@ abstract class ApiClient {
   @GET("${EndPoints.getApplicationForEmployee}{id}")
   Future<GetJobApplicationsResponse> getJobApplications(@Path("id") String id);
 
-   @PUT("job-applications/{id}/status")
+  @PUT("job-applications/{id}/status")
   Future<GetJobApplicationsResponse> updateApplicationStatus(@Path("id") String id, @Body() Map<String, dynamic> request);
+
+  @POST("${EndPoints.applyJob}/{jobId}")
+  @MultiPart()
+  Future<ApplyJobResponse> applyJob(
+    @Path("jobId") String jobId,
+    @Part(name: "resume") File file,
+    @Part(name: "coverLetter") String? coverLetter,
+  );
+
+  @GET(EndPoints.getMyApplications)
+  Future<GetMyApplicationsResponse> getMyApplications(
+    @Query('page') int? page,
+    @Query('limit') int? limit,
+    @Query('status') String? status,
+  );
+
+  @GET(EndPoints.getApplicationStats)
+  Future<GetApplicationStatsResponse> getApplicationStats();
 }
