@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/constants/app_colors.dart';
+import 'package:jobify_project/core/extensions/theme_context_extension.dart';
 import 'package:jobify_project/domain/entities/job_entity.dart';
 
 class JobCard extends StatelessWidget {
@@ -20,8 +21,7 @@ class JobCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final isDark = context.theme.brightness == Brightness.dark;
 
     return GestureDetector(
       onTap: onTap,
@@ -34,12 +34,12 @@ class JobCard extends StatelessWidget {
           color: isDark ? AppColors.black[50] : AppColors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.05),
+            color: context.onSurfaceColor.withValues(alpha: 0.05),
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: theme.shadowColor.withValues(alpha: 0.03),
+              color: context.theme.shadowColor.withValues(alpha: 0.03),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -53,7 +53,7 @@ class JobCard extends StatelessWidget {
               height: 48,
               decoration: BoxDecoration(
                 color: isDark
-                    ? theme.colorScheme.surface
+                    ? context.surfaceColor
                     : const Color(0xFFF0F2F5),
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -78,8 +78,8 @@ class JobCard extends StatelessWidget {
                 children: [
                   Text(
                     job.title,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: theme.colorScheme.onSurface,
+                    style: context.titleMedium?.copyWith(
+                      color: context.onSurfaceColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
                     ),
@@ -93,13 +93,13 @@ class JobCard extends StatelessWidget {
                       Icon(
                         Icons.business_center_rounded,
                         size: 14,
-                        color: theme.colorScheme.primary,
+                        color: context.primaryColor,
                       ),
                       const SizedBox(width: 4),
                       Text(
                         job.companyName,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(
+                        style: context.bodySmall?.copyWith(
+                          color: context.onSurfaceColor.withValues(
                             alpha: 0.6,
                           ),
                           fontWeight: FontWeight.w500,
@@ -118,14 +118,14 @@ class JobCard extends StatelessWidget {
                       Icon(
                         Icons.location_on_rounded,
                         size: 14,
-                        color: theme.colorScheme.primary,
+                        color: context.primaryColor,
                       ),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           job.location,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(
+                          style: context.bodySmall?.copyWith(
+                            color: context.onSurfaceColor.withValues(
                               alpha: 0.6,
                             ),
                             fontWeight: FontWeight.w500,
@@ -139,14 +139,18 @@ class JobCard extends StatelessWidget {
                 ],
               ),
             ),
-            // Right: Action Options (three dots)
+            // Right: Action Options (bookmark / save icon)
             if (trailing != null)
               trailing!
             else if (onOptionsTap != null)
               IconButton(
                 icon: Icon(
-                  Icons.more_vert_rounded,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                  job.isBookmarked
+                      ? Icons.bookmark_rounded
+                      : Icons.bookmark_border_rounded,
+                  color: job.isBookmarked
+                      ? context.primaryColor
+                      : context.onSurfaceColor.withValues(alpha: 0.5),
                 ),
                 onPressed: onOptionsTap,
                 padding: EdgeInsets.zero,

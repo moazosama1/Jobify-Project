@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jobify_project/core/di/di.dart';
 import 'package:jobify_project/core/router/route_names.dart';
+import 'package:jobify_project/presentation/job_seeker/edit_profile/view/screens/edit_profile_screen.dart';
+import 'package:jobify_project/presentation/job_seeker/edit_profile/view_model/edit_job_seeker_profile_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/messages/view/messages_screen.dart';
 import 'package:jobify_project/presentation/job_seeker/messages/view_model/messages_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/messages/view_model/messages_event.dart';
@@ -64,7 +66,6 @@ import 'package:jobify_project/presentation/search/view_model/search_cubit.dart'
 import 'package:jobify_project/presentation/search/view_model/search_event.dart';
 import 'package:jobify_project/domain/entities/requests/get_all_jobs_request_entity.dart';
 import 'package:jobify_project/presentation/ai_chat/view/screens/ai_chat_screen.dart';
-import 'package:jobify_project/domain/entities/job_entity.dart';
 
 abstract class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -106,11 +107,8 @@ abstract class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: RouteNames.savedJobs,
-                builder: (context, state) => BlocProvider(
-                  create: (_) => getIt<SavedJobsCubit>(),
-                  child: const SavedJobsScreen(),
-                ),
+                path: RouteNames.applications,
+                builder: (context, state) => const ApplicationsScreen(),
               ),
             ],
           ),
@@ -132,7 +130,7 @@ abstract class AppRouter {
                 path: RouteNames.profile,
                 builder: (context, state) => BlocProvider(
                   create: (_) =>
-                      getIt<ProfileCubit>()..doIntent(const ProfileLoadDataEvent()),
+                      getIt<ProfileCubit>()..doIntent(const LoadProfileEvent()),
                   child: const ProfileScreen(),
                 ),
               ),
@@ -183,7 +181,8 @@ abstract class AppRouter {
                 path: RouteNames.hrProfile,
                 builder: (context, state) => BlocProvider(
                   create: (_) =>
-                      getIt<HrProfileCubit>()..doIntent(const HrProfileLoadDataEvent()),
+                      getIt<HrProfileCubit>()
+                        ..doIntent(const HrProfileLoadDataEvent()),
                   child: const HrProfileScreen(),
                 ),
               ),
@@ -231,20 +230,25 @@ abstract class AppRouter {
         },
       ),
       GoRoute(
-        path: RouteNames.applications,
-        builder: (context, state) => const ApplicationsScreen(),
+        path: RouteNames.savedJobs,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<SavedJobsCubit>(),
+          child: const SavedJobsScreen(),
+        ),
       ),
       GoRoute(
         path: RouteNames.chatScreen,
         builder: (context, state) => BlocProvider(
-          create: (_) => getIt<ChatScreenCubit>()..doIntent(ChatScreenLoadEvent()),
+          create: (_) =>
+              getIt<ChatScreenCubit>()..doIntent(ChatScreenLoadEvent()),
           child: const ChatScreen(),
         ),
       ),
       GoRoute(
         path: RouteNames.hrChatScreen,
         builder: (context, state) => BlocProvider(
-          create: (_) => getIt<HrChatScreenCubit>()..doIntent(HrChatScreenLoadEvent()),
+          create: (_) =>
+              getIt<HrChatScreenCubit>()..doIntent(HrChatScreenLoadEvent()),
           child: const HrChatScreen(),
         ),
       ),
@@ -265,8 +269,9 @@ abstract class AppRouter {
           final jobId = extra['jobId'] as String;
           final jobTitle = extra['jobTitle'] as String;
           return BlocProvider(
-            create: (_) => getIt<HrJobApplicationsCubit>()
-              ..doIntent(LoadJobApplicationsEvent(jobId)),
+            create: (_) =>
+                getIt<HrJobApplicationsCubit>()
+                  ..doIntent(LoadJobApplicationsEvent(jobId)),
             child: HrJobApplicationsScreen(jobTitle: jobTitle),
           );
         },
@@ -274,8 +279,16 @@ abstract class AppRouter {
       GoRoute(
         path: RouteNames.editProfile,
         builder: (context, state) => BlocProvider(
-          create: (_) => getIt<EditProfileCubit>()..doIntent(const EditProfileLoadEvent()),
+          create: (_) =>
+              getIt<EditProfileCubit>()..doIntent(const EditProfileLoadEvent()),
           child: const EditProfileScreen(),
+        ),
+      ),
+      GoRoute(
+        path: RouteNames.editJobSeekerScreen,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<EditJobSeekerProfileCubit>(),
+          child: const EditJobSeekerProfileScreen(),
         ),
       ),
       GoRoute(

@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:jobify_project/core/constants/const_keys.dart';
 import 'package:jobify_project/core/utils/shared_prefs_manager.dart';
 import 'package:jobify_project/data/data_source/ai_chat_local_data_source.dart';
-import 'package:jobify_project/data/models/ai_chat_message_model.dart';
+import 'package:jobify_project/api/models/ai_chat_message_model.dart';
 
 @Injectable(as: AiChatLocalDataSource)
 class AiChatLocalDataSourceImpl implements AiChatLocalDataSource {

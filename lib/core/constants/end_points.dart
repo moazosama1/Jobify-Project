@@ -1,8 +1,12 @@
 abstract class EndPoints {
   // for moo
-  static const String baseUrl = "http://192.168.1.4:3000/";
+  static const String baseUrl = "http://192.168.1.7:3000/";
   // for anas
   // static const String baseUrl = "http://192.168.1.14:3000/";
+
+  // AWS S3 Base URL (Replace with your actual bucket URL if different)
+  static const String awsBaseUrl = "https://your-bucket-name.s3.amazonaws.com/";
+
 
   ///User
   ///

@@ -20,25 +20,40 @@ class UserDto extends Equatable {
   final String location;
   final String role;
   
+  @JsonKey(defaultValue: [])
   final List<dynamic> skills;
+  @JsonKey(defaultValue: [])
   final List<dynamic> jobTypePreferences;
+  @JsonKey(defaultValue: [])
   final List<dynamic> savedJobs;
+  @JsonKey(defaultValue: false)
   final bool confirmed;
+  @JsonKey(defaultValue: [])
   final List<dynamic> friends;
+  @JsonKey(defaultValue: [])
   final List<dynamic> blockedUsers;
+  @JsonKey(defaultValue: false)
   final bool isActive;
+  @JsonKey(defaultValue: false)
   final bool notificationsEnabled;
+  @JsonKey(defaultValue: [])
   final List<dynamic> experience;
+  @JsonKey(defaultValue: [])
   final List<dynamic> education;
+  final String? resume;
   
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   
-  @JsonKey(name: '__v')
+  @JsonKey(name: '__v', defaultValue: 0)
   final int version;
   
+  @JsonKey(defaultValue: '')
   final String userName;
+  @JsonKey(defaultValue: '')
   final String id;
+  
+  final String? bio;
 
   const UserDto({
     required this.mongoId,
@@ -62,11 +77,13 @@ class UserDto extends Equatable {
     required this.notificationsEnabled,
     required this.experience,
     required this.education,
-    required this.createdAt,
-    required this.updatedAt,
+    this.resume,
+    this.createdAt,
+    this.updatedAt,
     required this.version,
     required this.userName,
     required this.id,
+    this.bio,
   });
 
   factory UserDto.fromJson(Map<String, dynamic> json) => _$UserDtoFromJson(json);
@@ -95,10 +112,12 @@ class UserDto extends Equatable {
         notificationsEnabled,
         experience,
         education,
+        resume,
         createdAt,
         updatedAt,
         version,
         userName,
         id,
+        bio,
       ];
 }

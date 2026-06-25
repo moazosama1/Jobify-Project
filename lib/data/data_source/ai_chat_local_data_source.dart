@@ -1,4 +1,4 @@
-import 'package:jobify_project/data/models/ai_chat_message_model.dart';
+import 'package:jobify_project/api/models/ai_chat_message_model.dart';
 
 abstract interface class AiChatLocalDataSource {
   Future<List<AiChatMessageModel>> getChatHistory();

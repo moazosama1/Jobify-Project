@@ -3,11 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/widgets/custom_elevated_button_loading.dart';
 import 'package:jobify_project/core/widgets/custom_toastification.dart';
-import 'package:jobify_project/generated/l10n.dart';
+import 'package:jobify_project/core/widgets/custom_loading_indicator.dart';
+import 'package:jobify_project/core/extensions/theme_context_extension.dart';
+import 'package:jobify_project/core/extensions/l10n_extension.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view/widgets/profile_contact_info_widget.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view/widgets/profile_header_widget.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view/widgets/profile_resume_widget.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view/widgets/profile_stats_widget.dart';
+import 'package:jobify_project/presentation/job_seeker/profile/view/widgets/profile_experience_widget.dart';
+import 'package:jobify_project/presentation/job_seeker/profile/view/widgets/profile_education_widget.dart';
+import 'package:jobify_project/presentation/job_seeker/profile/view/widgets/profile_personal_info_widget.dart';
+import 'package:jobify_project/presentation/job_seeker/profile/view/widgets/profile_skills_widget.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view_model/profile_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view_model/profile_event.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view_model/profile_state.dart';
@@ -20,9 +26,6 @@ class ProfileScreenViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final local = AppLocalizations.of(context);
-
     return BlocConsumer<ProfileCubit, ProfileState>(
       listenWhen: (previous, current) =>
           previous.logoutSuccess != current.logoutSuccess ||
@@ -32,78 +35,135 @@ class ProfileScreenViewBody extends StatelessWidget {
           customToastification(
             context,
             ToastificationType.success,
-            local.success,
+            context.l10n.success,
           );
           context.go(RouteNames.login);
         } else if (state.errorMessage != null && !state.isLoading) {
           customToastification(
             context,
             ToastificationType.error,
-            state.errorMessage,
+            state.errorMessage!,
           );
         }
       },
       builder: (context, state) {
         if (state.isLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: CustomLoadingIndicator());
         }
 
-        if (state.errorMessage != null && state.name.isEmpty) {
+        final user = state.data;
+
+        if (state.errorMessage != null && user == null) {
           return Center(
-            child: Text(
-              state.errorMessage!,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.error,
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.cloud_off_outlined,
+                  size: 64,
+                  color: context.onSurfaceColor.withValues(alpha: 0.3),
+                ),
+                const SizedBox(height: AppMeasurements.paddingMedium),
+                Text(
+                  state.errorMessage!,
+                  style: context.bodyLarge?.copyWith(
+                    color: context.onSurfaceColor.withValues(alpha: 0.6),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           );
         }
 
+        final name = user != null ? '${user.firstName} ${user.lastName}' : '';
+        final email = user?.email ?? '';
+        final phoneNumber = user?.phoneNumber ?? '';
+        final title = user?.role ?? '';
+        final bio = user?.bio ?? '';
+        final skillsString = user?.skills.join(', ') ?? '';
+
         return SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(
+            parent: BouncingScrollPhysics(),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header section (Avatar, Name, Title)
-              ProfileHeaderWidget(
-                name: state.name,
-                title: state.title,
-              ),
+              // ── Header (Avatar, Name, Role, Bio) ──
+              ProfileHeaderWidget(name: name, title: title, bio: bio),
               const SizedBox(height: AppMeasurements.paddingLarge),
 
-              // Stats section (Applied, Reviewed, Interview counts)
+              // ── Stats (Applied, Reviewed, Interview) ──
               ProfileStatsWidget(
-                appliedCount: state.appliedCount,
-                reviewedCount: state.reviewedCount,
-                interviewCount: state.interviewCount,
+                appliedCount: user?.savedJobs.length ?? 0,
+                reviewedCount: 0,
+                interviewCount: 0,
               ),
               const SizedBox(height: AppMeasurements.paddingLarge),
 
-              // Resume section (CV, PDF preview)
+              // ── Resume (CV Preview) ──
               ProfileResumeWidget(
-                name: state.name,
-                title: state.title,
-                description: state.description,
+                name: name,
+                title: title,
+                description: skillsString.isNotEmpty
+                    ? 'Skills: $skillsString'
+                    : '',
+                resumeUrl: user?.resume,
               ),
               const SizedBox(height: AppMeasurements.paddingLarge),
 
-              // Contact Info section (Name, Email, Phone Number fields)
+              // ── Skills ──
+              ProfileSkillsWidget(
+                skills: user?.skills ?? const [],
+              ),
+              const SizedBox(height: AppMeasurements.paddingLarge),
+
+              // ── Experience ──
+              ProfileExperienceWidget(
+                experienceList: user?.experience ?? const [],
+              ),
+              const SizedBox(height: AppMeasurements.paddingLarge),
+
+              // ── Education ──
+              ProfileEducationWidget(
+                educationList: user?.education ?? const [],
+              ),
+              const SizedBox(height: AppMeasurements.paddingLarge),
+
+              // ── Personal Info (Age, Gender, Location, Job Preferences) ──
+              ProfilePersonalInfoWidget(
+                age: user?.age ?? 0,
+                gender: user?.gender ?? '',
+                location: user?.location ?? '',
+                jobPreferences: user?.jobTypePreferences ?? const [],
+              ),
+              const SizedBox(height: AppMeasurements.paddingLarge),
+
+              // ── Contact Info (Name, Email, Phone) ──
               ProfileContactInfoWidget(
-                name: state.name,
-                email: state.email,
-                phoneNumber: state.phoneNumber,
+                name: name,
+                email: email,
+                phoneNumber: phoneNumber,
               ),
               const SizedBox(height: AppMeasurements.paddingLarge),
 
-              // Logout Button
-              CustomElevatedButtonLoading(
-                isLoading: state.isLogoutLoading,
-                textButton: 'Logout', // Hardcoded string as fallback
-                colorButton: theme.colorScheme.error,
-                onPressed: () {
-                  context.read<ProfileCubit>().doIntent(const ProfileLogoutEvent());
-                },
+              // ── Logout Button ──
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  CustomElevatedButtonLoading(
+                    isLoading: state.isLogoutLoading,
+                    widthButton: 120,
+                    textButton: context.l10n.logout,
+                    colorButton: context.errorColor,
+                    onPressed: () {
+                      context.read<ProfileCubit>().doIntent(
+                        const LogoutProfileEvent(),
+                      );
+                    },
+                  ),
+                ],
               ),
               const SizedBox(height: AppMeasurements.paddingLarge),
             ],

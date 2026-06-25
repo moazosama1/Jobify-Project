@@ -8,6 +8,11 @@ class GetStoredUserRoleUseCase {
   GetStoredUserRoleUseCase(this._repo);
 
   Future<String?> call() async {
+    final rememberMe = await _repo.getRememberMe();
+    if (!rememberMe) {
+      await _repo.clearLocalData();
+      return null;
+    }
     final token = await _repo.getToken();
     if (token == null || token.isEmpty) {
       return null;

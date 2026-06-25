@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jobify_project/core/extensions/theme_context_extension.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/router/route_names.dart';
 import 'package:jobify_project/domain/entities/job_entity.dart';
 import 'package:jobify_project/generated/l10n.dart';
 import 'package:jobify_project/core/widgets/job_card.dart';
+import 'package:jobify_project/presentation/job_seeker/home/view_model/home_cubit.dart';
+import 'package:jobify_project/presentation/job_seeker/home/view_model/home_event.dart';
 
 class RecentJobsSectionWidget extends StatelessWidget {
   final List<JobEntity> recentJobs;
@@ -36,8 +40,8 @@ class RecentJobsSectionWidget extends StatelessWidget {
             children: [
               Text(
                 local.recentJobs,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
+                style: context.titleMedium?.copyWith(
+                  color: context.onSurfaceColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
@@ -62,7 +66,9 @@ class RecentJobsSectionWidget extends StatelessWidget {
               onTap: () => context.push(RouteNames.jobDetails, extra: job),
               job: job,
               onOptionsTap: () {
-                // Show options modal sheet.
+                context.read<HomeCubit>().doIntent(
+                  HomeToggleBookmarkEvent(job.id),
+                );
               },
             );
           },

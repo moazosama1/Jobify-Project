@@ -21,7 +21,10 @@ class SearchState extends Equatable {
     return activeFilters!.location != null ||
         activeFilters!.employmentType != null ||
         activeFilters!.isRemote != null ||
-        activeFilters!.experienceLevel != null;
+        activeFilters!.experienceLevel != null ||
+        activeFilters!.category != null ||
+        activeFilters!.minSalary != null ||
+        activeFilters!.maxSalary != null;
   }
 
   SearchState copyWith({

@@ -11,7 +11,7 @@ class OnboardingLocalDataSourceImpl implements OnboardingLocalDataSource {
 
   @override
   Future<void> saveOnboardingStatus(bool completed) async {
-    // await _prefs.setBool(ConstKeys.onboardingKey, completed);
+    await _prefs.setBool(ConstKeys.onboardingKey, completed);
   }
 
   @override

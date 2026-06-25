@@ -1,5 +1,6 @@
 import 'package:jobify_project/core/api_result/api_result.dart';
 import 'package:jobify_project/domain/entities/login_entity.dart';
+import 'package:jobify_project/domain/entities/user_entity.dart';
 import 'package:jobify_project/domain/entities/login_request_entity.dart';
 import 'package:jobify_project/domain/entities/signup_entity.dart';
 import 'package:jobify_project/domain/entities/signup_request_entity.dart';
@@ -9,7 +10,10 @@ import 'package:jobify_project/domain/entities/forget_password_request_entity.da
 import 'package:jobify_project/domain/entities/forget_password_entity.dart';
 import 'package:jobify_project/domain/entities/reset_password_request_entity.dart';
 import 'package:jobify_project/domain/entities/reset_password_entity.dart';
-
+import 'package:jobify_project/domain/entities/update_basic_info_request_entity.dart';
+import 'package:jobify_project/domain/entities/experience_request_entity.dart';
+import 'package:jobify_project/domain/entities/education_request_entity.dart';
+import 'package:jobify_project/domain/entities/update_skills_request_entity.dart';
 abstract interface class AuthRepo {
   Future<ApiResult<LoginEntity>> login(LoginRequestEntity request);
   Future<ApiResult<SignUpEntity>> signup(SignUpRequestEntity request);
@@ -19,4 +23,17 @@ abstract interface class AuthRepo {
   Future<String?> getToken();
   Future<String?> getRole();
   Future<ApiResult<void>> logout();
+  Future<void> saveRememberMe(bool value);
+  Future<bool> getRememberMe();
+  Future<void> clearLocalData();
+  Future<ApiResult<UserEntity>> getProfile();
+  Future<ApiResult<UserEntity>> updateBasicInfo(UpdateBasicInfoRequestEntity request);
+  Future<ApiResult<UserEntity>> addExperience(ExperienceRequestEntity request);
+  Future<ApiResult<UserEntity>> updateExperience(String id, ExperienceRequestEntity request);
+  Future<ApiResult<UserEntity>> deleteExperience(String id);
+  Future<ApiResult<UserEntity>> addEducation(EducationRequestEntity request);
+  Future<ApiResult<UserEntity>> updateEducation(String id, EducationRequestEntity request);
+  Future<ApiResult<UserEntity>> deleteEducation(String id);
+  Future<ApiResult<UserEntity>> updateSkills(UpdateSkillsRequestEntity request);
+  Future<ApiResult<UserEntity>> uploadResume(String resumeFilePath);
 }

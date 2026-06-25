@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jobify_project/core/extensions/l10n_extension.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/router/route_names.dart';
 import 'package:jobify_project/core/widgets/custom_loading_indicator.dart';
 import 'package:jobify_project/core/widgets/suggested_job_card.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jobify_project/presentation/job_seeker/job_details/view/widgets/job_details_header_section.dart';
 import 'package:jobify_project/presentation/job_seeker/job_details/view/widgets/job_details_requirements_section.dart';
 import 'package:jobify_project/presentation/job_seeker/job_details/view_model/job_details_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/job_details/view_model/job_details_event.dart';
@@ -29,14 +27,6 @@ class JobDetailsScreenViewBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: AppMeasurements.paddingSmall),
-          JobDetailsHeaderSection(
-            title: context.l10n.details,
-            onSkipPressed: () {
-              context.pop();
-            },
-          ),
-          const SizedBox(height: AppMeasurements.paddingLarge),
           Center(
             child: SuggestedJobCard(
               job: job,

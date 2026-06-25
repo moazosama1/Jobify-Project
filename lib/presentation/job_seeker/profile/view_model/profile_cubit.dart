@@ -1,59 +1,52 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jobify_project/core/api_result/api_result.dart';
+import 'package:jobify_project/domain/entities/user_entity.dart';
+import 'package:jobify_project/domain/use_cases/get_user_profile_use_case.dart';
 import 'package:jobify_project/domain/use_cases/logout_use_case.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view_model/profile_event.dart';
 import 'package:jobify_project/presentation/job_seeker/profile/view_model/profile_state.dart';
 
 @injectable
 class ProfileCubit extends Cubit<ProfileState> {
+  final GetUserProfileUseCase _getUserProfileUseCase;
   final LogoutUseCase _logoutUseCase;
 
-  ProfileCubit(this._logoutUseCase) : super(const ProfileState());
+  ProfileCubit(
+    this._getUserProfileUseCase,
+    this._logoutUseCase,
+  ) : super(const ProfileState()) {
+    _init();
+  }
+
+  void _init() {
+    _onLoadProfile();
+  }
 
   void doIntent(ProfileEvent event) {
-    if (event is ProfileLoadDataEvent) {
-      _onLoadData();
-    } else if (event is ProfileUpdateContactInfoEvent) {
-      _onUpdateContactInfo(event);
-    } else if (event is ProfileLogoutEvent) {
-      _onLogout();
+    switch (event) {
+      case LoadProfileEvent():
+        _onLoadProfile();
+      case UpdateContactInfoProfileEvent():
+        _onUpdateContactInfo(event);
+      case LogoutProfileEvent():
+        _onLogout();
     }
   }
 
-  Future<void> _onLoadData() async {
+  Future<void> _onLoadProfile() async {
     emit(state.copyWith(isLoading: true, clearError: true));
-    try {
-      // Simulate loading delay
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      emit(
-        state.copyWith(
-          isLoading: false,
-          name: 'Mazen Mohammed',
-          email: 'mazen.mohammed@example.com',
-          phoneNumber: '+1 555-0199',
-          title: 'UX Designer',
-          description:
-              'Creative UX Designer with 6+ years of experience in optimizing user experience through innovative solutions and dynamic interface designs. Successful in enhancing user engagement for well-known brands, providing a compelling user experience to improve brand loyalty and customer retention.',
-          appliedCount: 35,
-          reviewedCount: 19,
-          interviewCount: 10,
-        ),
-      );
-    } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+    final result = await _getUserProfileUseCase();
+    if (result is ApiSuccessResult<UserEntity>) {
+      emit(state.copyWith(isLoading: false, data: result.data));
+    } else if (result is ApiErrorResult<UserEntity>) {
+      emit(state.copyWith(isLoading: false, errorMessage: result.errorMessage));
     }
   }
 
-  void _onUpdateContactInfo(ProfileUpdateContactInfoEvent event) {
-    emit(
-      state.copyWith(
-        name: event.name,
-        email: event.email,
-        phoneNumber: event.phoneNumber,
-      ),
-    );
+  void _onUpdateContactInfo(UpdateContactInfoProfileEvent event) {
+    // Contact updates are handled via EditProfileScreen.
+    // If local update is needed in the future, it can be implemented here.
   }
 
   Future<void> _onLogout() async {
@@ -65,7 +58,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(
         state.copyWith(
           isLogoutLoading: false,
-          errorMessage: (result).errorMessage,
+          errorMessage: result.errorMessage,
         ),
       );
     }

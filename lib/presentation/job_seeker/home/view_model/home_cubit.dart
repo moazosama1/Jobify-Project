@@ -1,9 +1,9 @@
+import 'dart:developer' as developer;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jobify_project/core/api_result/api_result.dart';
 import 'package:jobify_project/core/constants/app_images.dart';
 import 'package:jobify_project/domain/entities/category_entity.dart';
-import 'package:jobify_project/domain/entities/job_entity.dart';
 import 'package:jobify_project/domain/entities/get_all_jobs_response_entity.dart';
 import 'package:jobify_project/domain/use_cases/get_all_jobs_use_case.dart';
 import 'package:jobify_project/domain/use_cases/remove_saved_job_use_case.dart';
@@ -72,28 +72,49 @@ class HomeCubit extends Cubit<HomeState> {
       ];
 
       final request = state.activeFilters ?? const GetAllJobsRequestEntity();
-      final result = await _getAllJobsUseCase.call(request);
 
-      if (result is ApiSuccessResult<GetAllJobsResponseEntity>) {
-        final jobs = result.data.jobs;
-        // Show all jobs in recent jobs, and up to 5 jobs in suggested jobs
-        final suggestedJobs = jobs.take(5).toList();
-        final recentJobs = List<JobEntity>.from(jobs);
+      // Fetch suggested jobs (sorted by highest salary, limit 5)
+      final suggestedFuture = _getAllJobsUseCase.call(
+        const GetAllJobsRequestEntity(
+          sortBy: 'salaryRange.max',
+          sortOrder: 'desc',
+          limit: 5,
+        ),
+      );
 
+      // Fetch recent jobs (according to active filters, if any)
+      final recentFuture = _getAllJobsUseCase.call(request);
+
+      final results = await Future.wait([suggestedFuture, recentFuture]);
+      final suggestedResult = results[0];
+      final recentResult = results[1];
+
+      if (suggestedResult is ApiSuccessResult<GetAllJobsResponseEntity> &&
+          recentResult is ApiSuccessResult<GetAllJobsResponseEntity>) {
         emit(
           state.copyWith(
             isLoading: false,
             categories: mockCategories,
-            suggestedJobs: suggestedJobs,
-            recentJobs: recentJobs,
+            suggestedJobs: suggestedResult.data.jobs,
+            recentJobs: recentResult.data.jobs,
           ),
         );
-      } else if (result is ApiErrorResult<GetAllJobsResponseEntity>) {
+      } else {
+        String? errorMsg;
+        if (suggestedResult is ApiErrorResult<GetAllJobsResponseEntity>) {
+          errorMsg = suggestedResult.errorMessage;
+        } else if (recentResult is ApiErrorResult<GetAllJobsResponseEntity>) {
+          errorMsg = recentResult.errorMessage;
+        }
         emit(
-          state.copyWith(isLoading: false, errorMessage: result.errorMessage),
+          state.copyWith(
+            isLoading: false,
+            errorMessage: errorMsg ?? 'Failed to load jobs data',
+          ),
         );
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      developer.log('HOME_CUBIT_ERROR: $e', error: e, stackTrace: stackTrace);
       emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
     }
   }

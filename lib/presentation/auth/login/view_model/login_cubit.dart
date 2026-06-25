@@ -31,7 +31,11 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(isLoading: true, clearError: true));
     
     final result = await _loginUseCase.call(
-      LoginRequestEntity(email: email, password: password),
+      LoginRequestEntity(
+        email: email,
+        password: password,
+        rememberMe: state.rememberMe,
+      ),
     );
 
     if (result is ApiSuccessResult<LoginEntity>) {

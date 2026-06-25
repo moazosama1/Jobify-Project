@@ -86,7 +86,7 @@ class SearchBody extends StatelessWidget {
             if (state.hasSearched) ...[
               const Expanded(child: SearchResultsSection()),
             ] else ...[
-              const RecentSearchesSection(),
+              const Expanded(child: RecentSearchesSection()),
               const SizedBox(height: AppMeasurements.paddingMedium),
               const BrowseCategorySection(),
               const SizedBox(height: AppMeasurements.paddingExtraLarge),

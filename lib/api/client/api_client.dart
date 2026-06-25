@@ -4,6 +4,7 @@ import 'package:jobify_project/api/models/get_job_applications_response.dart';
 import 'package:jobify_project/api/models/login_response.dart';
 import 'package:jobify_project/api/models/requests/login_request_dto.dart';
 import 'package:jobify_project/api/models/requests/signup_request.dart';
+import 'package:jobify_project/api/models/get_user_profile_response.dart';
 import 'package:jobify_project/api/models/signup_response.dart';
 import 'package:jobify_project/api/models/requests/confirm_email_request.dart';
 import 'package:jobify_project/api/models/confirm_email_response.dart';
@@ -20,6 +21,7 @@ import 'package:jobify_project/api/models/get_saved_jobs_response.dart';
 import 'package:jobify_project/api/models/toggle_saved_job_response.dart';
 import 'package:jobify_project/core/constants/end_points.dart';
 import 'package:retrofit/retrofit.dart';
+import 'dart:io';
 
 part 'api_client.g.dart';
 
@@ -75,6 +77,37 @@ abstract class ApiClient {
 
   @POST(EndPoints.logOut)
   Future<dynamic> logout(@Body() Map<String, dynamic> body);
+
+  @GET(EndPoints.getProfile)
+  Future<GetUserProfileResponse> getProfile();
+
+  @PUT(EndPoints.updateProfile)
+  Future<GetUserProfileResponse> updateBasicInfo(@Body() Map<String, dynamic> request);
+
+  @POST(EndPoints.addExp)
+  Future<GetUserProfileResponse> addExperience(@Body() Map<String, dynamic> request);
+
+  @PUT("${EndPoints.updateEx}/{id}")
+  Future<GetUserProfileResponse> updateExperience(@Path("id") String id, @Body() Map<String, dynamic> request);
+
+  @DELETE("${EndPoints.deleteEx}/{id}")
+  Future<GetUserProfileResponse> deleteExperience(@Path("id") String id);
+
+  @POST(EndPoints.addEd)
+  Future<GetUserProfileResponse> addEducation(@Body() Map<String, dynamic> request);
+
+  @PUT("${EndPoints.updateEd}/{id}")
+  Future<GetUserProfileResponse> updateEducation(@Path("id") String id, @Body() Map<String, dynamic> request);
+
+  @DELETE("${EndPoints.deleteEd}/{id}")
+  Future<GetUserProfileResponse> deleteEducation(@Path("id") String id);
+
+  @PUT(EndPoints.udateSkills)
+  Future<GetUserProfileResponse> updateSkills(@Body() Map<String, dynamic> request);
+
+  @POST(EndPoints.uploadResume)
+  @MultiPart()
+  Future<GetUserProfileResponse> uploadResume(@Part(name: "resume") File file);
 
   @PUT("${EndPoints.updataJob}{id}")
   Future<CreateJobResponse> updateJob(

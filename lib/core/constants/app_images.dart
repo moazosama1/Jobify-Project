@@ -15,4 +15,5 @@ abstract class AppImages {
   static const String iconPartTime = "$_iconsPath/part-time.png";
   static const String iconFreelance = "$_iconsPath/freelance-work.png";
   static const String iconCompany = "$_iconsPath/company.png";
+  static const String iconAI = "$_iconsPath/ai_image.png";
 }
