@@ -80,7 +80,7 @@ class HrHomeScreenViewBody extends StatelessWidget {
 
                 const SizedBox(height: AppMeasurements.paddingLarge),
                 HrRecentJobsSectionWidget(
-                  recentJobs: state.recentJobs,
+                  recentJobs: state.filteredRecentJobs,
                   local: local,
                   onSeeAllPressed: () {},
                 ),

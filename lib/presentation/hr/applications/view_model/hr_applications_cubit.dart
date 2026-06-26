@@ -22,6 +22,9 @@ class HrApplicationsCubit extends Cubit<HrApplicationsState> {
       case LoadHrApplicationsEvent():
         _onLoadJobs();
         break;
+      case SearchHrApplicationsEvent():
+        _onSearch(event);
+        break;
     }
   }
 
@@ -33,6 +36,7 @@ class HrApplicationsCubit extends Cubit<HrApplicationsState> {
         emit(state.copyWith(
           isLoading: false,
           jobs: data,
+          filteredJobs: data,
         ));
         break;
       case ApiErrorResult(:final error):
@@ -42,5 +46,20 @@ class HrApplicationsCubit extends Cubit<HrApplicationsState> {
         ));
         break;
     }
+  }
+
+  void _onSearch(SearchHrApplicationsEvent event) {
+    final query = event.query.toLowerCase();
+    if (query.isEmpty) {
+      emit(state.copyWith(filteredJobs: state.jobs, searchQuery: query));
+      return;
+    }
+
+    final filtered = state.jobs.where((job) {
+      return job.title.toLowerCase().contains(query) ||
+             job.companyName.toLowerCase().contains(query);
+    }).toList();
+
+    emit(state.copyWith(filteredJobs: filtered, searchQuery: query));
   }
 }

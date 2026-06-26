@@ -399,36 +399,72 @@ class _HrHiringPostBodyState extends State<HrHiringPostBody> {
                   controller: _skillsRequiredController,
                   label: local.skillsRequired,
                   hintText: 'e.g. Node.js, REST API',
-                  validator: (value) => (value == null || value.trim().isEmpty)
-                      ? local.thisFieldIsRequired
-                      : null,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return local.thisFieldIsRequired;
+                    }
+                    final items = value.split(',');
+                    for (var item in items) {
+                      if (item.trim().length < 5) {
+                        return "Item '${item.trim()}' must be at least 5 chars";
+                      }
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: AppMeasurements.paddingMedium),
                 CustomTextField(
                   controller: _responsibilitiesController,
                   label: local.responsibilities,
                   hintText: 'e.g. Build REST APIs, Maintain backend',
-                  validator: (value) => (value == null || value.trim().isEmpty)
-                      ? local.thisFieldIsRequired
-                      : null,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return local.thisFieldIsRequired;
+                    }
+                    final items = value.split(',');
+                    for (var item in items) {
+                      if (item.trim().length < 5) {
+                        return "Item '${item.trim()}' must be at least 5 chars";
+                      }
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: AppMeasurements.paddingMedium),
                 CustomTextField(
                   controller: _requirementsController,
                   label: local.requirements,
                   hintText: 'e.g. MongoDB, Node.js, Express',
-                  validator: (value) => (value == null || value.trim().isEmpty)
-                      ? local.thisFieldIsRequired
-                      : null,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return local.thisFieldIsRequired;
+                    }
+                    final items = value.split(',');
+                    for (var item in items) {
+                      if (item.trim().length < 5) {
+                        return "Item '${item.trim()}' must be at least 5 chars";
+                      }
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: AppMeasurements.paddingMedium),
                 CustomTextField(
                   controller: _preferredQualificationsController,
                   label: local.preferredQualifications,
                   hintText: 'e.g. TypeScript, Microservices',
-                  validator: (value) => (value == null || value.trim().isEmpty)
-                      ? local.thisFieldIsRequired
-                      : null,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return local.thisFieldIsRequired;
+                    }
+                    final items = value.split(',');
+                    for (var item in items) {
+                      if (item.trim().length < 5) {
+                        return "Item '${item.trim()}' must be at least 5 chars";
+                      }
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: AppMeasurements.paddingExtraLarge),
 

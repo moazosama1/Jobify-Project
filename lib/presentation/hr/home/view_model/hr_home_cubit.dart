@@ -30,6 +30,9 @@ class HrHomeCubit extends Cubit<HrHomeState> {
       case final DeleteJobHrHomeEvent deleteEvent:
         _onDeleteJob(deleteEvent.jobId);
         break;
+      case final SearchHrHomeEvent searchEvent:
+        emit(state.copyWith(searchQuery: searchEvent.query));
+        break;
     }
   }
 

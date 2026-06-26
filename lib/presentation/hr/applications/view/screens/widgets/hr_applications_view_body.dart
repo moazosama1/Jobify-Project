@@ -9,6 +9,7 @@ import 'package:jobify_project/core/router/route_names.dart';
 import 'package:jobify_project/core/widgets/custom_search_bar.dart';
 import 'package:jobify_project/generated/l10n.dart';
 import 'package:jobify_project/presentation/hr/applications/view_model/hr_applications_cubit.dart';
+import 'package:jobify_project/presentation/hr/applications/view_model/hr_applications_event.dart';
 import 'package:jobify_project/presentation/hr/applications/view_model/hr_applications_state.dart';
 
 class HrApplicationsViewBody extends StatelessWidget {
@@ -22,8 +23,14 @@ class HrApplicationsViewBody extends StatelessWidget {
       children: [
         CustomAppBar(title: local.incomingApplications, showBackButton: false),
         const SizedBox(height: AppMeasurements.paddingMedium),
-        CustomSearchBar(hintText: " Search.."),
-
+        CustomSearchBar(
+          hintText: " Search..",
+          onChanged: (value) {
+            context.read<HrApplicationsCubit>().doIntent(
+              SearchHrApplicationsEvent(value),
+            );
+          },
+        ),
         Expanded(
           child: BlocBuilder<HrApplicationsCubit, HrApplicationsState>(
             builder: (context, state) {
@@ -42,7 +49,16 @@ class HrApplicationsViewBody extends StatelessWidget {
                 );
               }
 
-              if (state.jobs.isEmpty) {
+              if (state.filteredJobs.isEmpty && state.searchQuery.isNotEmpty) {
+                return Center(
+                  child: Text(
+                    "No applications found for '${state.searchQuery}'",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                );
+              }
+
+              if (state.filteredJobs.isEmpty) {
                 return Center(
                   child: Text(
                     "No jobs posted yet",
@@ -53,14 +69,11 @@ class HrApplicationsViewBody extends StatelessWidget {
 
               return ListView.separated(
                 physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppMeasurements.paddingMedium,
-                ),
-                itemCount: state.jobs.length,
+                itemCount: state.filteredJobs.length,
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: AppMeasurements.paddingSmall),
                 itemBuilder: (context, index) {
-                  final job = state.jobs[index];
+                  final job = state.filteredJobs[index];
                   return CustomJobApplicationCard(
                     jobTitle: job.title,
                     companyName: job.companyName,

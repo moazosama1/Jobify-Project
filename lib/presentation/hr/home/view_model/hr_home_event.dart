@@ -11,3 +11,8 @@ class DeleteJobHrHomeEvent extends HrHomeEvent {
   final String jobId;
   DeleteJobHrHomeEvent(this.jobId);
 }
+
+class SearchHrHomeEvent extends HrHomeEvent {
+  final String query;
+  SearchHrHomeEvent(this.query);
+}
