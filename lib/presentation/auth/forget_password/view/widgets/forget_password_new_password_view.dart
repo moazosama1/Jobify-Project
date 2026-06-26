@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jobify_project/core/constants/app_images.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/utils/validations.dart';
 import 'package:jobify_project/core/widgets/custom_elevated_button_loading.dart';
@@ -47,6 +48,13 @@ class _ForgetPasswordNewViewState extends State<ForgetPasswordNewView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Image.asset(
+                AppImages.iconLogoFullName,
+                fit: BoxFit.contain,
+                height: 120,
+                width: 120,
+              ),
+              const SizedBox(height: AppMeasurements.paddingMedium),
               Text(
                 local.pleaseEnterNewPassword,
                 style: theme.textTheme.bodyMedium?.copyWith(

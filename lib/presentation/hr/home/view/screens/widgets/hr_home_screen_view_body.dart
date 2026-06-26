@@ -43,7 +43,7 @@ class HrHomeScreenViewBody extends StatelessWidget {
 
         return RefreshIndicator(
           onRefresh: () async {
-            context.read<HrHomeCubit>().doIntent(HrHomeLoadDataEvent());
+            context.read<HrHomeCubit>().doIntent(LoadHrHomeEvent());
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),

@@ -21,13 +21,13 @@ class HrHomeCubit extends Cubit<HrHomeState> {
 
   void doIntent(HrHomeEvent event) {
     switch (event) {
-      case HrHomeLoadDataEvent():
+      case LoadHrHomeEvent():
         _onLoadData();
         break;
-      case final HrHomeToggleBookmarkEvent toggleEvent:
+      case final ToggleBookmarkHrHomeEvent toggleEvent:
         _onToggleBookmark(toggleEvent.jobId);
         break;
-      case final HrHomeDeleteJobEvent deleteEvent:
+      case final DeleteJobHrHomeEvent deleteEvent:
         _onDeleteJob(deleteEvent.jobId);
         break;
     }

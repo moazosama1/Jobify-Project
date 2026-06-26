@@ -1,8 +1,11 @@
 sealed class HrChatScreenEvent {}
 
-class HrChatScreenLoadEvent extends HrChatScreenEvent {}
+class LoadHrChatScreenEvent extends HrChatScreenEvent {
+  final String receiverId;
+  LoadHrChatScreenEvent(this.receiverId);
+}
 
-class HrChatScreenSendMessageEvent extends HrChatScreenEvent {
+class SendMessageHrChatScreenEvent extends HrChatScreenEvent {
   final String text;
-  HrChatScreenSendMessageEvent(this.text);
+  SendMessageHrChatScreenEvent(this.text);
 }

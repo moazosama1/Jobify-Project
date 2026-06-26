@@ -1,3 +1,3 @@
 sealed class HrMessagesEvent {}
 
-class HrMessagesLoadEvent extends HrMessagesEvent {}
+class LoadHrMessagesEvent extends HrMessagesEvent {}

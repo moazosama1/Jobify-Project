@@ -10,7 +10,7 @@ class HrMessagesCubit extends Cubit<HrMessagesState> {
   HrMessagesCubit() : super(const HrMessagesState());
 
   void doIntent(HrMessagesEvent event) {
-    if (event is HrMessagesLoadEvent) {
+    if (event is LoadHrMessagesEvent) {
       _onLoadChats();
     }
   }

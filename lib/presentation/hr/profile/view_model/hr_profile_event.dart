@@ -2,22 +2,22 @@ sealed class HrProfileEvent {
   const HrProfileEvent();
 }
 
-class HrProfileLoadDataEvent extends HrProfileEvent {
-  const HrProfileLoadDataEvent();
+class LoadHrProfileEvent extends HrProfileEvent {
+  const LoadHrProfileEvent();
 }
 
-class HrProfileUpdateContactInfoEvent extends HrProfileEvent {
+class UpdateContactInfoHrProfileEvent extends HrProfileEvent {
   final String name;
   final String email;
   final String phoneNumber;
 
-  const HrProfileUpdateContactInfoEvent({
+  const UpdateContactInfoHrProfileEvent({
     required this.name,
     required this.email,
     required this.phoneNumber,
   });
 }
 
-class HrProfileLogoutEvent extends HrProfileEvent {
-  const HrProfileLogoutEvent();
+class LogoutHrProfileEvent extends HrProfileEvent {
+  const LogoutHrProfileEvent();
 }

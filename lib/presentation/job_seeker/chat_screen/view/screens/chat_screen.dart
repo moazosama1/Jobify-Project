@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jobify_project/core/widgets/custom_screen_wrapper.dart';
 import 'package:jobify_project/presentation/job_seeker/chat_screen/view/widgets/chat_screen_body.dart';
+import 'package:jobify_project/presentation/job_seeker/chat_screen/view/widgets/chat_header_section.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -8,6 +9,7 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const CustomScreenWrapper(
+      appBar: ChatHeaderSection(),
       body: ChatScreenBody(),
     );
   }

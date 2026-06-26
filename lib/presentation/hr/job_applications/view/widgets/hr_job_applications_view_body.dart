@@ -264,7 +264,7 @@ class HrJobApplicationsViewBody extends StatelessWidget {
                   _openPdf(context, application.resume);
                   if (application.status == 'pending') {
                     context.read<HrJobApplicationsCubit>().doIntent(
-                      UpdateStatusJobApplicationsEvent(
+                      UpdateStatusHrJobApplicationsEvent(
                         id: application.id,
                         status: ApplicationStatus.reviewed,
                       ),
@@ -298,7 +298,7 @@ class HrJobApplicationsViewBody extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: () {
                       context.read<HrJobApplicationsCubit>().doIntent(
-                        UpdateStatusJobApplicationsEvent(
+                        UpdateStatusHrJobApplicationsEvent(
                           id: application.id,
                           status: ApplicationStatus.rejected,
                         ),
@@ -322,7 +322,7 @@ class HrJobApplicationsViewBody extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       context.read<HrJobApplicationsCubit>().doIntent(
-                        UpdateStatusJobApplicationsEvent(
+                        UpdateStatusHrJobApplicationsEvent(
                           id: application.id,
                           status: ApplicationStatus.accepted,
                         ),
@@ -352,7 +352,7 @@ class HrJobApplicationsViewBody extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  context.push(RouteNames.hrChatScreen);
+                  context.push(RouteNames.hrChatScreen, extra: application.user.id);
                 },
                 icon: const Icon(Icons.chat_bubble_outline_rounded, size: 18),
                 label: Text(context.l10n.contact),

@@ -12,11 +12,11 @@ class HrProfileCubit extends Cubit<HrProfileState> {
   HrProfileCubit(this._logoutUseCase) : super(const HrProfileState());
 
   void doIntent(HrProfileEvent event) {
-    if (event is HrProfileLoadDataEvent) {
+    if (event is LoadHrProfileEvent) {
       _onLoadData();
-    } else if (event is HrProfileUpdateContactInfoEvent) {
+    } else if (event is UpdateContactInfoHrProfileEvent) {
       _onUpdateContactInfo(event);
-    } else if (event is HrProfileLogoutEvent) {
+    } else if (event is LogoutHrProfileEvent) {
       _onLogout();
     }
   }
@@ -46,7 +46,7 @@ class HrProfileCubit extends Cubit<HrProfileState> {
     }
   }
 
-  void _onUpdateContactInfo(HrProfileUpdateContactInfoEvent event) {
+  void _onUpdateContactInfo(UpdateContactInfoHrProfileEvent event) {
     emit(
       state.copyWith(
         name: event.name,

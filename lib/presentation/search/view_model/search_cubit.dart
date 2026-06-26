@@ -33,21 +33,21 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   void _init() {
-    doIntent(LoadRecentSearchesEvent());
+    doIntent(LoadRecentSearchesSearchEvent());
   }
 
   void doIntent(SearchEvent event) {
-    if (event is LoadRecentSearchesEvent) {
+    if (event is LoadRecentSearchesSearchEvent) {
       _loadRecentSearches();
-    } else if (event is SearchSubmittedEvent) {
+    } else if (event is SubmitSearchEvent) {
       _submitSearch(event.query);
-    } else if (event is ClearRecentSearchesEvent) {
+    } else if (event is ClearRecentSearchesSearchEvent) {
       _clearRecentSearches();
-    } else if (event is SearchQueryChangedEvent) {
+    } else if (event is QueryChangedSearchEvent) {
       _onQueryChanged(event.query);
-    } else if (event is ClearSearchResultsEvent) {
+    } else if (event is ClearResultsSearchEvent) {
       _clearSearchResults();
-    } else if (event is UpdateSearchFiltersEvent) {
+    } else if (event is UpdateFiltersSearchEvent) {
       _onUpdateFilters(event.filters);
     }
   }
@@ -135,7 +135,7 @@ class SearchCubit extends Cubit<SearchState> {
 
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
-      doIntent(SearchSubmittedEvent(query));
+      doIntent(SubmitSearchEvent(query));
     });
   }
 
@@ -146,9 +146,9 @@ class SearchCubit extends Cubit<SearchState> {
   void _onUpdateFilters(GetAllJobsRequestEntity filters) {
     emit(state.copyWith(activeFilters: filters));
     if (searchController.text.isNotEmpty) {
-      doIntent(SearchSubmittedEvent(searchController.text));
+      doIntent(SubmitSearchEvent(searchController.text));
     } else {
-      doIntent(SearchSubmittedEvent(""));
+      doIntent(SubmitSearchEvent(""));
     }
   }
 

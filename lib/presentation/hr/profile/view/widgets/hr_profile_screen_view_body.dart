@@ -102,7 +102,7 @@ class HrProfileScreenViewBody extends StatelessWidget {
                 textButton: 'Logout', // Hardcoded string as fallback
                 colorButton: theme.colorScheme.error,
                 onPressed: () {
-                  context.read<HrProfileCubit>().doIntent(const HrProfileLogoutEvent());
+                  context.read<HrProfileCubit>().doIntent(const LogoutHrProfileEvent());
                 },
               ),
               const SizedBox(height: AppMeasurements.paddingLarge),

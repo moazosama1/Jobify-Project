@@ -277,7 +277,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                   onPressed: () {
                     if (_formKey.currentState?.validate() == true) {
                       context.read<EditProfileCubit>().doIntent(
-                            EditProfileSubmitEvent(
+                            SubmitEditProfileEvent(
                               name: _nameController.text,
                               contactNumber: _phoneController.text,
                               dateOfBirth: _selectedDateOfBirth ?? '',

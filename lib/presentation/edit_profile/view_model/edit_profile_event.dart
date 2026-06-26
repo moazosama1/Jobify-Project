@@ -2,18 +2,18 @@ sealed class EditProfileEvent {
   const EditProfileEvent();
 }
 
-class EditProfileLoadEvent extends EditProfileEvent {
-  const EditProfileLoadEvent();
+class LoadEditProfileEvent extends EditProfileEvent {
+  const LoadEditProfileEvent();
 }
 
-class EditProfileSubmitEvent extends EditProfileEvent {
+class SubmitEditProfileEvent extends EditProfileEvent {
   final String name;
   final String contactNumber;
   final String dateOfBirth;
   final String aboutYou;
   final String photoUrl;
 
-  const EditProfileSubmitEvent({
+  const SubmitEditProfileEvent({
     required this.name,
     required this.contactNumber,
     required this.dateOfBirth,

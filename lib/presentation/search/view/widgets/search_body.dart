@@ -35,10 +35,10 @@ class SearchBody extends StatelessWidget {
                     prefixIcon: Icon(Icons.search, color: theme.colorScheme.primary),
                     textInputAction: TextInputAction.search,
                     onChanged: (query) {
-                      cubit.doIntent(SearchQueryChangedEvent(query));
+                      cubit.doIntent(QueryChangedSearchEvent(query));
                     },
                     onSubmitted: (query) {
-                      cubit.doIntent(SearchSubmittedEvent(query));
+                      cubit.doIntent(SubmitSearchEvent(query));
                     },
                   ),
                 ),
@@ -70,10 +70,10 @@ class SearchBody extends StatelessWidget {
                         builder: (bottomSheetContext) => SearchFilterBottomSheet(
                           initialFilters: state.activeFilters,
                           onApply: (filters) {
-                            cubit.doIntent(UpdateSearchFiltersEvent(filters));
+                            cubit.doIntent(UpdateFiltersSearchEvent(filters));
                           },
                           onClear: () {
-                            cubit.doIntent(UpdateSearchFiltersEvent(const GetAllJobsRequestEntity()));
+                            cubit.doIntent(UpdateFiltersSearchEvent(const GetAllJobsRequestEntity()));
                           },
                         ),
                       );

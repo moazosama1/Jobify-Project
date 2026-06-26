@@ -21,7 +21,14 @@ import 'package:jobify_project/api/models/get_all_jobs_response.dart';
 import 'package:jobify_project/api/models/get_job_by_id_response.dart';
 import 'package:jobify_project/api/models/get_my_jobs_response.dart';
 import 'package:jobify_project/api/models/get_saved_jobs_response.dart';
+import 'package:jobify_project/api/models/get_saved_jobs_response.dart';
 import 'package:jobify_project/api/models/toggle_saved_job_response.dart';
+import 'package:jobify_project/api/models/message_response.dart';
+import 'package:jobify_project/api/models/conversation_response.dart';
+import 'package:jobify_project/api/models/get_conversations_response.dart';
+import 'package:jobify_project/api/models/get_chat_history_response.dart';
+import 'package:jobify_project/api/models/send_message_response.dart';
+import 'package:jobify_project/api/models/requests/send_message_request.dart';
 import 'package:jobify_project/core/constants/end_points.dart';
 import 'package:retrofit/retrofit.dart';
 import 'dart:io';
@@ -144,4 +151,26 @@ abstract class ApiClient {
 
   @GET(EndPoints.getApplicationStats)
   Future<GetApplicationStatsResponse> getApplicationStats();
+
+  @POST(EndPoints.sendMessage)
+  Future<SendMessageResponse> sendMessage(@Body() SendMessageRequest request);
+
+  @GET(EndPoints.getConversations)
+  Future<GetConversationsResponse> getConversations(
+    @Query('page') int? page,
+    @Query('limit') int? limit,
+  );
+
+  @GET("${EndPoints.getConversation}{userId}")
+  Future<GetChatHistoryResponse> getConversation(
+    @Path("userId") String userId,
+    @Query('page') int? page,
+    @Query('limit') int? limit,
+  );
+
+  @PUT("${EndPoints.markMessageRead}{messageId}/read")
+  Future<dynamic> markMessageRead(@Path("messageId") String messageId);
+
+  @DELETE("${EndPoints.deleteMessage}{messageId}")
+  Future<dynamic> deleteMessage(@Path("messageId") String messageId);
 }

@@ -1,92 +1,116 @@
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:jobify_project/core/api_result/api_result.dart';
+import 'package:jobify_project/core/services/socket_service.dart';
 import 'package:jobify_project/domain/entities/message_entity.dart';
+import 'package:jobify_project/domain/use_cases/get_chat_history_use_case.dart';
+import 'package:jobify_project/domain/use_cases/send_message_use_case.dart';
 import 'hr_chat_screen_event.dart';
 import 'hr_chat_screen_state.dart';
 
 @injectable
 class HrChatScreenCubit extends Cubit<HrChatScreenState> {
-  HrChatScreenCubit() : super(const HrChatScreenState());
+  final GetChatHistoryUseCase _getChatHistoryUseCase;
+  final SendMessageUseCase _sendMessageUseCase;
+  final SocketService _socketService;
+  StreamSubscription? _newMessageSub;
+
+  String _currentReceiverId = "";
+
+  HrChatScreenCubit(
+    this._getChatHistoryUseCase,
+    this._sendMessageUseCase,
+    this._socketService,
+  ) : super(const HrChatScreenState()) {
+    _init();
+  }
+
+  void _init() {
+    _socketService.connect();
+  }
 
   void doIntent(HrChatScreenEvent event) {
-    if (event is HrChatScreenLoadEvent) {
-      _onLoadMessages();
-    } else if (event is HrChatScreenSendMessageEvent) {
-      _onSendMessage(event.text);
+    switch (event) {
+      case LoadHrChatScreenEvent():
+        _currentReceiverId = event.receiverId;
+        _onLoadMessages(event.receiverId);
+        break;
+      case SendMessageHrChatScreenEvent():
+        _onSendMessage(event.text);
+        break;
     }
   }
 
-  void _onLoadMessages() {
+  Future<void> _onLoadMessages(String receiverId) async {
     emit(state.copyWith(isLoading: true, clearError: true));
-    
-    final mockMessages = [
-      const MessageEntity(
-        id: '1',
-        text: 'Halo, bro',
-        time: '08:50 AM',
-        isMe: true,
-      ),
-      const MessageEntity(
-        id: '2',
-        text: "What's going on? Why do we have no money at all?",
-        time: '',
-        isMe: true,
-      ),
-      const MessageEntity(
-        id: '3',
-        text: 'so, why should i buy them...',
-        time: '09:01 AM',
-        isMe: false,
-      ),
-      const MessageEntity(
-        id: '4',
-        text: 'Halo, bro',
-        time: '09:20 AM',
-        isMe: true,
-      ),
-      const MessageEntity(
-        id: '5',
-        text: "What's going on? Why do we have no money at all?",
-        time: '',
-        isMe: true,
-      ),
-      const MessageEntity(
-        id: '6',
-        text: "What's going on? Why do we have no money at all?",
-        time: '',
-        isMe: true,
-      ),
-      const MessageEntity(
-        id: '7',
-        text: 'so, why should i buy them...',
-        time: '09:01 AM',
-        isMe: false,
-      ),
-    ];
 
-    emit(state.copyWith(
-      isLoading: false,
-      messages: mockMessages,
-      participantName: 'Mazen Mohammed',
-      participantAvatar: 'https://i.pravatar.cc/150?img=12',
-      statusText: 'is typing...',
-    ));
+    final result = await _getChatHistoryUseCase(receiverId);
+    switch (result) {
+      case ApiSuccessResult():
+        emit(
+          state.copyWith(
+            isLoading: false,
+            data: result.data,
+            participantName: 'Mazen Mohammed',
+            participantAvatar: 'https://i.pravatar.cc/150?img=12',
+            statusText: 'is typing...',
+          ),
+        );
+        break;
+      case ApiErrorResult():
+        emit(
+          state.copyWith(isLoading: false, errorMessage: result.errorMessage),
+        );
+        break;
+    }
+
+    _newMessageSub?.cancel();
+    _newMessageSub = _socketService.onNewMessage.listen((data) {
+      final senderData = data['senderId'];
+      final senderIdStr = senderData is Map
+          ? (senderData['_id'] ?? senderData['id'])?.toString()
+          : senderData?.toString();
+      if (senderIdStr == receiverId) {
+        doIntent(LoadHrChatScreenEvent(receiverId));
+      }
+    });
   }
 
-  void _onSendMessage(String text) {
+  Future<void> _onSendMessage(String text) async {
     if (text.trim().isEmpty) return;
-
-    final now = DateTime.now();
-    final timeStr = "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')} ${now.hour >= 12 ? 'PM' : 'AM'}";
 
     final newMessage = MessageEntity(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       text: text,
-      time: timeStr,
+      time: 'Just Now',
       isMe: true,
     );
+    final updatedMessages = List<MessageEntity>.from(state.data ?? [])
+      ..add(newMessage);
+    emit(state.copyWith(data: updatedMessages));
 
-    final updatedMessages = List<MessageEntity>.from(state.messages)..add(newMessage);
-    emit(state.copyWith(messages: updatedMessages));
+    final result = await _sendMessageUseCase(_currentReceiverId, text);
+    switch (result) {
+      case ApiErrorResult():
+        emit(state.copyWith(errorMessage: result.errorMessage));
+        break;
+      case ApiSuccessResult():
+        final realMessage = result.data;
+        final idx = updatedMessages.indexWhere((m) => m.id == newMessage.id);
+        if (idx != -1) {
+          updatedMessages[idx] = realMessage;
+        } else {
+          updatedMessages.add(realMessage);
+        }
+        emit(state.copyWith(data: List.from(updatedMessages)));
+        break;
+    }
+  }
+
+  @override
+  Future<void> close() {
+    _newMessageSub?.cancel();
+    return super.close();
   }
 }

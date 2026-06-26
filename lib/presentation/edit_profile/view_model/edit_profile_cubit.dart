@@ -8,9 +8,9 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   EditProfileCubit() : super(const EditProfileState());
 
   void doIntent(EditProfileEvent event) {
-    if (event is EditProfileLoadEvent) {
+    if (event is LoadEditProfileEvent) {
       _onLoadData();
-    } else if (event is EditProfileSubmitEvent) {
+    } else if (event is SubmitEditProfileEvent) {
       _onSubmit(event);
     }
   }
@@ -31,7 +31,7 @@ class EditProfileCubit extends Cubit<EditProfileState> {
     }
   }
 
-  Future<void> _onSubmit(EditProfileSubmitEvent event) async {
+  Future<void> _onSubmit(SubmitEditProfileEvent event) async {
     emit(state.copyWith(isLoading: true, clearError: true));
     try {
       await Future.delayed(const Duration(milliseconds: 1000));

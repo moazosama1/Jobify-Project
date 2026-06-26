@@ -40,4 +40,11 @@ abstract class EndPoints {
   static const String applyJob = "job-applications/apply";
   static const String getMyApplications = "job-applications/my-applications";
   static const String getApplicationStats = "job-applications/stats";
+
+  // Messages
+  static const String sendMessage = "messages/send";
+  static const String getConversations = "messages/conversations";
+  static const String getConversation = "messages/conversation/";
+  static const String markMessageRead = "messages/";
+  static const String deleteMessage = "messages/";
 }

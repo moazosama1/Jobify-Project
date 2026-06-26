@@ -76,7 +76,7 @@ class HrRecentJobsSectionWidget extends StatelessWidget {
                         extra: job,
                       );
                       if (context.mounted) {
-                        context.read<HrHomeCubit>().doIntent(HrHomeLoadDataEvent());
+                        context.read<HrHomeCubit>().doIntent(LoadHrHomeEvent());
                       }
                     },
                     backgroundColor: context.primaryColor,
@@ -103,7 +103,7 @@ class HrRecentJobsSectionWidget extends StatelessWidget {
                                 onPressed: () {
                                   Navigator.pop(dialogContext);
                                   context.read<HrHomeCubit>().doIntent(
-                                        HrHomeDeleteJobEvent(job.id),
+                                        DeleteJobHrHomeEvent(job.id),
                                       );
                                 },
                                 child: Text(
@@ -130,7 +130,7 @@ class HrRecentJobsSectionWidget extends StatelessWidget {
                 onTap: () async {
                   await context.push(RouteNames.hrHiringPost, extra: job);
                   if (context.mounted) {
-                    context.read<HrHomeCubit>().doIntent(HrHomeLoadDataEvent());
+                    context.read<HrHomeCubit>().doIntent(LoadHrHomeEvent());
                   }
                 },
                 job: job,
