@@ -29,6 +29,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         email: event.email,
         password: event.password,
         confirmPassword: event.confirmPassword,
+        profileImage: event.profileImage,
       );
     } else if (event is RegisterGoogleLoginClickedEvent) {
       _onGoogleLoginClicked();
@@ -46,6 +47,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     required String email,
     required String password,
     required String confirmPassword,
+    String? profileImage,
   }) async {
     emit(state.copyWith(registerStatus: BaseState.loading()));
 
@@ -61,6 +63,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         phoneNumber: phoneNumber,
         gender: gender.name,
         role: role.name,
+        profileImage: profileImage,
       ),
     );
 

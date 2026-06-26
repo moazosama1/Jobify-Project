@@ -1,23 +1,19 @@
-sealed class EditProfileEvent {
+import 'package:equatable/equatable.dart';
+import 'package:jobify_project/domain/entities/update_basic_info_request_entity.dart';
+
+sealed class EditProfileEvent extends Equatable {
   const EditProfileEvent();
+
+  @override
+  List<Object?> get props => [];
 }
 
-class LoadEditProfileEvent extends EditProfileEvent {
-  const LoadEditProfileEvent();
-}
+class LoadEditProfileEvent extends EditProfileEvent {}
 
-class SubmitEditProfileEvent extends EditProfileEvent {
-  final String name;
-  final String contactNumber;
-  final String dateOfBirth;
-  final String aboutYou;
-  final String photoUrl;
+class UpdateBasicInfoEvent extends EditProfileEvent {
+  final UpdateBasicInfoRequestEntity request;
+  const UpdateBasicInfoEvent(this.request);
 
-  const SubmitEditProfileEvent({
-    required this.name,
-    required this.contactNumber,
-    required this.dateOfBirth,
-    required this.aboutYou,
-    required this.photoUrl,
-  });
+  @override
+  List<Object?> get props => [request];
 }

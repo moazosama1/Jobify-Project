@@ -1,73 +1,70 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jobify_project/core/api_result/api_result.dart';
+import 'package:jobify_project/core/api_result/base_state.dart';
+import 'package:jobify_project/domain/entities/user_entity.dart';
+import 'package:jobify_project/domain/use_cases/auth/get_user_profile_use_case.dart';
 import 'package:jobify_project/domain/use_cases/logout_use_case.dart';
 import 'hr_profile_event.dart';
 import 'hr_profile_state.dart';
 
 @injectable
 class HrProfileCubit extends Cubit<HrProfileState> {
+  final GetUserProfileUseCase _getUserProfileUseCase;
   final LogoutUseCase _logoutUseCase;
 
-  HrProfileCubit(this._logoutUseCase) : super(const HrProfileState());
+  HrProfileCubit(
+    this._getUserProfileUseCase,
+    this._logoutUseCase,
+  ) : super(const HrProfileState()) {
+    _init();
+  }
+
+  void _init() {
+    _onLoadData();
+  }
 
   void doIntent(HrProfileEvent event) {
-    if (event is LoadHrProfileEvent) {
-      _onLoadData();
-    } else if (event is UpdateContactInfoHrProfileEvent) {
-      _onUpdateContactInfo(event);
-    } else if (event is LogoutHrProfileEvent) {
-      _onLogout();
+    switch (event) {
+      case LoadHrProfileEvent():
+        _onLoadData();
+      case LogoutHrProfileEvent():
+        _onLogout();
     }
   }
 
   Future<void> _onLoadData() async {
-    emit(state.copyWith(isLoading: true, clearError: true));
-    try {
-      // Simulate loading delay
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      emit(
-        state.copyWith(
-          isLoading: false,
-          name: 'Mazen Mohammed',
-          email: 'mazen.mohammed@example.com',
-          phoneNumber: '+1 555-0199',
-          title: 'UX Designer',
-          description:
-              'Creative UX Designer with 6+ years of experience in optimizing user experience through innovative solutions and dynamic interface designs. Successful in enhancing user engagement for well-known brands, providing a compelling user experience to improve brand loyalty and customer retention.',
-          appliedCount: 35,
-          reviewedCount: 19,
-          interviewCount: 10,
-        ),
-      );
-    } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+    emit(state.copyWith(profileState:  BaseState.loading()));
+    final result = await _getUserProfileUseCase();
+    switch (result) {
+      case ApiSuccessResult<UserEntity>():
+        emit(
+          state.copyWith(
+            profileState: BaseState.success(result.data),
+          ),
+        );
+      case ApiErrorResult<UserEntity>():
+        emit(
+          state.copyWith(
+            profileState: BaseState.error(result.errorMessage),
+          ),
+        );
     }
   }
 
-  void _onUpdateContactInfo(UpdateContactInfoHrProfileEvent event) {
-    emit(
-      state.copyWith(
-        name: event.name,
-        email: event.email,
-        phoneNumber: event.phoneNumber,
-      ),
-    );
-  }
-
   Future<void> _onLogout() async {
-    emit(state.copyWith(isLogoutLoading: true, clearError: true));
+    emit(state.copyWith(isLogoutLoading: true));
     final result = await _logoutUseCase();
-    if (result is ApiSuccessResult) {
-      emit(state.copyWith(isLogoutLoading: false, logoutSuccess: true));
-    } else if (result is ApiErrorResult) {
-      emit(
-        state.copyWith(
-          isLogoutLoading: false,
-          errorMessage: (result).errorMessage,
-        ),
-      );
+    switch (result) {
+      case ApiSuccessResult():
+        emit(state.copyWith(isLogoutLoading: false, logoutSuccess: true));
+      case ApiErrorResult():
+        emit(
+          state.copyWith(
+            isLogoutLoading: false,
+            profileState: BaseState.error(result.errorMessage),
+          ),
+        );
     }
   }
 }

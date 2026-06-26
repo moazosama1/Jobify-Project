@@ -40,6 +40,7 @@ class UserData {
   final String? mongoId;
   final List<dynamic>? experience;
   final List<dynamic>? education;
+  final String? profileImage;
   final String? createdAt;
   final String? updatedAt;
   @JsonKey(name: '__v')
@@ -70,6 +71,7 @@ class UserData {
     this.mongoId,
     this.experience,
     this.education,
+    this.profileImage,
     this.createdAt,
     this.updatedAt,
     this.v,

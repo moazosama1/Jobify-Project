@@ -11,6 +11,7 @@ class SignUpRequestEntity extends Equatable {
   final String? phoneNumber;
   final String? gender;
   final String? role;
+  final String? profileImage;
 
   const SignUpRequestEntity({
     this.firstName,
@@ -23,6 +24,7 @@ class SignUpRequestEntity extends Equatable {
     this.phoneNumber,
     this.gender,
     this.role,
+    this.profileImage,
   });
 
   @override
@@ -37,5 +39,6 @@ class SignUpRequestEntity extends Equatable {
         phoneNumber,
         gender,
         role,
+        profileImage,
       ];
 }

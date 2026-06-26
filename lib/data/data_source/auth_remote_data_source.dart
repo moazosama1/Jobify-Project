@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:jobify_project/api/models/login_response.dart';
 import 'package:jobify_project/api/models/signup_response.dart';
 import 'package:jobify_project/api/models/requests/login_request_dto.dart';
@@ -15,7 +17,7 @@ import 'package:jobify_project/api/models/education_request_model.dart';
 import 'package:jobify_project/api/models/update_skills_request_model.dart';
 abstract interface class AuthRemoteDataSource {
   Future<LoginResponse> login(LoginRequestDto request);
-  Future<SignUPResponse> signup(SignUpRequest request);
+  Future<SignUPResponse> signup(SignUpRequest request, File? profileImage);
   Future<ConfirmEmailResponse> confirmEmail(ConfirmEmailRequest request);
   Future<ForgetPasswordResponse> forgetPassword(ForgetPasswordRequest request);
   Future<ResetPasswordResponse> resetPassword(ResetPasswordRequest request);

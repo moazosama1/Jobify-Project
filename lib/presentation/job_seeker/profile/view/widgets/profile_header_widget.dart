@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:jobify_project/core/constants/app_images.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/extensions/theme_context_extension.dart';
+import 'package:jobify_project/core/widgets/custom_cached_network_image.dart';
+import 'package:jobify_project/core/constants/end_points.dart';
 
 class ProfileHeaderWidget extends StatelessWidget {
   final String name;
   final String title;
   final String? bio;
+  final String? profileImage;
 
   const ProfileHeaderWidget({
     super.key,
     required this.name,
     required this.title,
     this.bio,
+    this.profileImage,
   });
 
   @override
@@ -40,18 +44,25 @@ class ProfileHeaderWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(2.0),
               child: ClipOval(
-                child: Image.asset(
-                  AppImages.imageUserPhoto,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    color: context.primaryColor.withValues(alpha: 0.1),
-                    child: Icon(
-                      Icons.person,
-                      size: 50,
-                      color: context.primaryColor,
-                    ),
-                  ),
-                ),
+                child: profileImage != null && profileImage!.isNotEmpty
+                    ? CustomCachedNetworkImage(
+                        imageUrl: "${EndPoints.awsBaseUrl}$profileImage",
+                        fit: BoxFit.cover,
+                        height: 100,
+                        width: 100,
+                      )
+                    : Image.asset(
+                        AppImages.imageUserPhoto,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          color: context.primaryColor.withValues(alpha: 0.1),
+                          child: Icon(
+                            Icons.person,
+                            size: 50,
+                            color: context.primaryColor,
+                          ),
+                        ),
+                      ),
               ),
             ),
           ),

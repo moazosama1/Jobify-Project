@@ -45,7 +45,20 @@ abstract class ApiClient {
   Future<LoginResponse> login(@Body() LoginRequestDto request);
 
   @POST(EndPoints.signup)
-  Future<SignUPResponse> signup(@Body() SignUpRequest request);
+  @MultiPart()
+  Future<SignUPResponse> signup(
+    @Part(name: "firstName") String? firstName,
+    @Part(name: "lastName") String? lastName,
+    @Part(name: "email") String? email,
+    @Part(name: "password") String? password,
+    @Part(name: "cPassword") String? cPassword,
+    @Part(name: "age") int? age,
+    @Part(name: "location") String? location,
+    @Part(name: "phoneNumber") String? phoneNumber,
+    @Part(name: "gender") String? gender,
+    @Part(name: "role") String? role,
+    @Part(name: "profileImage") MultipartFile? profileImage,
+  );
 
   @POST(EndPoints.confirmEmail)
   Future<ConfirmEmailResponse> confirmEmail(
