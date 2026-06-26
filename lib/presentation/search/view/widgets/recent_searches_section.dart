@@ -35,7 +35,7 @@ class RecentSearchesSection extends StatelessWidget {
                 return InkWell(
                   onTap: () {
                     context.read<SearchCubit>().doIntent(
-                      ClearRecentSearchesEvent(),
+                      ClearRecentSearchesSearchEvent(),
                     );
                   },
                   child: Icon(
@@ -92,7 +92,7 @@ class RecentSearchesSection extends StatelessWidget {
                 onTap: () {
                   final cubit = context.read<SearchCubit>();
                   cubit.searchController.text = query;
-                  cubit.doIntent(SearchSubmittedEvent(query));
+                  cubit.doIntent(SubmitSearchEvent(query));
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),

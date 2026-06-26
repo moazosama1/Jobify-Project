@@ -2,23 +2,23 @@ import 'package:jobify_project/domain/entities/requests/get_all_jobs_request_ent
 
 sealed class SearchEvent {}
 
-class LoadRecentSearchesEvent extends SearchEvent {}
+class LoadRecentSearchesSearchEvent extends SearchEvent {}
 
-class SearchQueryChangedEvent extends SearchEvent {
+class QueryChangedSearchEvent extends SearchEvent {
   final String query;
-  SearchQueryChangedEvent(this.query);
+  QueryChangedSearchEvent(this.query);
 }
 
-class SearchSubmittedEvent extends SearchEvent {
+class SubmitSearchEvent extends SearchEvent {
   final String query;
-  SearchSubmittedEvent(this.query);
+  SubmitSearchEvent(this.query);
 }
 
-class ClearRecentSearchesEvent extends SearchEvent {}
+class ClearRecentSearchesSearchEvent extends SearchEvent {}
 
-class ClearSearchResultsEvent extends SearchEvent {}
+class ClearResultsSearchEvent extends SearchEvent {}
 
-class UpdateSearchFiltersEvent extends SearchEvent {
+class UpdateFiltersSearchEvent extends SearchEvent {
   final GetAllJobsRequestEntity filters;
-  UpdateSearchFiltersEvent(this.filters);
+  UpdateFiltersSearchEvent(this.filters);
 }

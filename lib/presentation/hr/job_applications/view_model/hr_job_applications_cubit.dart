@@ -20,10 +20,10 @@ class HrJobApplicationsCubit extends Cubit<HrJobApplicationsState> {
 
   void doIntent(HrJobApplicationsEvent event) {
     switch (event) {
-      case final LoadJobApplicationsEvent loadEvent:
+      case final LoadHrJobApplicationsEvent loadEvent:
         _onLoadApplications(loadEvent.jobId);
         break;
-      case final UpdateStatusJobApplicationsEvent updateEvent:
+      case final UpdateStatusHrJobApplicationsEvent updateEvent:
         _onUpdateStatus(updateEvent.id, updateEvent.status);
         break;
     }

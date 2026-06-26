@@ -2,10 +2,10 @@ sealed class HrProfileEvent {
   const HrProfileEvent();
 }
 
-class HrProfileLoadDataEvent extends HrProfileEvent {
-  const HrProfileLoadDataEvent();
+class LoadHrProfileEvent extends HrProfileEvent {
+  const LoadHrProfileEvent();
 }
 
-class HrProfileLogoutEvent extends HrProfileEvent {
-  const HrProfileLogoutEvent();
+class LogoutHrProfileEvent extends HrProfileEvent {
+  const LogoutHrProfileEvent();
 }

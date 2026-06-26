@@ -4,13 +4,13 @@ sealed class HrJobApplicationsEvent {
   const HrJobApplicationsEvent();
 }
 
-class LoadJobApplicationsEvent extends HrJobApplicationsEvent {
+class LoadHrJobApplicationsEvent extends HrJobApplicationsEvent {
   final String jobId;
-  const LoadJobApplicationsEvent(this.jobId);
+  const LoadHrJobApplicationsEvent(this.jobId);
 }
 
-class UpdateStatusJobApplicationsEvent extends HrJobApplicationsEvent {
+class UpdateStatusHrJobApplicationsEvent extends HrJobApplicationsEvent {
   final String id;
   final ApplicationStatus status;
-  const UpdateStatusJobApplicationsEvent({required this.id, required this.status});
+  const UpdateStatusHrJobApplicationsEvent({required this.id, required this.status});
 }

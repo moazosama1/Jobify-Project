@@ -24,7 +24,9 @@ class HrProfileScreen extends StatelessWidget {
             onPressed: () async {
               await context.push(RouteNames.editProfile);
               if (context.mounted) {
-                context.read<HrProfileCubit>().doIntent(const HrProfileLoadDataEvent());
+                context.read<HrProfileCubit>().doIntent(
+                  const LoadHrProfileEvent(),
+                );
               }
             },
             icon: Icon(Icons.edit_outlined, color: context.onSurfaceColor),

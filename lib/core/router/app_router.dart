@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jobify_project/core/di/di.dart';
 import 'package:jobify_project/core/router/route_names.dart';
 import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile_event.dart';
+import 'package:jobify_project/presentation/hr/chat_screen/view_model/hr_chat_screen_event.dart';
 import 'package:jobify_project/presentation/job_seeker/edit_profile/view/screens/edit_profile_screen.dart';
 import 'package:jobify_project/presentation/job_seeker/edit_profile/view_model/edit_job_seeker_profile_cubit.dart';
 import 'package:jobify_project/presentation/job_seeker/messages/view/messages_screen.dart';
@@ -53,7 +54,7 @@ import 'package:jobify_project/presentation/hr/profile/view_model/hr_profile_cub
 import 'package:jobify_project/presentation/hr/profile/view_model/hr_profile_event.dart';
 import 'package:jobify_project/presentation/hr/chat_screen/view/screens/hr_chat_screen.dart';
 import 'package:jobify_project/presentation/hr/chat_screen/view_model/hr_chat_screen_cubit.dart';
-import 'package:jobify_project/presentation/hr/chat_screen/view_model/hr_chat_screen_event.dart';
+// import 'package:jobify_project/presentation/hr/chat_screen/view_model/hr_chat_screen_event.dart';
 import 'package:jobify_project/presentation/hr/hiring_post/view/screens/hr_hiring_post_screen.dart';
 import 'package:jobify_project/presentation/hr/hiring_post/view_model/hr_hiring_post_cubit.dart';
 import 'package:jobify_project/presentation/hr/job_applications/view/screens/hr_job_applications_screen.dart';
@@ -118,7 +119,7 @@ abstract class AppRouter {
                 path: RouteNames.messages,
                 builder: (context, state) => BlocProvider(
                   create: (_) =>
-                      getIt<MessagesCubit>()..doIntent(MessagesLoadEvent()),
+                      getIt<MessagesCubit>()..doIntent(LoadMessagesEvent()),
                   child: const MessagesScreen(),
                 ),
               ),
@@ -149,7 +150,7 @@ abstract class AppRouter {
                 path: RouteNames.hrHome,
                 builder: (context, state) => BlocProvider(
                   create: (_) =>
-                      getIt<HrHomeCubit>()..doIntent(HrHomeLoadDataEvent()),
+                      getIt<HrHomeCubit>()..doIntent(LoadHrHomeEvent()),
                   child: const HrHomeScreen(),
                 ),
               ),
@@ -169,7 +170,7 @@ abstract class AppRouter {
                 path: RouteNames.hrMessages,
                 builder: (context, state) => BlocProvider(
                   create: (_) =>
-                      getIt<HrMessagesCubit>()..doIntent(HrMessagesLoadEvent()),
+                      getIt<HrMessagesCubit>()..doIntent(LoadHrMessagesEvent()),
                   child: const HrMessagesScreen(),
                 ),
               ),
@@ -182,7 +183,7 @@ abstract class AppRouter {
                 builder: (context, state) => BlocProvider(
                   create: (_) =>
                       getIt<HrProfileCubit>()
-                        ..doIntent(const HrProfileLoadDataEvent()),
+                        ..doIntent(const LoadHrProfileEvent()),
                   child: const HrProfileScreen(),
                 ),
               ),
@@ -241,19 +242,27 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: RouteNames.chatScreen,
-        builder: (context, state) => BlocProvider(
-          create: (_) =>
-              getIt<ChatScreenCubit>()..doIntent(ChatScreenLoadEvent()),
-          child: const ChatScreen(),
-        ),
+        builder: (context, state) {
+          final receiverId = state.extra as String? ?? '';
+          return BlocProvider(
+            create: (_) =>
+                getIt<ChatScreenCubit>()
+                  ..doIntent(LoadChatScreenEvent(receiverId)),
+            child: const ChatScreen(),
+          );
+        },
       ),
       GoRoute(
         path: RouteNames.hrChatScreen,
-        builder: (context, state) => BlocProvider(
-          create: (_) =>
-              getIt<HrChatScreenCubit>()..doIntent(HrChatScreenLoadEvent()),
-          child: const HrChatScreen(),
-        ),
+        builder: (context, state) {
+          final receiverId = state.extra as String? ?? '';
+          return BlocProvider(
+            create: (_) =>
+                getIt<HrChatScreenCubit>()
+                  ..doIntent(LoadHrChatScreenEvent(receiverId)),
+            child: const HrChatScreen(),
+          );
+        },
       ),
       GoRoute(
         path: RouteNames.hrHiringPost,
@@ -274,7 +283,7 @@ abstract class AppRouter {
           return BlocProvider(
             create: (_) =>
                 getIt<HrJobApplicationsCubit>()
-                  ..doIntent(LoadJobApplicationsEvent(jobId)),
+                  ..doIntent(LoadHrJobApplicationsEvent(jobId)),
             child: HrJobApplicationsScreen(jobTitle: jobTitle),
           );
         },
@@ -313,7 +322,7 @@ abstract class AppRouter {
             create: (_) {
               final cubit = getIt<SearchCubit>();
               if (initialFilters != null) {
-                cubit.doIntent(UpdateSearchFiltersEvent(initialFilters));
+                cubit.doIntent(UpdateFiltersSearchEvent(initialFilters));
               }
               return cubit;
             },

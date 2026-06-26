@@ -58,7 +58,7 @@ class BrowseCategorySection extends StatelessWidget {
           categoryFilter = category.nameKey;
 
         context.read<SearchCubit>().doIntent(
-          UpdateSearchFiltersEvent(
+          UpdateFiltersSearchEvent(
             GetAllJobsRequestEntity(
               category: categoryFilter.isNotEmpty ? categoryFilter : null,
               employmentType: employmentTypeFilter.isNotEmpty

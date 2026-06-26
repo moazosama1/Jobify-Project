@@ -81,7 +81,7 @@ class HrProfileScreenViewBody extends StatelessWidget {
           color: context.primaryColor,
           backgroundColor: context.surfaceColor,
           onRefresh: () async {
-            context.read<HrProfileCubit>().doIntent(const HrProfileLoadDataEvent());
+            context.read<HrProfileCubit>().doIntent(const LoadHrProfileEvent());
             await Future.delayed(const Duration(milliseconds: 800));
           },
           child: SingleChildScrollView(
@@ -128,7 +128,7 @@ class HrProfileScreenViewBody extends StatelessWidget {
                       colorButton: context.errorColor,
                       onPressed: () {
                         context.read<HrProfileCubit>().doIntent(
-                              const HrProfileLogoutEvent(),
+                              const LogoutHrProfileEvent(),
                             );
                       },
                     ),

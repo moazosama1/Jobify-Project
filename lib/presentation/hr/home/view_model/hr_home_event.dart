@@ -1,13 +1,18 @@
 sealed class HrHomeEvent {}
 
-class HrHomeLoadDataEvent extends HrHomeEvent {}
+class LoadHrHomeEvent extends HrHomeEvent {}
 
-class HrHomeToggleBookmarkEvent extends HrHomeEvent {
+class ToggleBookmarkHrHomeEvent extends HrHomeEvent {
   final String jobId;
-  HrHomeToggleBookmarkEvent(this.jobId);
+  ToggleBookmarkHrHomeEvent(this.jobId);
 }
 
-class HrHomeDeleteJobEvent extends HrHomeEvent {
+class DeleteJobHrHomeEvent extends HrHomeEvent {
   final String jobId;
-  HrHomeDeleteJobEvent(this.jobId);
+  DeleteJobHrHomeEvent(this.jobId);
+}
+
+class SearchHrHomeEvent extends HrHomeEvent {
+  final String query;
+  SearchHrHomeEvent(this.query);
 }

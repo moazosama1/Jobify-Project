@@ -1,28 +1,30 @@
 import 'package:jobify_project/core/api_result/base_state.dart';
 import 'package:jobify_project/domain/entities/messages_entity.dart';
 
-class MessagesState extends BaseState<dynamic> {
-  final List<MessagesEntity> chats;
-
+class MessagesState extends BaseState<List<MessagesEntity>> {
   const MessagesState({
     super.isLoading = false,
     super.errorMessage,
-    this.chats = const [],
+    super.data = const [],
   });
 
   MessagesState copyWith({
     bool? isLoading,
     String? errorMessage,
-    List<MessagesEntity>? chats,
+    List<MessagesEntity>? data,
     bool clearError = false,
   }) {
     return MessagesState(
       isLoading: isLoading ?? this.isLoading,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
-      chats: chats ?? this.chats,
+      data: data ?? this.data,
     );
   }
 
   @override
-  List<Object?> get props => [isLoading, errorMessage, chats];
+  List<Object?> get props => [
+        isLoading,
+        errorMessage,
+        data,
+      ];
 }

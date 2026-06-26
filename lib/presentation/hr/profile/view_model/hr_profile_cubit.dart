@@ -26,9 +26,9 @@ class HrProfileCubit extends Cubit<HrProfileState> {
 
   void doIntent(HrProfileEvent event) {
     switch (event) {
-      case HrProfileLoadDataEvent():
+      case LoadHrProfileEvent():
         _onLoadData();
-      case HrProfileLogoutEvent():
+      case LogoutHrProfileEvent():
         _onLogout();
     }
   }

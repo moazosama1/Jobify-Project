@@ -1,3 +1,3 @@
 sealed class MessagesEvent {}
 
-class MessagesLoadEvent extends MessagesEvent {}
+class LoadMessagesEvent extends MessagesEvent {}

@@ -19,84 +19,7 @@ class HrMessagesScreenViewBody extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     final local = AppLocalizations.of(context);
 
-    return Column(
-      children: [
-        // Custom Header Bar
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Back Button
-            InkWell(
-              onTap: () {
-                final navigator = Navigator.of(context);
-                if (navigator.canPop()) {
-                  navigator.pop();
-                }
-              },
-              borderRadius: BorderRadius.circular(24),
-              child: Container(
-                padding: const EdgeInsets.all(AppMeasurements.paddingSmall + 2),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.15),
-                    width: 1.5,
-                  ),
-                ),
-                child: Icon(
-                  Icons.arrow_back_rounded,
-                  size: 20,
-                  color: theme.colorScheme.onSurface,
-                ),
-              ),
-            ),
-            // Title
-            Text(
-              local.chats,
-              style: theme.textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
-              ),
-            ),
-            // Right Actions
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: isDark ? AppColors.black[50] : AppColors.lightGray,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.search_rounded,
-                        size: 20,
-                        color: theme.colorScheme.onSurface,
-                      ),
-                      onPressed: () {},
-                      padding: EdgeInsets.zero,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: AppMeasurements.paddingSmall),
-                IconButton(
-                  icon: Icon(
-                    Icons.more_vert_rounded,
-                    color: theme.colorScheme.onSurface,
-                  ),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-          ],
-        ),
-        const SizedBox(height: AppMeasurements.paddingLarge),
-        // Chat List
-        Expanded(
-          child: BlocBuilder<HrMessagesCubit, HrMessagesState>(
+    return BlocBuilder<HrMessagesCubit, HrMessagesState>(
             builder: (context, state) {
               if (state.isLoading) {
                 return const Center(child: CustomLoadingIndicator());
@@ -155,15 +78,12 @@ class HrMessagesScreenViewBody extends StatelessWidget {
                     unreadCount: chat.unreadCount,
                     isRead: chat.isRead,
                     onTap: () {
-                      context.push(RouteNames.hrChatScreen);
+                      context.push(RouteNames.hrChatScreen, extra: chat.id);
                     },
                   );
                 },
               );
             },
-          ),
-        ),
-      ],
-    );
+          );
   }
 }

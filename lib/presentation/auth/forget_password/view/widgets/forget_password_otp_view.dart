@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jobify_project/core/constants/app_images.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/widgets/custom_elevated_button_loading.dart';
 import 'package:jobify_project/presentation/auth/forget_password/view_model/forget_password_cubit.dart';
@@ -65,6 +66,13 @@ class _ForgetPasswordOtpViewState extends State<ForgetPasswordOtpView> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Image.asset(
+              AppImages.iconLogoFullName,
+              fit: BoxFit.contain,
+              height: 120,
+              width: 120,
+            ),
+            const SizedBox(height: AppMeasurements.paddingMedium),
             RichText(
               text: TextSpan(
                 style: theme.textTheme.bodyMedium?.copyWith(

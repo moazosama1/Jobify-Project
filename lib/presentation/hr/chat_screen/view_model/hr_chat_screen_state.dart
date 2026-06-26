@@ -1,8 +1,7 @@
 import 'package:jobify_project/core/api_result/base_state.dart';
 import 'package:jobify_project/domain/entities/message_entity.dart';
 
-class HrChatScreenState extends BaseState<dynamic> {
-  final List<MessageEntity> messages;
+class HrChatScreenState extends BaseState<List<MessageEntity>> {
   final String participantName;
   final String participantAvatar;
   final String statusText;
@@ -10,7 +9,7 @@ class HrChatScreenState extends BaseState<dynamic> {
   const HrChatScreenState({
     super.isLoading = false,
     super.errorMessage,
-    this.messages = const [],
+    super.data = const [],
     this.participantName = '',
     this.participantAvatar = '',
     this.statusText = '',
@@ -19,7 +18,7 @@ class HrChatScreenState extends BaseState<dynamic> {
   HrChatScreenState copyWith({
     bool? isLoading,
     String? errorMessage,
-    List<MessageEntity>? messages,
+    List<MessageEntity>? data,
     String? participantName,
     String? participantAvatar,
     String? statusText,
@@ -28,7 +27,7 @@ class HrChatScreenState extends BaseState<dynamic> {
     return HrChatScreenState(
       isLoading: isLoading ?? this.isLoading,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
-      messages: messages ?? this.messages,
+      data: data ?? this.data,
       participantName: participantName ?? this.participantName,
       participantAvatar: participantAvatar ?? this.participantAvatar,
       statusText: statusText ?? this.statusText,
@@ -39,7 +38,7 @@ class HrChatScreenState extends BaseState<dynamic> {
   List<Object?> get props => [
         isLoading,
         errorMessage,
-        messages,
+        data,
         participantName,
         participantAvatar,
         statusText,

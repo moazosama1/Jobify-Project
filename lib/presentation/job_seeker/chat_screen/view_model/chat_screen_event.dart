@@ -1,8 +1,11 @@
 sealed class ChatScreenEvent {}
 
-class ChatScreenLoadEvent extends ChatScreenEvent {}
+class LoadChatScreenEvent extends ChatScreenEvent {
+  final String receiverId;
+  LoadChatScreenEvent(this.receiverId);
+}
 
-class ChatScreenSendMessageEvent extends ChatScreenEvent {
+class SendMessageChatScreenEvent extends ChatScreenEvent {
   final String text;
-  ChatScreenSendMessageEvent(this.text);
+  SendMessageChatScreenEvent(this.text);
 }

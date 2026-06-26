@@ -1,8 +1,8 @@
 abstract class EndPoints {
   // for moo
-  // static const String baseUrl = "http://192.168.1.7:3000/";
+  static const String baseUrl = "http://192.168.1.7:3000/";
   // for anas
-  static const String baseUrl = "http://192.168.1.14:3000/";
+  // static const String baseUrl = "http://192.168.1.14:3000/";
 
   // AWS S3 Base URL
   static const String awsBaseUrl =
@@ -43,4 +43,11 @@ abstract class EndPoints {
   static const String getProfileById = "job-applications/stats";
 
 
+
+  // Messages
+  static const String sendMessage = "messages/send";
+  static const String getConversations = "messages/conversations";
+  static const String getConversation = "messages/conversation/";
+  static const String markMessageRead = "messages/";
+  static const String deleteMessage = "messages/";
 }

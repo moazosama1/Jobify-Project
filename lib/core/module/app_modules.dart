@@ -15,7 +15,6 @@ abstract class AppModules {
   Future<Dio> provideDio(SecureStorageManager storageManager) async {
     final dio = Dio(provideBaseOptions(EndPoints.baseUrl));
     dio.interceptors.addAll([
-      providePrettyDioLogger,
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           final String? token = await storageManager.getString(
@@ -27,6 +26,7 @@ abstract class AppModules {
           return handler.next(options);
         },
       ),
+      providePrettyDioLogger,
     ]);
     return dio;
   }

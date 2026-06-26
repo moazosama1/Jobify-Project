@@ -50,7 +50,7 @@ class HrHomeScreenViewBody extends StatelessWidget {
 
         return RefreshIndicator(
           onRefresh: () async {
-            context.read<HrHomeCubit>().doIntent(HrHomeLoadDataEvent());
+            // context.read<HrHomeCubit>().doIntent(HrHomeLoadDataEvent());
             context.read<CoreCubit>().fetchUserInfo();
           },
           child: SingleChildScrollView(
@@ -80,7 +80,7 @@ class HrHomeScreenViewBody extends StatelessWidget {
 
                 const SizedBox(height: AppMeasurements.paddingLarge),
                 HrRecentJobsSectionWidget(
-                  recentJobs: state.recentJobs,
+                  recentJobs: state.filteredRecentJobs,
                   local: local,
                   onSeeAllPressed: () {},
                 ),
