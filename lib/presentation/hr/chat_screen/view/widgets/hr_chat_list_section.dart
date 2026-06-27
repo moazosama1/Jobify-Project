@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/domain/entities/message_entity.dart';
-import 'package:jobify_project/core/extensions/theme_context_extension.dart';
 import 'package:jobify_project/core/extensions/l10n_extension.dart';
 import 'package:jobify_project/core/extensions/string_extension.dart';
 import '../../view_model/hr_chat_screen_cubit.dart';

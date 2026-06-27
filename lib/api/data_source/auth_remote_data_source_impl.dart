@@ -104,6 +104,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
+  Future<GetUserProfileResponse> getProfileById(String id) {
+    return _apiClient.getProfileById(id);
+  }
+
+  @override
   Future<GetUserProfileResponse> updateBasicInfo(
     UpdateBasicInfoRequestModel request,
   ) {

@@ -4,12 +4,17 @@ import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/extensions/theme_context_extension.dart';
 import 'package:jobify_project/core/extensions/l10n_extension.dart';
 import 'package:jobify_project/core/router/route_names.dart';
+import 'package:jobify_project/core/cubit/core_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeAiChatBannerWidget extends StatelessWidget {
   const HomeAiChatBannerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final coreState = context.read<CoreCubit>().state;
+    final isHr = coreState is CoreStateChanged && coreState.user != null && coreState.user!.role.toLowerCase() == 'hr';
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppMeasurements.paddingMedium,
@@ -74,7 +79,7 @@ class HomeAiChatBannerWidget extends StatelessWidget {
                 const SizedBox(height: AppMeasurements.paddingMedium),
                 // Banner Title
                 Text(
-                  context.l10n.homeAiChatBannerTitle,
+                  isHr ? "Try Jobify HR Copilot" : context.l10n.homeAiChatBannerTitle,
                   style: context.titleLarge?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -86,7 +91,9 @@ class HomeAiChatBannerWidget extends StatelessWidget {
                 SizedBox(
                   width: MediaQuery.sizeOf(context).width * 0.6,
                   child: Text(
-                    context.l10n.homeAiChatBannerSubtitle,
+                    isHr
+                        ? "Draft job descriptions, design templates, and screen candidates instantly."
+                        : context.l10n.homeAiChatBannerSubtitle,
                     style: context.bodyMedium?.copyWith(
                       color: Colors.white.withValues(alpha: 0.8),
                       fontSize: 12,
@@ -104,7 +111,7 @@ class HomeAiChatBannerWidget extends StatelessWidget {
                     color: context.primaryColor,
                   ),
                   label: Text(
-                    context.l10n.homeAiChatBannerCTA,
+                    isHr ? "Start Hiring Help" : context.l10n.homeAiChatBannerCTA,
                     style: context.labelMedium?.copyWith(
                       color: context.primaryColor,
                       fontWeight: FontWeight.bold,

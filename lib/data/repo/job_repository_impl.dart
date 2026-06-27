@@ -67,6 +67,14 @@ class JobRepositoryImpl implements JobRepository {
   }
 
   @override
+  Future<ApiResult<List<JobApplicationEntity>>> getAllApplications() async {
+    return await safeApiCall(
+      () => _remoteDataSource.getAllApplications(),
+      (response) => response.applications?.map((app) => app.toEntity()).toList() ?? const [],
+    );
+  }
+
+  @override
   Future<ApiResult<List<JobApplicationEntity>>> updateApplicationStatus(String id, ApplicationStatus status) async {
     return await safeApiCall(
       () => _remoteDataSource.updateApplicationStatus(id, {

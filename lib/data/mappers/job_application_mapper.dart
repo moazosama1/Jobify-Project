@@ -6,9 +6,10 @@ extension ApplicationUserDtoMapper on ApplicationUserDto {
   ApplicationUserEntity toEntity() {
     return ApplicationUserEntity(
       id: id ?? '',
-      firstName: firstName ?? '',
+      firstName: (firstName == null || firstName!.isEmpty) ? 'Applicant' : firstName!,
       lastName: lastName ?? '',
-      email: email ?? '',
+      email: (email == null || email!.isEmpty) ? 'No email' : email!,
+      profileImage: profileImage,
     );
   }
 }

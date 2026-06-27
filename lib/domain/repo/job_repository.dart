@@ -18,6 +18,7 @@ abstract interface class JobRepository {
   Future<ApiResult<CreateJobResponseEntity>> updateJob(String id, Map<String, dynamic> request);
   Future<ApiResult<CreateJobResponseEntity>> deleteJob(String id);
   Future<ApiResult<List<JobApplicationEntity>>> getJobApplications(String jobId);
+  Future<ApiResult<List<JobApplicationEntity>>> getAllApplications();
   Future<ApiResult<List<JobApplicationEntity>>> updateApplicationStatus(String id, ApplicationStatus status);
   Future<ApiResult<GetAllJobsResponseEntity>> getAllJobs(GetAllJobsRequestEntity request);
   Future<ApiResult<GetJobByIdResponseEntity>> getJobById(String id);

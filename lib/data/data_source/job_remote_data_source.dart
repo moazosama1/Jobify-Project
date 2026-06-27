@@ -19,6 +19,7 @@ abstract interface class JobRemoteDataSource {
   Future<CreateJobResponse> updateJob(String id, Map<String, dynamic> request);
   Future<CreateJobResponse> deleteJob(String id);
   Future<GetJobApplicationsResponse> getJobApplications(String jobId);
+  Future<GetJobApplicationsResponse> getAllApplications();
   Future<GetJobApplicationsResponse> updateApplicationStatus(String id, Map<String, dynamic> request);
   Future<GetAllJobsResponse> getAllJobs(GetAllJobsRequestEntity request);
   Future<GetJobByIdResponse> getJobById(String id);

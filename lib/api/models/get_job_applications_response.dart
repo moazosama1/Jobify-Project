@@ -22,7 +22,9 @@ class GetJobApplicationsResponse {
 class JobApplicationDto {
   @JsonKey(name: '_id')
   final String? id;
+  @JsonKey(fromJson: _parseJobId)
   final String? jobId;
+  @JsonKey(fromJson: _parseUserId)
   final ApplicationUserDto? userId;
   final String? status;
   final String? resume;
@@ -39,6 +41,26 @@ class JobApplicationDto {
     this.createdAt,
   });
 
+  static String? _parseJobId(dynamic json) {
+    if (json is String) {
+      return json;
+    }
+    if (json is Map) {
+      return json['_id'] as String?;
+    }
+    return null;
+  }
+
+  static ApplicationUserDto? _parseUserId(dynamic json) {
+    if (json is String) {
+      return ApplicationUserDto(id: json);
+    }
+    if (json is Map<String, dynamic>) {
+      return ApplicationUserDto.fromJson(json);
+    }
+    return null;
+  }
+
   factory JobApplicationDto.fromJson(Map<String, dynamic> json) =>
       _$JobApplicationDtoFromJson(json);
 
@@ -52,12 +74,14 @@ class ApplicationUserDto {
   final String? firstName;
   final String? lastName;
   final String? email;
+  final String? profileImage;
 
   ApplicationUserDto({
     this.id,
     this.firstName,
     this.lastName,
     this.email,
+    this.profileImage,
   });
 
   factory ApplicationUserDto.fromJson(Map<String, dynamic> json) =>

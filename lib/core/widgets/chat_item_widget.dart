@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/constants/app_colors.dart';
+import 'package:jobify_project/core/constants/end_points.dart';
 import 'package:jobify_project/core/widgets/custom_cached_network_image.dart';
 
 class ChatItemWidget extends StatelessWidget {
@@ -52,7 +53,11 @@ class ChatItemWidget extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: CustomCachedNetworkImage(
-                imageUrl: avatarUrl,
+                imageUrl: avatarUrl.isNotEmpty
+                    ? (avatarUrl.startsWith('http')
+                        ? avatarUrl
+                        : (EndPoints.awsBaseUrl + avatarUrl))
+                    : 'https://i.pravatar.cc/150?img=12',
                 borderRadius: BorderRadius.circular(28),
                 fit: BoxFit.cover,
               ),
@@ -70,8 +75,6 @@ class ChatItemWidget extends StatelessWidget {
                       color: theme.colorScheme.onSurface,
                       fontWeight: FontWeight.bold,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: AppMeasurements.paddingSmall - 2),
                   Row(

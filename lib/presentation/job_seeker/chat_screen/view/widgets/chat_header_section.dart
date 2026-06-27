@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jobify_project/core/extensions/l10n_extension.dart';
 import 'package:jobify_project/core/widgets/custom_chat_app_bar.dart';
+import 'package:go_router/go_router.dart';
+import 'package:jobify_project/core/router/route_names.dart';
 import '../../view_model/chat_screen_cubit.dart';
 import '../../view_model/chat_screen_state.dart';
 
@@ -14,7 +16,8 @@ class ChatHeaderSection extends StatelessWidget implements PreferredSizeWidget {
       buildWhen: (previous, current) =>
           previous.participantName != current.participantName ||
           previous.participantAvatar != current.participantAvatar ||
-          previous.statusText != current.statusText,
+          previous.statusText != current.statusText ||
+          previous.receiverId != current.receiverId,
       builder: (context, state) {
         String displayParticipantName = state.participantName;
         if (state.participantName == 'Mazen Mohammed') {
@@ -27,6 +30,11 @@ class ChatHeaderSection extends StatelessWidget implements PreferredSizeWidget {
           statusText: state.statusText == 'is typing...'
               ? context.l10n.isTyping
               : state.statusText,
+          onProfilePressed: () {
+            if (state.receiverId.isNotEmpty) {
+              context.push(RouteNames.userProfile, extra: state.receiverId);
+            }
+          },
         );
       },
     );

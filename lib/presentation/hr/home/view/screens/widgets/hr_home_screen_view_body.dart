@@ -68,6 +68,9 @@ class HrHomeScreenViewBody extends StatelessWidget {
                   onSavedPressed: () {
                     context.push(RouteNames.aiChat);
                   },
+                  onProfilePressed: () {
+                    context.push(RouteNames.hrProfile);
+                  },
                 ),
                 const SizedBox(height: AppMeasurements.paddingLarge),
 

@@ -127,11 +127,11 @@ class HrRecentJobsSectionWidget extends StatelessWidget {
                 ],
               ),
               child: JobCard(
-                onTap: () async {
-                  await context.push(RouteNames.hrHiringPost, extra: job);
-                  if (context.mounted) {
-                    context.read<HrHomeCubit>().doIntent(LoadHrHomeEvent());
-                  }
+                onTap: () {
+                  context.push(
+                    RouteNames.hrJobApplications,
+                    extra: {'jobId': job.id, 'jobTitle': job.title},
+                  );
                 },
                 job: job,
               ),

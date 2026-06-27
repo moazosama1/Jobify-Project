@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/constants/app_colors.dart';
+import 'package:jobify_project/core/widgets/custom_cached_network_image.dart';
 
 class CustomUserInfoAppBar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -9,6 +10,7 @@ class CustomUserInfoAppBar extends StatelessWidget
   final String? profileImageUrl;
   final VoidCallback? onSavedPressed;
   final VoidCallback? onProfilePressed;
+  final IconData? actionIcon;
 
   const CustomUserInfoAppBar({
     super.key,
@@ -17,6 +19,7 @@ class CustomUserInfoAppBar extends StatelessWidget
     this.profileImageUrl,
     this.onSavedPressed,
     this.onProfilePressed,
+    this.actionIcon,
   });
 
   @override
@@ -30,66 +33,67 @@ class CustomUserInfoAppBar extends StatelessWidget
       scrolledUnderElevation: 0,
       automaticallyImplyLeading: false,
       titleSpacing: AppMeasurements.paddingLarge,
-      title: Row(
-        children: [
-          // Profile Avatar
-          GestureDetector(
-            onTap: onProfilePressed,
-            child: Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: theme.colorScheme.surfaceContainerHighest,
-                image: profileImageUrl != null
-                    ? DecorationImage(
-                        image: NetworkImage(profileImageUrl!),
+      title: GestureDetector(
+        onTap: onProfilePressed,
+        behavior: HitTestBehavior.opaque,
+        child: Row(
+          children: [
+            // Profile Avatar
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: theme.colorScheme.surfaceContainerHighest,
+                  border: Border.all(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+                    width: 1,
+                  ),
+                ),
+                child: profileImageUrl != null && profileImageUrl!.isNotEmpty
+                    ? CustomCachedNetworkImage(
+                        imageUrl: profileImageUrl!,
                         fit: BoxFit.cover,
                       )
-                    : null,
-                border: Border.all(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
-                  width: 1,
-                ),
+                    : Icon(
+                        Icons.person_outline,
+                        color: theme.colorScheme.onSurface,
+                      ),
               ),
-              child: profileImageUrl == null
-                  ? Icon(
-                      Icons.person_outline,
+            ),
+            const SizedBox(width: AppMeasurements.paddingMedium),
+            // Welcoming Texts
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    welcomeText,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      fontWeight: FontWeight.w400,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    userNameText,
+                    style: theme.textTheme.titleMedium?.copyWith(
                       color: theme.colorScheme.onSurface,
-                    )
-                  : null,
-            ),
-          ),
-          const SizedBox(width: AppMeasurements.paddingMedium),
-          // Welcoming Texts
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  welcomeText,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                    fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  userNameText,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: theme.colorScheme.onSurface,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       actions: [
         // Notification Button
@@ -116,7 +120,7 @@ class CustomUserInfoAppBar extends StatelessWidget
             child: IconButton(
               onPressed: onSavedPressed,
               icon: Icon(
-                Icons.bookmark_outline,
+                actionIcon ?? Icons.bookmark_outline,
                 color: theme.colorScheme.onSurface,
                 size: 22,
               ),

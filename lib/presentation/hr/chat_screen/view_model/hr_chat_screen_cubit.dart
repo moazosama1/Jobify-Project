@@ -34,7 +34,7 @@ class HrChatScreenCubit extends Cubit<HrChatScreenState> {
     switch (event) {
       case LoadHrChatScreenEvent():
         _currentReceiverId = event.receiverId;
-        _onLoadMessages(event.receiverId);
+        _onLoadMessages(event.receiverId, event.userName, event.userAvatar);
         break;
       case SendMessageHrChatScreenEvent():
         _onSendMessage(event.text);
@@ -42,8 +42,14 @@ class HrChatScreenCubit extends Cubit<HrChatScreenState> {
     }
   }
 
-  Future<void> _onLoadMessages(String receiverId) async {
-    emit(state.copyWith(isLoading: true, clearError: true));
+  Future<void> _onLoadMessages(String receiverId, String? userName, String? userAvatar) async {
+    emit(state.copyWith(
+      isLoading: true,
+      clearError: true,
+      receiverId: receiverId,
+      participantName: userName ?? state.participantName,
+      participantAvatar: userAvatar ?? state.participantAvatar,
+    ));
 
     final result = await _getChatHistoryUseCase(receiverId);
     switch (result) {
@@ -52,8 +58,9 @@ class HrChatScreenCubit extends Cubit<HrChatScreenState> {
           state.copyWith(
             isLoading: false,
             data: result.data,
-            participantName: 'Mazen Mohammed',
-            participantAvatar: 'https://i.pravatar.cc/150?img=12',
+            receiverId: receiverId,
+            participantName: userName ?? (state.participantName.isNotEmpty ? state.participantName : 'Mazen Mohammed'),
+            participantAvatar: userAvatar ?? (state.participantAvatar.isNotEmpty ? state.participantAvatar : 'https://i.pravatar.cc/150?img=12'),
             statusText: 'is typing...',
           ),
         );
@@ -72,7 +79,7 @@ class HrChatScreenCubit extends Cubit<HrChatScreenState> {
           ? (senderData['_id'] ?? senderData['id'])?.toString()
           : senderData?.toString();
       if (senderIdStr == receiverId) {
-        doIntent(LoadHrChatScreenEvent(receiverId));
+        doIntent(LoadHrChatScreenEvent(receiverId, userName: userName, userAvatar: userAvatar));
       }
     });
   }

@@ -303,5 +303,6 @@
   "searchApplication": "Search Application...",
   "all": "All",
   "noApplicationsFound": "No applications found",
-  "viewApplication": "View Application"
+  "viewApplication": "View Application",
+  "yesterday": "Yesterday"
 }

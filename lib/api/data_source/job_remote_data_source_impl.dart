@@ -72,6 +72,11 @@ class JobRemoteDataSourceImpl implements JobRemoteDataSource {
   }
 
   @override
+  Future<GetJobApplicationsResponse> getAllApplications() {
+    return _apiClient.getAllApplications();
+  }
+
+  @override
   Future<GetJobApplicationsResponse> updateApplicationStatus(String id, Map<String, dynamic> request) {
     return _apiClient.updateApplicationStatus(id, request);
   }

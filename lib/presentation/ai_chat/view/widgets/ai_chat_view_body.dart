@@ -8,6 +8,7 @@ import 'package:jobify_project/domain/entities/ai_chat_message_entity.dart';
 import 'package:jobify_project/presentation/ai_chat/view_model/ai_chat_view_model.dart';
 import 'package:jobify_project/presentation/ai_chat/view_model/ai_chat_events.dart';
 import 'package:jobify_project/presentation/ai_chat/view_model/ai_chat_state.dart';
+import 'package:jobify_project/core/cubit/core_cubit.dart';
 import 'ai_chat_message_bubble.dart';
 import 'ai_chat_input_section.dart';
 
@@ -45,6 +46,9 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
 
   @override
   Widget build(BuildContext context) {
+    final coreState = context.read<CoreCubit>().state;
+    final isHr = coreState is CoreStateChanged && coreState.user != null && coreState.user!.role.toLowerCase() == 'hr';
+
     return BlocBuilder<AiChatViewModel, AiChatState>(
       builder: (context, state) {
         final messages = state.chatMessages.data ?? [];
@@ -73,11 +77,11 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
                 child: Column(
                   children: [
                     const SizedBox(height: 40),
-                    _buildHeroSection(context),
+                    _buildHeroSection(context, isHr),
                     const SizedBox(height: 32),
                     const AiChatInputSection(),
                     const SizedBox(height: 32),
-                    _buildSuggestionsGrid(context),
+                    _buildSuggestionsGrid(context, isHr),
                     const SizedBox(height: 40),
                   ],
                 ),
@@ -89,7 +93,7 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
     );
   }
 
-  Widget _buildHeroSection(BuildContext context) {
+  Widget _buildHeroSection(BuildContext context, bool isHr) {
     return Column(
       children: [
         Container(
@@ -147,7 +151,7 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
         ),
         const SizedBox(height: AppMeasurements.paddingMedium),
         Text(
-          context.l10n.aiChatHeroTitle,
+          isHr ? "Jobify HR Copilot" : context.l10n.aiChatHeroTitle,
           style: context.headlineMedium?.copyWith(
             fontWeight: FontWeight.w900,
             color: context.onSurfaceColor,
@@ -158,7 +162,9 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
         ),
         const SizedBox(height: AppMeasurements.paddingSmall),
         Text(
-          context.l10n.aiChatHeroSubtitle,
+          isHr
+              ? "Draft job descriptions, design interview templates, filter candidate criteria, or get hiring strategies instantly."
+              : context.l10n.aiChatHeroSubtitle,
           textAlign: TextAlign.center,
           style: context.bodyMedium?.copyWith(
             color: context.onSurfaceColor.withValues(alpha: 0.6),
@@ -170,13 +176,20 @@ class _AiChatViewBodyState extends State<AiChatViewBody> {
     );
   }
 
-  Widget _buildSuggestionsGrid(BuildContext context) {
-    final suggestions = [
-      context.l10n.aiChatSuggestionResume,
-      context.l10n.aiChatSuggestionInterview,
-      context.l10n.aiChatSuggestionSkills,
-      context.l10n.aiChatSuggestionCareer,
-    ];
+  Widget _buildSuggestionsGrid(BuildContext context, bool isHr) {
+    final suggestions = isHr
+        ? [
+            "📝 Write a job description",
+            "💡 Standard interview questions",
+            "🚀 Screen resumes for a role",
+            "🎯 HR hiring best practices",
+          ]
+        : [
+            context.l10n.aiChatSuggestionResume,
+            context.l10n.aiChatSuggestionInterview,
+            context.l10n.aiChatSuggestionSkills,
+            context.l10n.aiChatSuggestionCareer,
+          ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

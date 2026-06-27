@@ -71,6 +71,9 @@ class HomeScreenViewBody extends StatelessWidget {
                   onSavedPressed: () {
                     context.push(RouteNames.savedJobs);
                   },
+                  onProfilePressed: () {
+                    context.push(RouteNames.profile);
+                  },
                 ),
                 const SizedBox(height: AppMeasurements.paddingLarge),
                 SearchSectionWidget(

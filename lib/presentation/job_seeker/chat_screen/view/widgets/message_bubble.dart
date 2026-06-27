@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
-import 'package:jobify_project/core/constants/app_colors.dart';
 import 'package:jobify_project/domain/entities/message_entity.dart';
 import 'package:jobify_project/core/extensions/theme_context_extension.dart';
 
@@ -27,8 +26,8 @@ class MessageBubble extends StatelessWidget {
           color: isMe
               ? context.primaryColor
               : (context.theme.brightness == Brightness.dark
-                    ? AppColors.black[50]
-                    : const Color(0xFFF8F9FA)),
+                    ? const Color(0xFF252A30)
+                    : const Color(0xFFE0E9FF)),
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(20),
             topRight: const Radius.circular(20),

@@ -23,6 +23,7 @@ abstract interface class AuthRemoteDataSource {
   Future<ResetPasswordResponse> resetPassword(ResetPasswordRequest request);
   Future<dynamic> logout();
   Future<GetUserProfileResponse> getProfile();
+  Future<GetUserProfileResponse> getProfileById(String id);
   Future<GetUserProfileResponse> updateBasicInfo(UpdateBasicInfoRequestModel request);
   Future<GetUserProfileResponse> addExperience(ExperienceRequestModel request);
   Future<GetUserProfileResponse> updateExperience(String id, ExperienceRequestModel request);

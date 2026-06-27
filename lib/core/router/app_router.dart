@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jobify_project/core/di/di.dart';
 import 'package:jobify_project/core/router/route_names.dart';
+import 'package:jobify_project/presentation/user_profile/view/screens/user_profile_screen.dart';
+import 'package:jobify_project/presentation/user_profile/view_model/user_profile_cubit.dart';
+import 'package:jobify_project/presentation/user_profile/view_model/user_profile_event.dart';
 import 'package:jobify_project/presentation/edit_profile/view_model/edit_profile_event.dart';
 import 'package:jobify_project/presentation/hr/chat_screen/view_model/hr_chat_screen_event.dart';
 import 'package:jobify_project/presentation/job_seeker/edit_profile/view/screens/edit_profile_screen.dart';
@@ -243,11 +246,21 @@ abstract class AppRouter {
       GoRoute(
         path: RouteNames.chatScreen,
         builder: (context, state) {
-          final receiverId = state.extra as String? ?? '';
+          final extra = state.extra;
+          String receiverId = '';
+          String? userName;
+          String? userAvatar;
+          if (extra is String) {
+            receiverId = extra;
+          } else if (extra is Map<String, dynamic>) {
+            receiverId = extra['receiverId'] as String? ?? '';
+            userName = extra['userName'] as String?;
+            userAvatar = extra['userAvatar'] as String?;
+          }
           return BlocProvider(
             create: (_) =>
                 getIt<ChatScreenCubit>()
-                  ..doIntent(LoadChatScreenEvent(receiverId)),
+                  ..doIntent(LoadChatScreenEvent(receiverId, userName: userName, userAvatar: userAvatar)),
             child: const ChatScreen(),
           );
         },
@@ -255,11 +268,21 @@ abstract class AppRouter {
       GoRoute(
         path: RouteNames.hrChatScreen,
         builder: (context, state) {
-          final receiverId = state.extra as String? ?? '';
+          final extra = state.extra;
+          String receiverId = '';
+          String? userName;
+          String? userAvatar;
+          if (extra is String) {
+            receiverId = extra;
+          } else if (extra is Map<String, dynamic>) {
+            receiverId = extra['receiverId'] as String? ?? '';
+            userName = extra['userName'] as String?;
+            userAvatar = extra['userAvatar'] as String?;
+          }
           return BlocProvider(
             create: (_) =>
                 getIt<HrChatScreenCubit>()
-                  ..doIntent(LoadHrChatScreenEvent(receiverId)),
+                  ..doIntent(LoadHrChatScreenEvent(receiverId, userName: userName, userAvatar: userAvatar)),
             child: const HrChatScreen(),
           );
         },
@@ -333,6 +356,17 @@ abstract class AppRouter {
       GoRoute(
         path: RouteNames.aiChat,
         builder: (context, state) => const AiChatScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.userProfile,
+        builder: (context, state) {
+          final userId = state.extra as String? ?? '';
+          return BlocProvider(
+            create: (_) => getIt<UserProfileCubit>()
+              ..doIntent(LoadUserProfileEvent(userId)),
+            child: UserProfileScreen(userId: userId),
+          );
+        },
       ),
     ],
   );

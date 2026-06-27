@@ -2,7 +2,9 @@ sealed class HrChatScreenEvent {}
 
 class LoadHrChatScreenEvent extends HrChatScreenEvent {
   final String receiverId;
-  LoadHrChatScreenEvent(this.receiverId);
+  final String? userName;
+  final String? userAvatar;
+  LoadHrChatScreenEvent(this.receiverId, {this.userName, this.userAvatar});
 }
 
 class SendMessageHrChatScreenEvent extends HrChatScreenEvent {

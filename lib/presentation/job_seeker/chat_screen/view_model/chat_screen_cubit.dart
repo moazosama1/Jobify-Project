@@ -15,8 +15,6 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
   final SendMessageUseCase _sendMessageUseCase;
   final SocketService _socketService;
   StreamSubscription? _newMessageSub;
-  String _receiverId = "";
-
   String _currentReceiverId = "";
 
   ChatScreenCubit(
@@ -36,7 +34,7 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     switch (event) {
       case LoadChatScreenEvent():
         _currentReceiverId = event.receiverId;
-        _onLoadMessages(event.receiverId);
+        _onLoadMessages(event.receiverId, event.userName, event.userAvatar);
         break;
       case SendMessageChatScreenEvent():
         _onSendMessage(event.text);
@@ -44,13 +42,26 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
     }
   }
 
-  Future<void> _onLoadMessages(String receiverId) async {
-    emit(state.copyWith(isLoading: true, clearError: true));
+  Future<void> _onLoadMessages(String receiverId, String? userName, String? userAvatar) async {
+    emit(state.copyWith(
+      isLoading: true,
+      clearError: true,
+      receiverId: receiverId,
+      participantName: userName ?? state.participantName,
+      participantAvatar: userAvatar ?? state.participantAvatar,
+    ));
 
     final result = await _getChatHistoryUseCase(receiverId);
     switch (result) {
       case ApiSuccessResult():
-        emit(state.copyWith(isLoading: false, data: result.data));
+        emit(state.copyWith(
+          isLoading: false,
+          data: result.data,
+          receiverId: receiverId,
+          participantName: userName ?? (state.participantName.isNotEmpty ? state.participantName : 'Mazen Mohammed'),
+          participantAvatar: userAvatar ?? (state.participantAvatar.isNotEmpty ? state.participantAvatar : 'https://i.pravatar.cc/150?img=12'),
+          statusText: 'is typing...',
+        ));
         break;
       case ApiErrorResult():
         emit(
@@ -61,15 +72,13 @@ class ChatScreenCubit extends Cubit<ChatScreenState> {
 
     _newMessageSub?.cancel();
     _newMessageSub = _socketService.onNewMessage.listen((data) {
-      if (data != null) {
-        final senderData = data['senderId'];
-        final senderIdStr = senderData is Map
-            ? (senderData['_id'] ?? senderData['id'])?.toString()
-            : senderData?.toString();
+      final senderData = data['senderId'];
+      final senderIdStr = senderData is Map
+          ? (senderData['_id'] ?? senderData['id'])?.toString()
+          : senderData?.toString();
         if (senderIdStr == receiverId) {
-          doIntent(LoadChatScreenEvent(receiverId));
+          doIntent(LoadChatScreenEvent(receiverId, userName: userName, userAvatar: userAvatar));
         }
-      }
     });
   }
 

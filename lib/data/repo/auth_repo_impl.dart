@@ -125,6 +125,14 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
+  Future<ApiResult<UserEntity>> getProfileById(String id) async {
+    return await safeApiCall(
+      () => _remoteDataSource.getProfileById(id),
+      (response) => response.user.toEntity(),
+    );
+  }
+
+  @override
   Future<ApiResult<UserEntity>> updateBasicInfo(UpdateBasicInfoRequestEntity request) async {
     return await safeApiCall(
       () => _remoteDataSource.updateBasicInfo(UpdateBasicInfoRequestModel.fromEntity(request)),

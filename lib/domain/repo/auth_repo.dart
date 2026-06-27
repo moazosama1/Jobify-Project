@@ -27,6 +27,7 @@ abstract interface class AuthRepo {
   Future<bool> getRememberMe();
   Future<void> clearLocalData();
   Future<ApiResult<UserEntity>> getProfile();
+  Future<ApiResult<UserEntity>> getProfileById(String id);
   Future<ApiResult<UserEntity>> updateBasicInfo(UpdateBasicInfoRequestEntity request);
   Future<ApiResult<UserEntity>> addExperience(ExperienceRequestEntity request);
   Future<ApiResult<UserEntity>> updateExperience(String id, ExperienceRequestEntity request);

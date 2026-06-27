@@ -104,6 +104,9 @@ abstract class ApiClient {
   @GET(EndPoints.getProfile)
   Future<GetUserProfileResponse> getProfile();
 
+  @GET("${EndPoints.getProfileById}{id}")
+  Future<GetUserProfileResponse> getProfileById(@Path("id") String id);
+
   @PUT(EndPoints.updateProfile)
   Future<GetUserProfileResponse> updateBasicInfo(@Body() Map<String, dynamic> request);
 
@@ -143,6 +146,9 @@ abstract class ApiClient {
 
   @GET("${EndPoints.getApplicationForEmployee}{id}")
   Future<GetJobApplicationsResponse> getJobApplications(@Path("id") String id);
+
+  @GET(EndPoints.getAllPlication)
+  Future<GetJobApplicationsResponse> getAllApplications();
 
   @PUT("job-applications/{id}/status")
   Future<GetJobApplicationsResponse> updateApplicationStatus(@Path("id") String id, @Body() Map<String, dynamic> request);

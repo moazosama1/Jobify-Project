@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/constants/app_colors.dart';
+import 'package:jobify_project/core/constants/end_points.dart';
 import 'package:jobify_project/core/extensions/theme_context_extension.dart';
 import 'package:jobify_project/core/widgets/custom_cached_network_image.dart';
 
@@ -12,6 +13,7 @@ class CustomChatAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onPhonePressed;
   final VoidCallback? onVideoPressed;
   final VoidCallback? onMorePressed;
+  final VoidCallback? onProfilePressed;
 
   const CustomChatAppBar({
     super.key,
@@ -22,6 +24,7 @@ class CustomChatAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onPhonePressed,
     this.onVideoPressed,
     this.onMorePressed,
+    this.onProfilePressed,
   });
 
   @override
@@ -62,45 +65,56 @@ class CustomChatAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           const SizedBox(width: AppMeasurements.paddingMedium),
-          // Participant Avatar
-          Container(
-            width: 44,
-            height: 44,
-            decoration: const BoxDecoration(shape: BoxShape.circle),
-            child: CustomCachedNetworkImage(
-              imageUrl: participantAvatar.isNotEmpty
-                  ? participantAvatar
-                  : 'https://i.pravatar.cc/150?img=12',
-              borderRadius: BorderRadius.circular(22),
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(width: AppMeasurements.paddingSmall + 2),
-          // Name & Typing status
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  participantName,
-                  style: context.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: context.onSurfaceColor,
+            child: InkWell(
+              onTap: onProfilePressed,
+              child: Row(
+                children: [
+                  // Participant Avatar
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: const BoxDecoration(shape: BoxShape.circle),
+                    child: CustomCachedNetworkImage(
+                      imageUrl: participantAvatar.isNotEmpty
+                          ? (participantAvatar.startsWith('http')
+                              ? participantAvatar
+                              : (EndPoints.awsBaseUrl + participantAvatar))
+                          : 'https://i.pravatar.cc/150?img=12',
+                      borderRadius: BorderRadius.circular(22),
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  statusText,
-                  style: context.bodySmall?.copyWith(
-                    color: AppColors.green,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 11,
+                  const SizedBox(width: AppMeasurements.paddingSmall + 2),
+                  // Name & Typing status
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          participantName,
+                          style: context.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: context.onSurfaceColor,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          statusText,
+                          style: context.bodySmall?.copyWith(
+                            color: AppColors.green,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

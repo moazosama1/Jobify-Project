@@ -9,6 +9,8 @@ import 'package:jobify_project/generated/l10n.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jobify_project/core/router/route_names.dart';
 
+import 'package:jobify_project/core/extensions/string_extension.dart';
+
 class MessagesScreenViewBody extends StatelessWidget {
   const MessagesScreenViewBody({super.key});
 
@@ -51,7 +53,7 @@ class MessagesScreenViewBody extends StatelessWidget {
             // Map localized name / message if matching keys exist
             String displayName = chat.name;
             String displayMsg = chat.message;
-            String displayTime = chat.time;
+            String displayTime = chat.time.toShortConversationTime(context);
 
             if (chat.name == 'Sara Ahmed') displayName = local.saraAhmed;
 
@@ -62,9 +64,6 @@ class MessagesScreenViewBody extends StatelessWidget {
             if (chat.message == 'Great I will have a look the te...')
               displayMsg = local.greatIWillHaveLook;
 
-            if (chat.time == 'Just Now') displayTime = local.justNow;
-            if (chat.time == '10 min ago') displayTime = local.tenMinAgo;
-
             return ChatItemWidget(
               name: displayName,
               message: displayMsg,
@@ -74,7 +73,14 @@ class MessagesScreenViewBody extends StatelessWidget {
               unreadCount: chat.unreadCount,
               isRead: chat.isRead,
               onTap: () {
-                context.push(RouteNames.chatScreen, extra: chat.id);
+                context.push(
+                  RouteNames.chatScreen,
+                  extra: {
+                    'receiverId': chat.id,
+                    'userName': displayName,
+                    'userAvatar': chat.avatarUrl,
+                  },
+                );
               },
             );
           },

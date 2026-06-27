@@ -11,6 +11,7 @@ import 'package:jobify_project/core/enums/application_status.dart';
 import 'package:jobify_project/core/constants/app_colors.dart';
 import 'package:jobify_project/core/constants/end_points.dart';
 import 'package:jobify_project/core/widgets/custom_toastification.dart';
+import 'package:jobify_project/core/widgets/custom_cached_network_image.dart';
 import 'package:jobify_project/domain/entities/job_application_entity.dart';
 import 'package:jobify_project/presentation/hr/job_applications/view_model/hr_job_applications_cubit.dart';
 import 'package:jobify_project/presentation/hr/job_applications/view_model/hr_job_applications_state.dart';
@@ -20,8 +21,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 class HrJobApplicationsViewBody extends StatelessWidget {
   final String jobTitle;
+  final bool showBackButton;
 
-  const HrJobApplicationsViewBody({super.key, required this.jobTitle});
+  const HrJobApplicationsViewBody({
+    super.key,
+    required this.jobTitle,
+    this.showBackButton = true,
+  });
 
   Future<void> _openPdf(BuildContext context, String resumePath) async {
     // لو الـ Backend مراجع الـ URL كامل، هنستخدمه، لو مراجع الـ path بس هنمجده مع رابط الـ Bucket
@@ -74,7 +80,7 @@ class HrJobApplicationsViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CustomAppBar(title: jobTitle, showBackButton: true),
+        CustomAppBar(title: jobTitle, showBackButton: showBackButton),
         const SizedBox(height: AppMeasurements.paddingMedium),
         Expanded(
           child: BlocBuilder<HrJobApplicationsCubit, HrJobApplicationsState>(
@@ -185,20 +191,65 @@ class HrJobApplicationsViewBody extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
                   children: [
-                    Text(
-                      "${application.user.firstName} ${application.user.lastName}",
-                      style: context.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        color: Colors.grey.shade200,
+                        child: (application.user.profileImage != null &&
+                                application.user.profileImage!.isNotEmpty)
+                            ? CustomCachedNetworkImage(
+                                imageUrl: EndPoints.awsBaseUrl +
+                                    application.user.profileImage!,
+                                fit: BoxFit.cover,
+                              )
+                            : Icon(
+                                Icons.person_rounded,
+                                color: context.onSurfaceColor
+                                    .withValues(alpha: 0.4),
+                                size: 28,
+                              ),
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      application.user.email,
-                      style: context.bodySmall?.copyWith(
-                        color: context.onSurfaceColor.withValues(alpha: 0.6),
+                    const SizedBox(width: AppMeasurements.paddingMedium),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${application.user.firstName} ${application.user.lastName}",
+                            style: context.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: context.primaryColor,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            application.user.email,
+                            style: context.bodySmall?.copyWith(
+                              color: context.onSurfaceColor
+                                  .withValues(alpha: 0.6),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          GestureDetector(
+                            onTap: () {
+                              context.push(RouteNames.userProfile,
+                                  extra: application.user.id);
+                            },
+                            child: Text(
+                              "View Profile",
+                              style: context.bodySmall?.copyWith(
+                                color: context.primaryColor,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -352,7 +403,14 @@ class HrJobApplicationsViewBody extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  context.push(RouteNames.hrChatScreen, extra: application.user.id);
+                  context.push(
+                    RouteNames.hrChatScreen,
+                    extra: {
+                      'receiverId': application.user.id,
+                      'userName': '${application.user.firstName} ${application.user.lastName}',
+                      'userAvatar': '',
+                    },
+                  );
                 },
                 icon: const Icon(Icons.chat_bubble_outline_rounded, size: 18),
                 label: Text(context.l10n.contact),
