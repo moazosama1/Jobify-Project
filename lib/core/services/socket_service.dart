@@ -26,13 +26,24 @@ class SocketService {
   Stream<String> get onUserOnline => _userOnlineController.stream;
   Stream<String> get onUserOffline => _userOfflineController.stream;
 
+  String? _connectedToken;
+
   SocketService(this._secureStorageManager);
 
   Future<void> connect() async {
-    if (_socket != null && _socket!.connected) return;
-
     final token = await _secureStorageManager.getString(key: ConstKeys.kUserToken);
     if (token == null) return;
+
+    if (_socket != null && _socket!.connected) {
+      if (_connectedToken == token) {
+        return;
+      }
+      print('🔌 Reconnecting socket because token changed');
+      _socket!.disconnect();
+      _socket = null;
+    }
+    
+    _connectedToken = token;
 
     // Use baseUrl but remove trailing slash if exists for socket
     String serverUrl = EndPoints.baseUrl;
@@ -76,6 +87,7 @@ class SocketService {
     });
 
     _socket!.on('new-message', (data) {
+      print('📩 Socket Service received new-message: $data');
       if (data is Map<String, dynamic>) {
         _newMessageController.add(data);
       }
@@ -123,5 +135,6 @@ class SocketService {
   void disconnect() {
     _socket?.disconnect();
     _socket = null;
+    _connectedToken = null;
   }
 }

@@ -6,6 +6,7 @@ import 'package:jobify_project/core/services/socket_service.dart';
 import 'package:jobify_project/domain/entities/message_entity.dart';
 import 'package:jobify_project/domain/use_cases/get_chat_history_use_case.dart';
 import 'package:jobify_project/domain/use_cases/send_message_use_case.dart';
+import 'package:jobify_project/api/models/message_response.dart';
 import 'hr_chat_screen_event.dart';
 import 'hr_chat_screen_state.dart';
 
@@ -78,8 +79,24 @@ class HrChatScreenCubit extends Cubit<HrChatScreenState> {
       final senderIdStr = senderData is Map
           ? (senderData['_id'] ?? senderData['id'])?.toString()
           : senderData?.toString();
+      print('ℹ️ HrChatScreenCubit onNewMessage: senderIdStr = $senderIdStr, receiverId = $receiverId');
       if (senderIdStr == receiverId) {
-        doIntent(LoadHrChatScreenEvent(receiverId, userName: userName, userAvatar: userAvatar));
+        final rawEntity = MessageResponse.fromJson(data).toEntity('');
+        final messageEntity = MessageEntity(
+          id: rawEntity.id,
+          text: rawEntity.text,
+          time: rawEntity.time,
+          isMe: false,
+          senderId: rawEntity.senderId,
+          receiverId: rawEntity.receiverId,
+          status: rawEntity.status,
+        );
+        final existingIdx = state.data?.indexWhere((m) => m.id == messageEntity.id) ?? -1;
+        if (existingIdx == -1) {
+          final updatedMessages = List<MessageEntity>.from(state.data ?? [])
+            ..add(messageEntity);
+          emit(state.copyWith(data: updatedMessages));
+        }
       }
     });
   }

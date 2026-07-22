@@ -4,6 +4,7 @@ import 'application_user_entity.dart';
 class JobApplicationEntity extends Equatable {
   final String id;
   final String jobId;
+  final String jobTitle;
   final ApplicationUserEntity user;
   final String status;
   final String resume;
@@ -13,6 +14,7 @@ class JobApplicationEntity extends Equatable {
   const JobApplicationEntity({
     required this.id,
     required this.jobId,
+    this.jobTitle = '',
     required this.user,
     required this.status,
     required this.resume,
@@ -23,6 +25,7 @@ class JobApplicationEntity extends Equatable {
   JobApplicationEntity copyWith({
     String? id,
     String? jobId,
+    String? jobTitle,
     ApplicationUserEntity? user,
     String? status,
     String? resume,
@@ -32,6 +35,7 @@ class JobApplicationEntity extends Equatable {
     return JobApplicationEntity(
       id: id ?? this.id,
       jobId: jobId ?? this.jobId,
+      jobTitle: jobTitle ?? this.jobTitle,
       user: user ?? this.user,
       status: status ?? this.status,
       resume: resume ?? this.resume,
@@ -41,5 +45,5 @@ class JobApplicationEntity extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, jobId, user, status, resume, coverLetter, createdAt];
+  List<Object?> get props => [id, jobId, jobTitle, user, status, resume, coverLetter, createdAt];
 }

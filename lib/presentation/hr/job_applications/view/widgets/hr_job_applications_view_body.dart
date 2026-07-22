@@ -228,10 +228,10 @@ class HrJobApplicationsViewBody extends StatelessWidget {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            application.user.email,
+                            application.jobTitle.isNotEmpty ? application.jobTitle : jobTitle,
                             style: context.bodySmall?.copyWith(
-                              color: context.onSurfaceColor
-                                  .withValues(alpha: 0.6),
+                              color: context.onSurfaceColor.withValues(alpha: 0.7),
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -408,7 +408,7 @@ class HrJobApplicationsViewBody extends StatelessWidget {
                     extra: {
                       'receiverId': application.user.id,
                       'userName': '${application.user.firstName} ${application.user.lastName}',
-                      'userAvatar': '',
+                      'userAvatar': application.user.profileImage,
                     },
                   );
                 },

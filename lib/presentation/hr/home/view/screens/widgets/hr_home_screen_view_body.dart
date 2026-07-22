@@ -13,9 +13,31 @@ import '../../../view_model/hr_home_state.dart';
 import 'package:jobify_project/generated/l10n.dart';
 import 'package:jobify_project/core/cubit/core_cubit.dart';
 import 'package:jobify_project/core/constants/end_points.dart';
+import 'package:jobify_project/presentation/hr/hiring_post/view/widgets/hr_hiring_post_body.dart';
 
-class HrHomeScreenViewBody extends StatelessWidget {
+class HrHomeScreenViewBody extends StatefulWidget {
   const HrHomeScreenViewBody({super.key});
+
+  @override
+  State<HrHomeScreenViewBody> createState() => _HrHomeScreenViewBodyState();
+}
+
+class _HrHomeScreenViewBodyState extends State<HrHomeScreenViewBody> {
+  @override
+  void initState() {
+    super.initState();
+    HrHiringPostBody.onJobPosted = () {
+      if (mounted) {
+        context.read<HrHomeCubit>().doIntent(LoadHrHomeEvent());
+      }
+    };
+  }
+
+  @override
+  void dispose() {
+    HrHiringPostBody.onJobPosted = null;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +84,11 @@ class HrHomeScreenViewBody extends StatelessWidget {
                 CustomUserInfoAppBar(
                   welcomeText: local.welcomeUser,
                   userNameText: userName,
-                  profileImageUrl: (coreState is CoreStateChanged && coreState.user != null && coreState.user!.profileImage != null && coreState.user!.profileImage!.isNotEmpty)
+                  profileImageUrl:
+                      (coreState is CoreStateChanged &&
+                          coreState.user != null &&
+                          coreState.user!.profileImage != null &&
+                          coreState.user!.profileImage!.isNotEmpty)
                       ? "${EndPoints.awsBaseUrl}${coreState.user!.profileImage}"
                       : null,
                   onSavedPressed: () {

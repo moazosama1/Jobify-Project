@@ -73,7 +73,26 @@ abstract class ApiClient {
   Future<ResetPasswordResponse> resetPassword(@Body() ResetPasswordRequest request);
 
   @POST(EndPoints.createJob)
-  Future<CreateJobResponse> createJob(@Body() CreateJobRequestModel request);
+  @MultiPart()
+  Future<CreateJobResponse> createJob(
+    @Part(name: "title") String title,
+    @Part(name: "description") String description,
+    @Part(name: "responsibilities[]") List<String> responsibilities,
+    @Part(name: "requirements[]") List<String> requirements,
+    @Part(name: "preferredQualifications[]") List<String> preferredQualifications,
+    @Part(name: "location") String location,
+    @Part(name: "employmentType") String employmentType,
+    @Part(name: "experienceLevel") String experienceLevel,
+    @Part(name: "salaryRange[min]") int salaryMin,
+    @Part(name: "salaryRange[max]") int salaryMax,
+    @Part(name: "applicationDeadline") String applicationDeadline,
+    @Part(name: "skillsRequired[]") List<String> skillsRequired,
+    @Part(name: "category") String category,
+    @Part(name: "openings") int openings,
+    @Part(name: "isRemote") bool isRemote,
+    @Part(name: "companySnapshot[name]") String companyName,
+    @Part(name: "logo") MultipartFile? logo,
+  );
 
   @GET(EndPoints.getJobs)
   Future<GetAllJobsResponse> getAllJobs(

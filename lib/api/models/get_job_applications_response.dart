@@ -22,8 +22,7 @@ class GetJobApplicationsResponse {
 class JobApplicationDto {
   @JsonKey(name: '_id')
   final String? id;
-  @JsonKey(fromJson: _parseJobId)
-  final String? jobId;
+  final dynamic jobId;
   @JsonKey(fromJson: _parseUserId)
   final ApplicationUserDto? userId;
   final String? status;
@@ -40,16 +39,6 @@ class JobApplicationDto {
     this.coverLetter,
     this.createdAt,
   });
-
-  static String? _parseJobId(dynamic json) {
-    if (json is String) {
-      return json;
-    }
-    if (json is Map) {
-      return json['_id'] as String?;
-    }
-    return null;
-  }
 
   static ApplicationUserDto? _parseUserId(dynamic json) {
     if (json is String) {

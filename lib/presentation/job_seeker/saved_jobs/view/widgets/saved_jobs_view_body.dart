@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/router/route_names.dart';
 import 'package:jobify_project/core/widgets/custom_app_bar.dart';

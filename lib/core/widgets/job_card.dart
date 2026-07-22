@@ -12,6 +12,8 @@ class JobCard extends StatelessWidget {
   final VoidCallback? onOptionsTap;
   final void Function()? onTap;
   final void Function()? onApplyTap;
+  final VoidCallback? onEditTap;
+  final VoidCallback? onDeleteTap;
   final Widget? trailing;
 
   const JobCard({
@@ -20,6 +22,8 @@ class JobCard extends StatelessWidget {
     required this.job,
     this.onOptionsTap,
     this.onApplyTap,
+    this.onEditTap,
+    this.onDeleteTap,
     this.trailing,
   });
 
@@ -27,26 +31,62 @@ class JobCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = context.theme.brightness == Brightness.dark;
 
+    int actionCount = 0;
+    if (onEditTap != null) actionCount++;
+    if (onDeleteTap != null) actionCount++;
+    if (onOptionsTap != null && onEditTap == null) actionCount++;
+    if (onApplyTap != null) actionCount++;
+
     return Slidable(
       key: ValueKey(job.id),
-      endActionPane: (onApplyTap != null || onOptionsTap != null)
+      endActionPane: actionCount > 0
           ? ActionPane(
               motion: const ScrollMotion(),
-              extentRatio: 0.45,
+              extentRatio: actionCount * 0.25,
               children: [
-                if (onOptionsTap != null)
+                if (onEditTap != null)
+                  SlidableAction(
+                    onPressed: (_) => onEditTap!(),
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    icon: Icons.edit_rounded,
+                    label: context.l10n.edit,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      bottomLeft: Radius.circular(20),
+                    ),
+                  ),
+                if (onDeleteTap != null)
+                  SlidableAction(
+                    onPressed: (_) => onDeleteTap!(),
+                    backgroundColor: AppColors.red,
+                    foregroundColor: Colors.white,
+                    icon: Icons.delete_rounded,
+                    label: context.l10n.delete,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                      topLeft: (onEditTap != null) ? Radius.zero : const Radius.circular(20),
+                      bottomLeft: (onEditTap != null) ? Radius.zero : const Radius.circular(20),
+                    ),
+                  ),
+                if (onOptionsTap != null && onEditTap == null)
                   SlidableAction(
                     onPressed: (_) => onOptionsTap!(),
-                    backgroundColor: job.isBookmarked 
-                        ? AppColors.red 
-                        : (isDark ? AppColors.black[100]! : const Color(0xFFF0F2F5)),
-                    foregroundColor: job.isBookmarked 
-                        ? AppColors.white 
+                    backgroundColor: job.isBookmarked
+                        ? AppColors.red
+                        : (isDark
+                            ? AppColors.black[100]!
+                            : const Color(0xFFF0F2F5)),
+                    foregroundColor: job.isBookmarked
+                        ? AppColors.white
                         : context.onSurfaceColor,
                     icon: job.isBookmarked
                         ? Icons.delete_outline_rounded
                         : Icons.bookmark_border_rounded,
-                    label: job.isBookmarked ? context.l10n.delete : context.l10n.save,
+                    label: job.isBookmarked
+                        ? context.l10n.delete
+                        : context.l10n.save,
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
                       bottomLeft: Radius.circular(20),
@@ -70,10 +110,7 @@ class JobCard extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 12,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           decoration: BoxDecoration(
             color: isDark ? AppColors.black[50] : AppColors.white,
             borderRadius: BorderRadius.circular(20),
@@ -93,24 +130,26 @@ class JobCard extends StatelessWidget {
             children: [
               // Left: Company Logo
               Container(
-                width: 40,
-                height: 40,
+                width: 48,
+                height: 48,
                 decoration: BoxDecoration(
                   color: isDark
                       ? context.surfaceColor
                       : const Color(0xFFF0F2F5),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                padding: const EdgeInsets.all(AppMeasurements.paddingSmall),
-                child: CachedNetworkImage(
-                  imageUrl: job.logoAsset,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: CachedNetworkImage(
+                    imageUrl: job.logoAsset,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.business, color: Colors.grey),
                   ),
-                  errorWidget: (context, url, error) =>
-                      const Icon(Icons.business, color: Colors.grey),
                 ),
               ),
               const SizedBox(width: 12),
@@ -185,14 +224,29 @@ class JobCard extends StatelessWidget {
                       spacing: 8,
                       runSpacing: 8,
                       children: [
+                        _buildChip(
+                          context,
+                          Icons.people_outline_rounded,
+                          '${job.applicationsCount} ${context.l10n.applications}',
+                        ),
+                        if (job.createdAt.isNotEmpty)
+                          _buildChip(
+                            context,
+                            Icons.access_time_rounded,
+                            '${context.l10n.postedOn}: ${_formatDate(job.createdAt)}',
+                          ),
                         if (job.applicationDeadline.isNotEmpty)
                           _buildChip(
                             context,
                             Icons.calendar_today_outlined,
-                            _formatDate(job.applicationDeadline),
+                            '${"Deadline"}: ${_formatDate(job.applicationDeadline)}',
                           ),
                         if (job.employmentType.isNotEmpty)
-                          _buildChip(context, Icons.work_outline, job.employmentType),
+                          _buildChip(
+                            context,
+                            Icons.work_outline,
+                            job.employmentType,
+                          ),
                       ],
                     ),
                   ],

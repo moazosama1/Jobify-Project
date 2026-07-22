@@ -41,12 +41,14 @@ class CustomChatAppBar extends StatelessWidget implements PreferredSizeWidget {
           const SizedBox(width: AppMeasurements.paddingLarge),
           // Back Button
           InkWell(
-            onTap: onBackPressed ?? () {
-              final navigator = Navigator.of(context);
-              if (navigator.canPop()) {
-                navigator.pop();
-              }
-            },
+            onTap:
+                onBackPressed ??
+                () {
+                  final navigator = Navigator.of(context);
+                  if (navigator.canPop()) {
+                    navigator.pop();
+                  }
+                },
             borderRadius: BorderRadius.circular(24),
             child: Container(
               padding: const EdgeInsets.all(AppMeasurements.paddingSmall + 2),
@@ -78,8 +80,8 @@ class CustomChatAppBar extends StatelessWidget implements PreferredSizeWidget {
                     child: CustomCachedNetworkImage(
                       imageUrl: participantAvatar.isNotEmpty
                           ? (participantAvatar.startsWith('http')
-                              ? participantAvatar
-                              : (EndPoints.awsBaseUrl + participantAvatar))
+                                ? participantAvatar
+                                : (EndPoints.awsBaseUrl + participantAvatar))
                           : 'https://i.pravatar.cc/150?img=12',
                       borderRadius: BorderRadius.circular(22),
                       fit: BoxFit.cover,

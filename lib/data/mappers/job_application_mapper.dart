@@ -16,9 +16,19 @@ extension ApplicationUserDtoMapper on ApplicationUserDto {
 
 extension JobApplicationDtoMapper on JobApplicationDto {
   JobApplicationEntity toEntity() {
+    String parsedJobId = '';
+    String parsedJobTitle = '';
+    if (jobId is String) {
+      parsedJobId = jobId as String;
+    } else if (jobId is Map) {
+      parsedJobId = jobId['_id'] as String? ?? '';
+      parsedJobTitle = jobId['title'] as String? ?? '';
+    }
+
     return JobApplicationEntity(
       id: id ?? '',
-      jobId: jobId ?? '',
+      jobId: parsedJobId,
+      jobTitle: parsedJobTitle,
       user: userId?.toEntity() ?? const ApplicationUserEntity(id: '', firstName: '', lastName: '', email: ''),
       status: status ?? 'pending',
       resume: resume ?? '',

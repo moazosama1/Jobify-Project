@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
 import 'package:jobify_project/core/router/route_names.dart';
@@ -64,77 +63,54 @@ class HrRecentJobsSectionWidget extends StatelessWidget {
               const SizedBox(height: AppMeasurements.paddingMedium),
           itemBuilder: (context, index) {
             final job = recentJobs[index];
-            return Slidable(
-              key: ValueKey(job.id),
-              endActionPane: ActionPane(
-                motion: const ScrollMotion(),
-                children: [
-                  SlidableAction(
-                    onPressed: (actionContext) async {
-                      await context.push(
-                        RouteNames.hrHiringPost,
-                        extra: job,
-                      );
-                      if (context.mounted) {
-                        context.read<HrHomeCubit>().doIntent(LoadHrHomeEvent());
-                      }
-                    },
-                    backgroundColor: context.primaryColor,
-                    foregroundColor: Colors.white,
-                    icon: Icons.edit_rounded,
-                    label: local.edit,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  const SizedBox(width: 8),
-                  SlidableAction(
-                    onPressed: (actionContext) {
-                      showDialog(
-                        context: context,
-                        builder: (dialogContext) {
-                          return AlertDialog(
-                            title: Text(local.deleteConfirmTitle),
-                            content: Text(local.deleteConfirmMessage),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(dialogContext),
-                                child: Text(local.no),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(dialogContext);
-                                  context.read<HrHomeCubit>().doIntent(
-                                        DeleteJobHrHomeEvent(job.id),
-                                      );
-                                },
-                                child: Text(
-                                  local.delete,
-                                  style: TextStyle(
-                                    color: Theme.of(context).colorScheme.error,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    backgroundColor: context.errorColor,
-                    foregroundColor: Colors.white,
-                    icon: Icons.delete_rounded,
-                    label: local.delete,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ],
-              ),
-              child: JobCard(
-                onTap: () {
-                  context.push(
-                    RouteNames.hrJobApplications,
-                    extra: {'jobId': job.id, 'jobTitle': job.title},
-                  );
-                },
-                job: job,
-              ),
+            return JobCard(
+              onTap: () {
+                context.push(
+                  RouteNames.hrJobApplications,
+                  extra: {'jobId': job.id, 'jobTitle': job.title},
+                );
+              },
+              job: job,
+              onEditTap: () async {
+                await context.push(
+                  RouteNames.hrHiringPost,
+                  extra: job,
+                );
+                if (context.mounted) {
+                  context.read<HrHomeCubit>().doIntent(LoadHrHomeEvent());
+                }
+              },
+              onDeleteTap: () {
+                showDialog(
+                  context: context,
+                  builder: (dialogContext) {
+                    return AlertDialog(
+                      title: Text(local.deleteConfirmTitle),
+                      content: Text(local.deleteConfirmMessage),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(dialogContext),
+                          child: Text(local.no),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(dialogContext);
+                            context.read<HrHomeCubit>().doIntent(
+                                  DeleteJobHrHomeEvent(job.id),
+                                );
+                          },
+                          child: Text(
+                            local.delete,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
             );
           },
         ),

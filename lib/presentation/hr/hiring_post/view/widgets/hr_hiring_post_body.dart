@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:jobify_project/core/constants/end_points.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jobify_project/core/responsive/app_measurements.dart';
@@ -14,6 +17,7 @@ import '../../view_model/hr_hiring_post_event.dart';
 
 class HrHiringPostBody extends StatefulWidget {
   final JobEntity? job;
+  static VoidCallback? onJobPosted;
 
   const HrHiringPostBody({super.key, this.job});
 
@@ -23,6 +27,7 @@ class HrHiringPostBody extends StatefulWidget {
 
 class _HrHiringPostBodyState extends State<HrHiringPostBody> {
   final _formKey = GlobalKey<FormState>();
+  bool _useProfileImage = false;
 
   late TextEditingController _companyNameController;
   late TextEditingController _companyLogoController;
@@ -51,11 +56,17 @@ class _HrHiringPostBodyState extends State<HrHiringPostBody> {
   void initState() {
     super.initState();
     final hasJob = widget.job != null;
+    if (hasJob) {
+      final logo = widget.job!.logoAsset;
+      if (logo.contains('users/profiles') || logo.contains('profiles')) {
+        _useProfileImage = true;
+      }
+    }
     _companyNameController = TextEditingController(
       text: hasJob ? widget.job!.companyName : 'Route',
     );
     _companyLogoController = TextEditingController(
-      text: hasJob ? widget.job!.logoAsset : 'https://logo.com/vodafone.png',
+      text: hasJob ? widget.job!.logoAsset : '',
     );
     _titleController = TextEditingController(
       text: hasJob ? widget.job!.title : '',
@@ -174,6 +185,7 @@ class _HrHiringPostBodyState extends State<HrHiringPostBody> {
             state.createJobStatus.data?.message ?? local.success,
           );
 
+          HrHiringPostBody.onJobPosted?.call();
           Navigator.of(context).pop();
         } else if (state.createJobStatus.errorMessage != null) {
           customToastification(
@@ -204,13 +216,159 @@ class _HrHiringPostBodyState extends State<HrHiringPostBody> {
                       : null,
                 ),
                 const SizedBox(height: AppMeasurements.paddingMedium),
-                CustomTextField(
-                  controller: _companyLogoController,
-                  label: local.companyLogo,
-                  hintText: local.companyLogo,
-                  validator: (value) => (value == null || value.trim().isEmpty)
-                      ? local.thisFieldIsRequired
-                      : null,
+                FormField<String>(
+                  initialValue: _companyLogoController.text,
+                  validator: (value) {
+                    if (_companyLogoController.text.trim().isEmpty) {
+                      return local.thisFieldIsRequired;
+                    }
+                    return null;
+                  },
+                  builder: (formFieldState) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildLabel(local.companyLogo),
+                        const SizedBox(height: AppMeasurements.paddingSmall),
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: _useProfileImage,
+                              onChanged: (val) {
+                                final profileImg = state.userProfileImage;
+                                if (val == true && (profileImg == null || profileImg.isEmpty)) {
+                                  customToastification(
+                                    context,
+                                    ToastificationType.warning,
+                                    "No profile picture found. Please upload one in your profile first.",
+                                  );
+                                  return;
+                                }
+                                setState(() {
+                                  _useProfileImage = val ?? false;
+                                  if (_useProfileImage) {
+                                    _companyLogoController.text = profileImg ?? '';
+                                    formFieldState.didChange(profileImg);
+                                  } else {
+                                    _companyLogoController.clear();
+                                    formFieldState.didChange(null);
+                                  }
+                                });
+                              },
+                              activeColor: context.primaryColor,
+                            ),
+                            Text(
+                              "Use Profile Picture",
+                              style: context.bodyMedium?.copyWith(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: AppMeasurements.paddingSmall),
+                        GestureDetector(
+                          onTap: _useProfileImage
+                              ? null
+                              : () async {
+                                  final result = await FilePicker.platform.pickFiles(
+                                    type: FileType.custom,
+                                    allowedExtensions: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'heic', 'heif'],
+                                  );
+                                  if (result != null && result.files.single.path != null) {
+                                    setState(() {
+                                      _companyLogoController.text = result.files.single.path!;
+                                      formFieldState.didChange(result.files.single.path);
+                                    });
+                                  }
+                                },
+                          child: Container(
+                            height: 120,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: context.surfaceColor,
+                              borderRadius: BorderRadius.circular(AppMeasurements.paddingMedium),
+                              border: Border.all(
+                                color: formFieldState.hasError
+                                    ? Colors.red
+                                    : context.onSurfaceColor.withValues(alpha: 0.2),
+                              ),
+                            ),
+                            child: _companyLogoController.text.isEmpty
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.add_photo_alternate_outlined,
+                                        size: 40,
+                                        color: context.primaryColor,
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'Import from device',
+                                        style: context.bodyMedium?.copyWith(
+                                          color: context.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Stack(
+                                    children: [
+                                      Center(
+                                        child: (_companyLogoController.text.isNotEmpty &&
+                                                !_companyLogoController.text.startsWith('http') &&
+                                                !_companyLogoController.text.startsWith('Jobify'))
+                                            ? Image.file(
+                                                File(_companyLogoController.text),
+                                                fit: BoxFit.contain,
+                                                height: 100,
+                                              )
+                                            : Image.network(
+                                                _companyLogoController.text.startsWith('Jobify')
+                                                    ? "${EndPoints.awsBaseUrl}${_companyLogoController.text}"
+                                                    : _companyLogoController.text,
+                                                fit: BoxFit.contain,
+                                                height: 100,
+                                                errorBuilder: (context, error, stackTrace) {
+                                                  return const Icon(
+                                                    Icons.business,
+                                                    size: 40,
+                                                    color: Colors.grey,
+                                                  );
+                                                },
+                                              ),
+                                      ),
+                                      if (!_useProfileImage)
+                                        Positioned(
+                                          top: 8,
+                                          right: 8,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(4),
+                                            decoration: BoxDecoration(
+                                              color: context.primaryColor,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: const Icon(
+                                              Icons.edit,
+                                              size: 16,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                          ),
+                        ),
+                        if (formFieldState.hasError) ...[
+                          const SizedBox(height: 6),
+                          Text(
+                            formFieldState.errorText ?? '',
+                            style: const TextStyle(color: Colors.red, fontSize: 12),
+                          ),
+                        ],
+                      ],
+                    );
+                  },
                 ),
                 const SizedBox(height: AppMeasurements.paddingLarge),
 

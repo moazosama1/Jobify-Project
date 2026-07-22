@@ -304,5 +304,7 @@
   "all": "All",
   "noApplicationsFound": "No applications found",
   "viewApplication": "View Application",
-  "yesterday": "Yesterday"
+  "yesterday": "Yesterday",
+  "applications": "Applications",
+  "postedOn": "Posted"
 }

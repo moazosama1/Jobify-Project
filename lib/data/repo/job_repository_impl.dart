@@ -28,8 +28,10 @@ class JobRepositoryImpl implements JobRepository {
 
   @override
   Future<ApiResult<CreateJobResponseEntity>> createJob(CreateJobRequestEntity request) async {
+    final logoPath = request.companySnapshot.logo;
+    final logoFile = logoPath.isNotEmpty && !logoPath.startsWith('http') && !logoPath.startsWith('Jobify') ? File(logoPath) : null;
     return await safeApiCall(
-      () => _remoteDataSource.createJob(request.toModel()),
+      () => _remoteDataSource.createJob(request.toModel(), logoFile),
       (response) => response.toEntity(),
     );
   }

@@ -65,7 +65,11 @@ class HomeScreenViewBody extends StatelessWidget {
                 CustomUserInfoAppBar(
                   welcomeText: local.welcomeUser,
                   userNameText: userName,
-                  profileImageUrl: (coreState is CoreStateChanged && coreState.user != null && coreState.user!.profileImage != null && coreState.user!.profileImage!.isNotEmpty)
+                  profileImageUrl:
+                      (coreState is CoreStateChanged &&
+                          coreState.user != null &&
+                          coreState.user!.profileImage != null &&
+                          coreState.user!.profileImage!.isNotEmpty)
                       ? "${EndPoints.awsBaseUrl}${coreState.user!.profileImage}"
                       : null,
                   onSavedPressed: () {

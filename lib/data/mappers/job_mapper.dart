@@ -1,6 +1,7 @@
 import 'package:jobify_project/api/models/create_job_response.dart';
 import 'package:jobify_project/api/models/requests/company_snapshot_model.dart';
 import 'package:jobify_project/api/models/requests/create_job_request_model.dart';
+import 'package:jobify_project/core/constants/end_points.dart';
 import 'package:jobify_project/api/models/requests/salary_range_model.dart';
 import 'package:jobify_project/api/models/job_dto.dart';
 import 'package:jobify_project/domain/entities/company_snapshot_entity.dart';
@@ -72,10 +73,15 @@ extension JobDtoMapper on JobDto {
         ? "\$${salaryRange!.min} - \$${salaryRange!.max}"
         : "";
 
+    final logoPath = companySnapshot?.logo ?? "";
+    final resolvedLogo = logoPath.isNotEmpty && !logoPath.startsWith('http')
+        ? "${EndPoints.awsBaseUrl}$logoPath"
+        : logoPath;
+
     return JobEntity(
       id: id ?? mongoId ?? "",
       companyName: companySnapshot?.name ?? "",
-      logoAsset: companySnapshot?.logo ?? "",
+      logoAsset: resolvedLogo,
       title: title ?? "",
       salary: salaryStr,
       tags: tagsList,
@@ -97,6 +103,8 @@ extension JobDtoMapper on JobDto {
      
       openings: openings ?? 1,
       isRemote: isRemote ?? false,
+      applicationsCount: applicationsCount ?? 0,
+      createdAt: createdAt ?? "",
     );
   }
 }

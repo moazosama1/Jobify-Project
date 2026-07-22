@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../api/mock/mock_api_interceptor.dart';
 import '../constants/const_keys.dart';
 import '../constants/end_points.dart';
 import '../utils/secure_storage_manager.dart';
@@ -14,6 +15,9 @@ abstract class AppModules {
   @lazySingleton
   Future<Dio> provideDio(SecureStorageManager storageManager) async {
     final dio = Dio(provideBaseOptions(EndPoints.baseUrl));
+    if (kIsWeb) {
+      dio.interceptors.add(MockApiInterceptor());
+    }
     dio.interceptors.addAll([
       InterceptorsWrapper(
         onRequest: (options, handler) async {

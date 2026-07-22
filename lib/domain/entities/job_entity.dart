@@ -26,6 +26,8 @@ class JobEntity extends Equatable {
 
   final int openings;
   final bool isRemote;
+  final int applicationsCount;
+  final String createdAt;
 
   const JobEntity({
     required this.id,
@@ -49,6 +51,8 @@ class JobEntity extends Equatable {
     this.salaryMax = 0,
     this.openings = 1,
     this.isRemote = false,
+    this.applicationsCount = 0,
+    this.createdAt = '',
   });
 
   JobEntity copyWith({
@@ -68,15 +72,13 @@ class JobEntity extends Equatable {
     String? experienceLevel,
     String? applicationDeadline,
     bool? isBookmarked,
-    
     List<String>? preferredQualifications,
-   
     int? salaryMin,
     int? salaryMax,
-  
-   
     int? openings,
     bool? isRemote,
+    int? applicationsCount,
+    String? createdAt,
   }) {
     return JobEntity(
       id: id ?? this.id,
@@ -95,14 +97,13 @@ class JobEntity extends Equatable {
       experienceLevel: experienceLevel ?? this.experienceLevel,
       applicationDeadline: applicationDeadline ?? this.applicationDeadline,
       isBookmarked: isBookmarked ?? this.isBookmarked,
-    
       preferredQualifications: preferredQualifications ?? this.preferredQualifications,
-     
       salaryMin: salaryMin ?? this.salaryMin,
       salaryMax: salaryMax ?? this.salaryMax,
-      
       openings: openings ?? this.openings,
       isRemote: isRemote ?? this.isRemote,
+      applicationsCount: applicationsCount ?? this.applicationsCount,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -124,18 +125,12 @@ class JobEntity extends Equatable {
         experienceLevel,
         applicationDeadline,
         isBookmarked,
-        description,
-        responsibilities,
-        requirements,
         preferredQualifications,
-        employmentType,
-        experienceLevel,
         salaryMin,
         salaryMax,
-        applicationDeadline,
-        skillsRequired,
-        category,
         openings,
         isRemote,
+        applicationsCount,
+        createdAt,
       ];
 }

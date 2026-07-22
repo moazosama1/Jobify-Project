@@ -8,6 +8,8 @@ import 'package:jobify_project/domain/entities/create_job_response_entity.dart';
 import 'package:jobify_project/domain/entities/salary_range_entity.dart';
 import 'package:jobify_project/domain/use_cases/create_job_use_case.dart';
 import 'package:jobify_project/domain/use_cases/update_job_use_case.dart';
+import 'package:jobify_project/domain/use_cases/auth/get_user_profile_use_case.dart';
+import 'package:jobify_project/domain/entities/user_entity.dart';
 import 'hr_hiring_post_event.dart';
 import 'hr_hiring_post_state.dart';
 
@@ -15,11 +17,26 @@ import 'hr_hiring_post_state.dart';
 class HrHiringPostCubit extends Cubit<HrHiringPostState> {
   final CreateJobUseCase _createJobUseCase;
   final UpdateJobUseCase _updateJobUseCase;
+  final GetUserProfileUseCase _getUserProfileUseCase;
 
   HrHiringPostCubit(
     this._createJobUseCase,
     this._updateJobUseCase,
-  ) : super(const HrHiringPostState());
+    this._getUserProfileUseCase,
+  ) : super(const HrHiringPostState()) {
+    _init();
+  }
+
+  void _init() {
+    _loadUserProfile();
+  }
+
+  Future<void> _loadUserProfile() async {
+    final result = await _getUserProfileUseCase();
+    if (result is ApiSuccessResult<UserEntity>) {
+      emit(state.copyWith(userProfileImage: result.data.profileImage));
+    }
+  }
 
   void doIntent(HrHiringPostEvent event) {
     switch (event) {

@@ -10,17 +10,15 @@ class SplashCubit extends Cubit<SplashState> {
   final GetOnboardingStatusUseCase _getOnboardingStatusUseCase;
   final GetStoredUserRoleUseCase _getStoredUserRoleUseCase;
 
-  SplashCubit(
-    this._getOnboardingStatusUseCase,
-    this._getStoredUserRoleUseCase,
-  ) : super(SplashInitial()) {
+  SplashCubit(this._getOnboardingStatusUseCase, this._getStoredUserRoleUseCase)
+    : super(SplashInitial()) {
     onSplashStartedEvent();
   }
 
   void onSplashStartedEvent() async {
     // Wait for 2 seconds
     await Future.delayed(const Duration(seconds: 2));
-    final bool isOnboardingCompleted = await _getOnboardingStatusUseCase();
+    final bool isOnboardingCompleted = false;
     if (isOnboardingCompleted) {
       final role = await _getStoredUserRoleUseCase();
       if (role == null) {
