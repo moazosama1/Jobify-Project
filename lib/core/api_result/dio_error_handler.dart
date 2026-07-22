@@ -25,6 +25,7 @@ String handleDioError(DioException error) {
       return AppLocalizations().connectionError;
 
     case DioExceptionType.unknown:
+    default:
       return "${AppLocalizations().unknownError} ${error.message ?? AppLocalizations().unknown}";
   }
 }

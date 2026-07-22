@@ -26,10 +26,9 @@ Future<void> main() async {
   await configureDependencies();
   Bloc.observer = MyBlocObserver();
 
-  // Set default demo token and role so web demo starts seamlessly
+  // Set default demo token so web demo starts seamlessly
   final storage = getIt<SecureStorageManager>();
   await storage.setString(key: ConstKeys.kUserToken, value: "mock_jwt_access_token_demo");
-  await storage.setString(key: ConstKeys.kRoleKey, value: "JobSeeker");
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
